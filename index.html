@@ -946,139 +946,125 @@ const THERMO = (function(){
 })();
 
 // ═══════════════════════════════════════════════════════════════════
-//  CoolProp.js INTEGRATION (optional — if available, overrides THERMO)
-//  Fix for GitHub Pages: .wasm served without application/wasm MIME type.
-//  Solution A: instantiateWasm() — fetch as ArrayBuffer, bypasses MIME check.
-//  Solution B: _headers file in repo (see repo root).
+//  CoolProp.js INTEGRATION
+//  CoolProp v7.0.0 is an ES Module — must use dynamic import(), NOT
+//  classic <script> tag. The Module config is passed to the factory fn.
 // ═══════════════════════════════════════════════════════════════════
 let cpReady = false;
+var Module = {}; // populated after factory call
 
-// Module MUST be a global var defined before coolprop.js loads.
-var Module = {
-  // Tell Emscripten where to find the .wasm file
-  locateFile: function(path, scriptDir) {
-    return path; // same folder as index.html
-  },
+function cpSuccess(instance) {
+  Module = instance;
+  cpReady = true;
+  const hasPropsSI = typeof Module.PropsSI === 'function';
+  console.log('[CoolProp] ✅ Ready | PropsSI:', hasPropsSI);
+  document.getElementById('tbRight').innerHTML =
+    '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_ok') + '</span></div>' +
+    '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_acc') + '</span></div>';
+  document.getElementById('infoBar').innerHTML =
+    '✅ <span>' + t('cp_ready_msg') + '</span>';
+  updateBtns();
+}
 
-  // Override WASM instantiation — use ArrayBuffer instead of streaming.
-  // Streaming (WebAssembly.instantiateStreaming) requires Content-Type: application/wasm,
-  // which GitHub Pages does not set. ArrayBuffer fetch has no such restriction.
-  instantiateWasm: function(imports, successCallback) {
-    const wasmFiles = ['coolprop.wasm', 'CoolProp.wasm'];
-    let tried = 0;
+function cpFallback(reason) {
+  console.warn('[CoolProp] Fallback to PR EOS. Reason:', reason);
+  document.getElementById('tbRight').innerHTML =
+    '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_pr') + '</span></div>' +
+    '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_missing') + '</span></div>';
+  document.getElementById('infoBar').innerHTML =
+    '⚠️ <span><strong>' + t('cp_missing') + '.</strong> ' + t('cp_miss') +
+    ' <a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.js/download" ' +
+    'style="color:#7dd3fc" target="_blank">coolprop.js</a> + ' +
+    '<a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.wasm/download" ' +
+    'style="color:#7dd3fc" target="_blank">coolprop.wasm</a>.</span>';
+}
 
-    function tryWasm() {
-      if (tried >= wasmFiles.length) {
-        console.error('[CoolProp] ❌ All .wasm sources failed');
+// Fetch WASM as ArrayBuffer — bypasses GitHub Pages MIME type issue
+function makeInstantiateWasm() {
+  return function(imports, successCb) {
+    fetch('coolprop.wasm')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.arrayBuffer();
+      })
+      .then(function(buf) { return WebAssembly.instantiate(buf, imports); })
+      .then(function(res) {
+        console.log('[CoolProp] ✅ WASM compiled');
+        successCb(res.instance, res.module);
+      })
+      .catch(function(e) { console.error('[CoolProp] WASM error:', e); });
+    return {};
+  };
+}
+
+// CoolProp v7 = ES Module → must use dynamic import()
+(function() {
+  // Try ES module import first (v7.x)
+  import('./coolprop.js')
+    .then(function(mod) {
+      console.log('[CoolProp] ES module loaded');
+      var factory = (typeof mod.default === 'function') ? mod.default
+                  : (typeof mod === 'function') ? mod
+                  : null;
+
+      if (!factory) {
+        // v7 might export module object directly, not a factory
+        cpSuccess(mod.default || mod);
         return;
       }
-      const url = wasmFiles[tried++];
-      console.log('[CoolProp] Fetching WASM via ArrayBuffer:', url);
 
-      fetch(url)
-        .then(function(r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + url);
-          console.log('[CoolProp] WASM download complete, compiling…');
-          return r.arrayBuffer();
-        })
-        .then(function(bytes) {
-          return WebAssembly.instantiate(bytes, imports);
-        })
-        .then(function(result) {
-          console.log('[CoolProp] ✅ WASM instantiated successfully');
-          // Emscripten expects (instance, module) in newer builds
-          successCallback(result.instance, result.module);
-        })
-        .catch(function(err) {
-          console.warn('[CoolProp] WASM failed for ' + url + ':', err.message);
-          tryWasm();
-        });
-    }
-    tryWasm();
-    return {}; // signal to Emscripten that we handle instantiation
-  },
-
-  onRuntimeInitialized: function() {
-    cpReady = true;
-    // Probe available API — v7 may expose PropsSI directly or via wrapper
-    const hasPropsSI = typeof Module.PropsSI === 'function';
-    console.log('[CoolProp] ✅ Runtime ready | PropsSI available:', hasPropsSI);
-    if (!hasPropsSI) {
-      console.warn('[CoolProp] PropsSI not found on Module — check CoolProp v7 API');
-    }
-    document.getElementById('tbRight').innerHTML =
-      '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_ok') + '</span></div>' +
-      '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_acc') + '</span></div>';
-    document.getElementById('infoBar').innerHTML =
-      '✅ <span>' + t('cp_ready_msg') + '</span>';
-    updateBtns();
-  },
-
-  print:    function(msg) { console.log('[CoolProp]', msg); },
-  printErr: function(msg) { console.warn('[CoolProp]', msg); }
-};
-
-(function() {
-  const srcs = [
-    'coolprop.js',  // v7.0.0 lowercase — primary
-    'CoolProp.js',  // old capitalised fallback
-  ];
-  let idx = 0;
-  let timer = null;
-
-  function tryNext() {
-    if (idx >= srcs.length) {
-      console.warn('[CoolProp] JS file not found — using PR EOS fallback (±1%)');
-      document.getElementById('tbRight').innerHTML =
-        '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_pr') + '</span></div>' +
-        '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_missing') + '</span></div>';
-      document.getElementById('infoBar').innerHTML =
-        '⚠️ <span><strong>' + t('cp_missing') + '.</strong> ' + t('cp_miss') +
-        ' <a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.js/download" ' +
-        'style="color:#7dd3fc" target="_blank">coolprop.js</a> (161 kB) + ' +
-        '<a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.wasm/download" ' +
-        'style="color:#7dd3fc" target="_blank">coolprop.wasm</a> (6.9 MB).</span>';
-      return;
-    }
-
-    const src = srcs[idx++];
-    const script = document.createElement('script');
-    script.src = src;
-
-    script.onerror = function() {
-      console.log('[CoolProp] JS not found:', src);
-      clearTimeout(timer);
-      tryNext();
-    };
-
-    script.onload = function() {
-      console.log('[CoolProp] JS loaded:', src, '— WASM compiling (up to 30s for 6.9 MB)…');
-      timer = setTimeout(function() {
-        if (!cpReady) {
-          console.warn('[CoolProp] WASM compile timeout — trying next source');
-          tryNext();
+      // Pass config to factory — this is how Emscripten ES modules work
+      return factory({
+        instantiateWasm: makeInstantiateWasm(),
+        onRuntimeInitialized: function() {
+          // handled below via promise resolution
+        },
+        print:    function(m) { console.log('[CP]', m); },
+        printErr: function(m) { console.warn('[CP]', m); }
+      });
+    })
+    .then(function(instance) {
+      if (instance) cpSuccess(instance);
+    })
+    .catch(function(err) {
+      console.warn('[CoolProp] ES import failed:', err.message, '— trying classic script');
+      // Fallback: classic <script> for older coolprop.js builds
+      var s = document.createElement('script');
+      s.src = 'coolprop.js';
+      s.onerror = function() { cpFallback('JS file not found'); };
+      s.onload = function() {
+        console.log('[CoolProp] Classic script loaded — waiting for Module init');
+        // For classic builds, Module global gets populated by the script itself
+        // Set onRuntimeInitialized on the global Module
+        if (typeof Module !== 'undefined') {
+          var _orig = Module.onRuntimeInitialized;
+          Module.onRuntimeInitialized = function() {
+            if (_orig) _orig();
+            cpSuccess(Module);
+          };
         }
-      }, 30000);
-    };
-
-    console.log('[CoolProp] Loading JS:', src);
-    document.head.appendChild(script);
-  }
-
-  tryNext();
+        setTimeout(function() {
+          if (!cpReady) cpFallback('WASM timeout');
+        }, 30000);
+      };
+      document.head.appendChild(s);
+    });
 })();
 
 // Unified property functions — use CoolProp if available, else THERMO
 function satP(T_C, fluid){
-  if(cpReady) return Module.PropsSI('P','T',T_C+273.15,'Q',0,fluid)/1e5;
+  if(cpReady && typeof Module.PropsSI==='function')
+    return Module.PropsSI('P','T',T_C+273.15,'Q',0,fluid)/1e5;
   return THERMO.satP(T_C, fluid);
 }
 function H(P_bar, T_C, fluid, phase){
-  if(cpReady) return Module.PropsSI('H','P',P_bar*1e5,'T',T_C+273.15,fluid)/1000;
+  if(cpReady && typeof Module.PropsSI==='function')
+    return Module.PropsSI('H','P',P_bar*1e5,'T',T_C+273.15,fluid)/1000;
   return THERMO.H(P_bar, T_C, fluid, phase||'vapor');
 }
 function RHO(P_bar, T_C, fluid){
-  if(cpReady) return Module.PropsSI('D','P',P_bar*1e5,'T',T_C+273.15,fluid);
+  if(cpReady && typeof Module.PropsSI==='function')
+    return Module.PropsSI('D','P',P_bar*1e5,'T',T_C+273.15,fluid);
   return THERMO.rho(P_bar, T_C, fluid, 'vapor');
 }
 
