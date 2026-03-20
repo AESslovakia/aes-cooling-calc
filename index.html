@@ -112,10 +112,43 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 .nb{font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
 .nb-en{background:#dbeafe;color:#1e40af}
 .nb-cc{background:#f3e8ff;color:#5b21b6}
+.nb-ash{background:#dcfce7;color:#14532d}
 .nb-ari{background:#fef3c7;color:#92400e}
 .qv{font-weight:700;font-size:13px;color:#059669}
 .dv{font-size:11px;color:#9aa3b8}
 .dv.pos{color:#059669}.dv.neg{color:#dc2626}
+
+/* ── STANDARDS EDITOR MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.modal-box{background:#fff;border-radius:16px;width:100%;max-width:860px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.4);overflow:hidden}
+.modal-head{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid #f0f3f9;flex-shrink:0}
+.modal-head-icon{width:34px;height:34px;background:linear-gradient(135deg,#2563eb,#1a4db5);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.modal-title{font-size:15px;font-weight:700;color:#0d1f3c;flex:1}
+.modal-close{width:30px;height:30px;border:none;background:#f0f3f9;border-radius:7px;font-size:16px;cursor:pointer;color:#7a8299;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.modal-close:hover{background:#fee2e2;color:#E24B4A}
+.modal-body{flex:1;overflow-y:auto;padding:18px 22px}
+.modal-foot{padding:14px 22px;border-top:1px solid #f0f3f9;display:flex;gap:8px;align-items:center;flex-shrink:0;background:#fafbfd}
+.std-editor-table{width:100%;border-collapse:collapse;font-size:12px}
+.std-editor-table th{background:#0d1f3c;color:#fff;padding:8px 9px;text-align:left;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+.std-editor-table th:first-child{border-radius:7px 0 0 0}
+.std-editor-table th:last-child{border-radius:0 7px 0 0;text-align:center}
+.std-editor-table td{padding:4px 5px;border-bottom:1px solid #f0f3f9;vertical-align:middle}
+.std-editor-table tr.custom-row td{background:#f8faff}
+.std-editor-table tr.new-row td{background:#f0fdf8}
+.std-editor-table input[type=text],.std-editor-table input[type=number]{width:100%;padding:5px 7px;border:1.5px solid #e4e9f4;border-radius:6px;font-size:11.5px;font-family:'Inter',sans-serif;background:#fff;color:#1e2433}
+.std-editor-table input:focus{outline:none;border-color:#2563eb}
+.std-editor-table input.narrow{max-width:70px}
+.ed-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:16px;padding:2px 5px;transition:color .15s;display:block;margin:auto}
+.ed-del:hover{color:#E24B4A}
+.ed-del:disabled{opacity:.3;cursor:not-allowed}
+.add-std-btn{padding:8px 16px;background:linear-gradient(135deg,#2563eb,#1a4db5);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.add-std-btn:hover{opacity:.9}
+.save-std-btn{padding:8px 20px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;margin-left:auto}
+.save-std-btn:hover{opacity:.9}
+.cancel-std-btn{padding:8px 16px;background:#fff;border:1.5px solid #e4e9f4;color:#7a8299;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.cancel-std-btn:hover{border-color:#E24B4A;color:#E24B4A}
+.edit-stds-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid #e4e9f4;border-radius:8px;background:#fafbfd;font-size:11px;font-weight:700;color:#2563eb;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.edit-stds-btn:hover{background:#eef3ff;border-color:#2563eb}
 
 .info-bar{background:#0d1f3c;border:1px solid #1e3a5f;border-radius:10px;padding:10px 16px;margin-bottom:14px;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:10px;line-height:1.5}
 .info-bar strong{color:#7dd3fc}
@@ -191,12 +224,46 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 <!-- APP -->
 <div class="app" id="appMain" style="display:none">
 
-  <!-- Language bar -->
+  <!-- Language bar + Standards editor button -->
   <div class="lang-bar">
-    <span class="lang-label">Language</span>
+    <button class="edit-stds-btn" onclick="openStdEditor()">⚙️ <span data-i18n="edit_stds_btn">Edit Standards</span></button>
+    <span class="lang-label" style="margin-left:8px">Language</span>
     <button class="lang-btn active" id="lb_en" onclick="setLang('en')"><span class="lang-flag">🇬🇧</span> English</button>
     <button class="lang-btn" id="lb_de" onclick="setLang('de')"><span class="lang-flag">🇩🇪</span> Deutsch</button>
     <button class="lang-btn" id="lb_sk" onclick="setLang('sk')"><span class="lang-flag">🇸🇰</span> Slovensky</button>
+  </div>
+
+  <!-- Standards Editor Modal -->
+  <div class="modal-overlay" id="stdModal" style="display:none" onclick="if(event.target===this)closeStdEditor()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div class="modal-head-icon">⚙️</div>
+        <div class="modal-title" data-i18n="modal_title">Standards Editor</div>
+        <button class="modal-close" onclick="closeStdEditor()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:11px;color:#9aa3b8;margin-bottom:12px;line-height:1.6" data-i18n="modal_desc">
+          Edit existing standard conditions or add new ones. Changes apply immediately to the calculator. The standard list is saved for this session.
+        </div>
+        <div style="overflow-x:auto">
+          <table class="std-editor-table" id="stdEditorTable">
+            <thead><tr>
+              <th data-i18n="th_std">Standard</th>
+              <th data-i18n="th_range">Range</th>
+              <th>Te [°C]</th><th>Tc [°C]</th>
+              <th>Tsuc [°C]</th><th>Tliq [°C]</th>
+              <th data-i18n="th_del">Del</th>
+            </tr></thead>
+            <tbody id="stdEditorBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="add-std-btn" onclick="addStdRow()">+ <span data-i18n="add_std">Add standard</span></button>
+        <button class="cancel-std-btn" onclick="closeStdEditor()" data-i18n="modal_cancel">Cancel</button>
+        <button class="save-std-btn" onclick="saveStds()">✓ <span data-i18n="modal_save">Save & apply</span></button>
+      </div>
+    </div>
   </div>
   <div class="topbar">
     <div class="tb-logo"><div class="tb-logo-inner">❄</div></div>
@@ -253,41 +320,8 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
           <div class="card-hint" data-i18n="c2_hint">Click standard or enter manually</div>
         </div>
 
-        <div class="std-family">
-          <div class="std-family-label">EN 12900</div>
-          <div class="std-row">
-            <div class="std-btn active" id="std_en_lbp" onclick="setStd('en_lbp')"><div class="std-name">LBP</div><div class="std-sub">Te −35 / Tc 40°C</div></div>
-            <div class="std-btn" id="std_en_mbp" onclick="setStd('en_mbp')"><div class="std-name">MBP</div><div class="std-sub">Te −10 / Tc 40°C</div></div>
-            <div class="std-btn" id="std_en_hbp" onclick="setStd('en_hbp')"><div class="std-name">HBP</div><div class="std-sub">Te +7.5 / Tc 40°C</div></div>
-          </div>
-        </div>
-
-        <div class="std-family">
-          <div class="std-family-label">CECOMAF</div>
-          <div class="std-row">
-            <div class="std-btn" id="std_cc_lbp" onclick="setStd('cc_lbp')"><div class="std-name">LBP</div><div class="std-sub">Tamb=Tsuc=Tliq 32°C</div></div>
-            <div class="std-btn" id="std_cc_mbp" onclick="setStd('cc_mbp')"><div class="std-name">MBP</div><div class="std-sub">Tamb=Tsuc=Tliq 25°C</div></div>
-          </div>
-        </div>
-
-        <div class="std-family">
-          <div class="std-family-label">ARI 520 / ASHRAE</div>
-          <div class="std-row">
-            <div class="std-btn" id="std_ari_lbp" onclick="setStd('ari_lbp')"><div class="std-name">LBP</div><div class="std-sub">Te −23.3 / Tc 54.4°C</div></div>
-            <div class="std-btn" id="std_ari_mbp" onclick="setStd('ari_mbp')"><div class="std-name">MBP</div><div class="std-sub">Te −6.7 / Tc 54.4°C</div></div>
-            <div class="std-btn" id="std_ari_hbp" onclick="setStd('ari_hbp')"><div class="std-name">HBP</div><div class="std-sub">Te +7.2 / Tc 54.4°C</div></div>
-          </div>
-        </div>
-
-        <div class="std-family">
-          <div class="std-family-label" data-i18n="std_custom_lbl">Custom</div>
-          <div class="std-row">
-            <div class="std-btn" id="std_custom" onclick="setStd('custom')">
-              <div class="std-name" data-i18n="std_custom_name">Custom</div>
-              <div class="std-sub" data-i18n="std_custom_sub">Manual input</div>
-            </div>
-          </div>
-        </div>
+        <!-- Dynamic standards panel — built by renderStdButtons() -->
+        <div id="stdButtonsPanel"></div>
 
         <div class="sec-label" data-i18n="c2_cond">Conditions (K4–O4)</div>
         <div class="g5">
@@ -508,6 +542,13 @@ const LANG = {
     err_check:    'Check: correct refrigerant name · valid temperatures · not above critical point',
     fluid_lbl:    'Refrigerant: ',
     meta_formula: 'Qo = Qvessel × CF_ρ × CF_Δh = ',
+    edit_stds_btn:'Edit Standards',
+    modal_title:  'Standards Editor',
+    modal_desc:   'Edit existing standard conditions or add new ones. Changes apply immediately to the calculator.',
+    th_del:       'Del',
+    add_std:      'Add standard',
+    modal_cancel: 'Cancel',
+    modal_save:   'Save & apply',
   },
   de: {
     pin_sub:      'PIN eingeben · v3.1',
@@ -607,6 +648,13 @@ const LANG = {
     err_check:    'Prüfen: korrekter Kältemittelname · gültige Temperaturen · nicht über kritischem Punkt',
     fluid_lbl:    'Kältemittel: ',
     meta_formula: 'Qo = Qvessel × CF_ρ × CF_Δh = ',
+    edit_stds_btn:'Normen bearbeiten',
+    modal_title:  'Normen-Editor',
+    modal_desc:   'Vorhandene Normbedingungen bearbeiten oder neue hinzufügen. Änderungen gelten sofort.',
+    th_del:       'Löschen',
+    add_std:      'Norm hinzufügen',
+    modal_cancel: 'Abbrechen',
+    modal_save:   'Speichern & anwenden',
   },
   sk: {
     pin_sub:      'Zadajte PIN pre prístup · v3.1',
@@ -706,6 +754,13 @@ const LANG = {
     err_check:    'Skontroluj: správny názov chladiva · platné teploty · nie nad kritický bod',
     fluid_lbl:    'Chladivo: ',
     meta_formula: 'Qo = Qvessel × CF_ρ × CF_Δh = ',
+    edit_stds_btn:'Upraviť normy',
+    modal_title:  'Editor noriem',
+    modal_desc:   'Uprav existujúce podmienky noriem alebo pridaj nové. Zmeny sa prejavia okamžite.',
+    th_del:       'Zmaž',
+    add_std:      'Pridať normu',
+    modal_cancel: 'Zrušiť',
+    modal_save:   'Uložiť a použiť',
   }
 };
 
@@ -739,6 +794,8 @@ function setLang(lang){
   }
   // Re-render debug if results exist
   if(window._lastDebugArgs) renderDebug(...window._lastDebugArgs);
+  // Re-render standards buttons (custom label may change)
+  renderStdButtons();
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -986,18 +1043,28 @@ function RHO(P_bar, T_C, fluid){
 // ═══════════════════════════════════════════════════════════════════
 const PIN = '1234'; // ← ZMENIŤ PIN TU
 
-const STANDARDS = {
-  en_lbp:  { Te:-35,   Tc:40,   Tsuc:20,   Tliq:40,   label:'EN 12900', range:'LBP', badge:'nb-en' },
-  en_mbp:  { Te:-10,   Tc:40,   Tsuc:20,   Tliq:40,   label:'EN 12900', range:'MBP', badge:'nb-en' },
-  en_hbp:  { Te: 7.5,  Tc:40,   Tsuc:20,   Tliq:40,   label:'EN 12900', range:'HBP', badge:'nb-en' },
-  cc_lbp:  { Te:-35,   Tc:40,   Tsuc:32,   Tliq:32,   label:'CECOMAF',  range:'LBP', badge:'nb-cc' },
-  cc_mbp:  { Te:-10,   Tc:40,   Tsuc:25,   Tliq:25,   label:'CECOMAF',  range:'MBP', badge:'nb-cc' },
-  ari_lbp: { Te:-23.3, Tc:54.4, Tsuc:32.2, Tliq:40.6, label:'ARI 520',  range:'LBP', badge:'nb-ari' },
-  ari_mbp: { Te: -6.7, Tc:54.4, Tsuc:32.2, Tliq:40.6, label:'ARI 520',  range:'MBP', badge:'nb-ari' },
-  ari_hbp: { Te:  7.2, Tc:54.4, Tsuc:18.3, Tliq:40.6, label:'ARI 520',  range:'HBP', badge:'nb-ari' },
-  custom:  { Te:-35,   Tc:40,   Tsuc:20,   Tliq:40,   label:'Vlastné',  range:'—',   badge:'' },
+// STANDARDS — corrected per official table (image)
+// Pe=Te evaporating temp, Pc=Tc condensing temp
+let STANDARDS = {
+  // ── EN 12900 ── each range has its own Tc
+  en_lbp:   { Te:-35,   Tc:40,   Tsuc:20,   Tliq:40,   label:'EN 12900', range:'LBP', badge:'nb-en' },
+  en_mbp:   { Te:-10,   Tc:45,   Tsuc:20,   Tliq:45,   label:'EN 12900', range:'MBP', badge:'nb-en' },
+  en_hbp:   { Te:  5,   Tc:50,   Tsuc:20,   Tliq:50,   label:'EN 12900', range:'HBP', badge:'nb-en' },
+  // ── CECOMAF ── Tc=55 for all, LBP Te=-25 (not -35)
+  cc_lbp:   { Te:-25,   Tc:55,   Tsuc:32,   Tliq:55,   label:'CECOMAF',  range:'LBP', badge:'nb-cc' },
+  cc_mbp:   { Te:-10,   Tc:55,   Tsuc:32,   Tliq:55,   label:'CECOMAF',  range:'MBP', badge:'nb-cc' },
+  cc_hbp:   { Te:  5,   Tc:55,   Tsuc:32,   Tliq:55,   label:'CECOMAF',  range:'HBP', badge:'nb-cc' },
+  // ── ASHRAE ── different Tsuc/Tliq per range
+  ash_lbp:  { Te:-23.3, Tc:54.4, Tsuc:32.2, Tliq:32.2, label:'ASHRAE',   range:'LBP', badge:'nb-ash' },
+  ash_mbp:  { Te: -6.7, Tc:54.4, Tsuc:35,   Tliq:46.1, label:'ASHRAE',   range:'MBP', badge:'nb-ash' },
+  ash_hbp:  { Te:  7.2, Tc:54.4, Tsuc:35,   Tliq:46.1, label:'ASHRAE',   range:'HBP', badge:'nb-ash' },
+  // ── ARI 540 ── Tc=49 for all, LBP Tsuc=4.4
+  ari_lbp:  { Te:-23.3, Tc:49,   Tsuc: 4.4, Tliq:49,   label:'ARI 540',  range:'LBP', badge:'nb-ari' },
+  ari_mbp:  { Te: -6.7, Tc:49,   Tsuc:18,   Tliq:49,   label:'ARI 540',  range:'MBP', badge:'nb-ari' },
+  ari_hbp:  { Te:  7.2, Tc:49,   Tsuc:18,   Tliq:49,   label:'ARI 540',  range:'HBP', badge:'nb-ari' },
+  custom:   { Te:-35,   Tc:40,   Tsuc:20,   Tliq:40,   label:'Custom',   range:'—',   badge:'' },
 };
-const ALL_STD_KEYS = ['en_lbp','en_mbp','en_hbp','cc_lbp','cc_mbp','ari_lbp','ari_mbp','ari_hbp'];
+let ALL_STD_KEYS = ['en_lbp','en_mbp','en_hbp','cc_lbp','cc_mbp','cc_hbp','ash_lbp','ash_mbp','ash_hbp','ari_lbp','ari_mbp','ari_hbp'];
 
 let measData=null, activeStd='en_lbp';
 
@@ -1116,21 +1183,169 @@ function parseCondPaste(e){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-//  STANDARDS
+//  STANDARDS — dynamic render + editor
 // ═══════════════════════════════════════════════════════════════════
-function setStd(key,silent){
+
+// Build grouped buttons from STANDARDS dynamically
+function renderStdButtons(){
+  const panel = document.getElementById('stdButtonsPanel');
+  if(!panel) return;
+
+  // Group by label
+  const groups = {};
+  ALL_STD_KEYS.forEach(k=>{
+    const p = STANDARDS[k];
+    if(!p) return;
+    if(!groups[p.label]) groups[p.label] = {badge:p.badge, entries:[]};
+    groups[p.label].entries.push({key:k, p});
+  });
+  // Custom entry
+  groups['__custom__'] = {badge:'', entries:[{key:'custom', p:STANDARDS['custom']}]};
+
+  let html = '';
+  Object.entries(groups).forEach(([label, grp])=>{
+    if(label === '__custom__'){
+      html += `<div class="std-family">
+        <div class="std-family-label">${t('std_custom_lbl')}</div>
+        <div class="std-row">
+          <div class="std-btn" id="std_custom" onclick="setStd('custom')">
+            <div class="std-name">${t('std_custom_name')}</div>
+            <div class="std-sub">${t('std_custom_sub')}</div>
+          </div>
+        </div>
+      </div>`;
+      return;
+    }
+    html += `<div class="std-family"><div class="std-family-label">${label}</div><div class="std-row">`;
+    grp.entries.forEach(({key, p})=>{
+      const isActive = key === activeStd;
+      const Te = p.Te >= 0 ? '+'+p.Te : String(p.Te);
+      html += `<div class="std-btn${isActive?' active':''}" id="std_${key}" onclick="setStd('${key}')">
+        <div class="std-name">${p.range}</div>
+        <div class="std-sub">Te ${Te} / Tc ${p.Tc}°C</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  panel.innerHTML = html;
+}
+
+function setStd(key, silent){
   if(!silent){ activeStd=key; }
   else { activeStd='custom'; key='custom'; }
-  Object.keys(STANDARDS).forEach(k=>{const e=document.getElementById('std_'+k);if(e)e.classList.remove('active');});
-  const e=document.getElementById('std_'+key);if(e)e.classList.add('active');
-  const p=STANDARDS[key];
-  if(p&&key!=='custom'){
-    document.getElementById('req_Te').value=p.Te;
-    document.getElementById('req_Tc').value=p.Tc;
-    document.getElementById('req_Tamb').value=p.Tc;
-    document.getElementById('req_Tsuc').value=p.Tsuc;
-    document.getElementById('req_Tliq').value=p.Tliq;
+  // Update active class
+  document.querySelectorAll('[id^="std_"]').forEach(el=>el.classList.remove('active'));
+  const el = document.getElementById('std_'+key);
+  if(el) el.classList.add('active');
+  const p = STANDARDS[key];
+  if(p && key!=='custom'){
+    document.getElementById('req_Te').value  = p.Te;
+    document.getElementById('req_Tc').value  = p.Tc;
+    document.getElementById('req_Tamb').value= p.Tc;
+    document.getElementById('req_Tsuc').value= p.Tsuc;
+    document.getElementById('req_Tliq').value= p.Tliq;
   }
+}
+
+// ── STANDARDS EDITOR ──────────────────────────────────────────────
+let _editorRows = []; // working copy during editing
+
+function openStdEditor(){
+  // Deep copy current standards (excluding 'custom')
+  _editorRows = ALL_STD_KEYS.map(k=>({
+    key: k,
+    label: STANDARDS[k]?.label || '',
+    range: STANDARDS[k]?.range || '',
+    Te:    STANDARDS[k]?.Te ?? 0,
+    Tc:    STANDARDS[k]?.Tc ?? 0,
+    Tsuc:  STANDARDS[k]?.Tsuc ?? 0,
+    Tliq:  STANDARDS[k]?.Tliq ?? 0,
+    badge: STANDARDS[k]?.badge || 'nb-en',
+    isNew: false
+  }));
+  renderEditorTable();
+  document.getElementById('stdModal').style.display = 'flex';
+}
+
+function closeStdEditor(){
+  document.getElementById('stdModal').style.display = 'none';
+}
+
+function renderEditorTable(){
+  const BADGES = ['nb-en','nb-cc','nb-ash','nb-ari'];
+  let rows = '';
+  _editorRows.forEach((r, i)=>{
+    const canDel = _editorRows.length > 1;
+    const badgeSel = BADGES.map(b=>
+      `<option value="${b}" ${r.badge===b?'selected':''}>${b.replace('nb-','')}</option>`
+    ).join('');
+    rows += `<tr class="${r.isNew?'new-row':''}">
+      <td><input type="text" value="${r.label}" oninput="_editorRows[${i}].label=this.value" placeholder="EN 12900…" style="min-width:90px"></td>
+      <td><input type="text" value="${r.range}" oninput="_editorRows[${i}].range=this.value" class="narrow" placeholder="LBP"></td>
+      <td><input type="number" value="${r.Te}"   oninput="_editorRows[${i}].Te=parseFloat(this.value)||0"   class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tc}"   oninput="_editorRows[${i}].Tc=parseFloat(this.value)||0"   class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tsuc}" oninput="_editorRows[${i}].Tsuc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tliq}" oninput="_editorRows[${i}].Tliq=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><button class="ed-del" onclick="delStdRow(${i})" ${canDel?'':'disabled'}>🗑</button></td>
+    </tr>`;
+  });
+  document.getElementById('stdEditorBody').innerHTML = rows;
+}
+
+function addStdRow(){
+  const lastLabel = _editorRows[_editorRows.length-1]?.label || 'Custom';
+  _editorRows.push({
+    key: 'custom_'+Date.now(),
+    label: lastLabel,
+    range: 'NEW',
+    Te: 0, Tc: 40, Tsuc: 20, Tliq: 40,
+    badge: 'nb-en',
+    isNew: true
+  });
+  renderEditorTable();
+  // Scroll to bottom of modal body
+  const body = document.querySelector('.modal-body');
+  if(body) body.scrollTop = body.scrollHeight;
+}
+
+function delStdRow(i){
+  if(_editorRows.length <= 1) return;
+  _editorRows.splice(i, 1);
+  renderEditorTable();
+}
+
+function saveStds(){
+  // Validate
+  for(const r of _editorRows){
+    if(!r.label.trim() || !r.range.trim()){
+      alert('All standards must have a label and range name.'); return;
+    }
+  }
+
+  // Rebuild STANDARDS and ALL_STD_KEYS from editor rows
+  ALL_STD_KEYS = [];
+  _editorRows.forEach((r, i)=>{
+    const key = r.isNew ? ('std_'+i+'_'+r.range.toLowerCase().replace(/\s+/g,'_')) : r.key;
+    STANDARDS[key] = {
+      Te:    r.Te,
+      Tc:    r.Tc,
+      Tsuc:  r.Tsuc,
+      Tliq:  r.Tliq,
+      label: r.label.trim(),
+      range: r.range.trim(),
+      badge: r.badge || 'nb-en'
+    };
+    ALL_STD_KEYS.push(key);
+  });
+
+  // Reset active standard if it no longer exists
+  if(!ALL_STD_KEYS.includes(activeStd)) {
+    activeStd = ALL_STD_KEYS[0] || 'custom';
+  }
+
+  closeStdEditor();
+  renderStdButtons();
+  setStd(activeStd);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -1342,6 +1557,8 @@ function showErr(e){
 // Apply default language (EN) on load
 document.addEventListener('DOMContentLoaded',()=>{
   setLang('en');
+  renderStdButtons();
+  setStd('en_lbp');
   document.getElementById('pasteArea').addEventListener('paste',()=>setTimeout(parsePaste,50));
 });
 </script>
