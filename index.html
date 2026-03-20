@@ -947,77 +947,93 @@ const THERMO = (function(){
 
 // ═══════════════════════════════════════════════════════════════════
 //  CoolProp.js INTEGRATION (optional — if available, overrides THERMO)
-//  Fix for GitHub Pages: .wasm served without application/wasm MIME type
-//  Solution: fetch WASM as ArrayBuffer → bypass streaming compilation
+//  Fix for GitHub Pages: .wasm served without application/wasm MIME type.
+//  Solution A: instantiateWasm() — fetch as ArrayBuffer, bypasses MIME check.
+//  Solution B: _headers file in repo (see repo root).
 // ═══════════════════════════════════════════════════════════════════
 let cpReady = false;
 
-// ── CoolProp v7.0.0 WebAssembly hook ──────────────────────────────
-// IMPORTANT: Module must be defined BEFORE coolprop.js is loaded.
-// instantiateWasm() overrides Emscripten's default streaming fetch,
-// which fails on GitHub Pages due to missing application/wasm MIME type.
+// Module MUST be a global var defined before coolprop.js loads.
 var Module = {
-  // Override WASM loading — fetch as binary ArrayBuffer instead of streaming
-  // This bypasses the Content-Type: application/wasm requirement
+  // Tell Emscripten where to find the .wasm file
+  locateFile: function(path, scriptDir) {
+    return path; // same folder as index.html
+  },
+
+  // Override WASM instantiation — use ArrayBuffer instead of streaming.
+  // Streaming (WebAssembly.instantiateStreaming) requires Content-Type: application/wasm,
+  // which GitHub Pages does not set. ArrayBuffer fetch has no such restriction.
   instantiateWasm: function(imports, successCallback) {
     const wasmFiles = ['coolprop.wasm', 'CoolProp.wasm'];
     let tried = 0;
-    function tryWasm(){
-      if(tried >= wasmFiles.length){
-        console.error('[CoolProp] All .wasm sources failed');
+
+    function tryWasm() {
+      if (tried >= wasmFiles.length) {
+        console.error('[CoolProp] ❌ All .wasm sources failed');
         return;
       }
-      const wasmUrl = wasmFiles[tried++];
-      console.log('[CoolProp] Fetching WASM:', wasmUrl);
-      fetch(wasmUrl)
-        .then(r => {
-          if(!r.ok) throw new Error('HTTP '+r.status);
+      const url = wasmFiles[tried++];
+      console.log('[CoolProp] Fetching WASM via ArrayBuffer:', url);
+
+      fetch(url)
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + url);
+          console.log('[CoolProp] WASM download complete, compiling…');
           return r.arrayBuffer();
         })
-        .then(bytes => WebAssembly.instantiate(bytes, imports))
-        .then(result => {
-          console.log('[CoolProp] WASM instantiated successfully');
-          successCallback(result.instance);
+        .then(function(bytes) {
+          return WebAssembly.instantiate(bytes, imports);
         })
-        .catch(err => {
-          console.warn('[CoolProp] WASM fetch failed for', wasmUrl, '—', err.message);
+        .then(function(result) {
+          console.log('[CoolProp] ✅ WASM instantiated successfully');
+          // Emscripten expects (instance, module) in newer builds
+          successCallback(result.instance, result.module);
+        })
+        .catch(function(err) {
+          console.warn('[CoolProp] WASM failed for ' + url + ':', err.message);
           tryWasm();
         });
     }
     tryWasm();
-    return {}; // tell Emscripten we handle it ourselves
+    return {}; // signal to Emscripten that we handle instantiation
   },
 
-  onRuntimeInitialized: function(){
+  onRuntimeInitialized: function() {
     cpReady = true;
+    // Probe available API — v7 may expose PropsSI directly or via wrapper
+    const hasPropsSI = typeof Module.PropsSI === 'function';
+    console.log('[CoolProp] ✅ Runtime ready | PropsSI available:', hasPropsSI);
+    if (!hasPropsSI) {
+      console.warn('[CoolProp] PropsSI not found on Module — check CoolProp v7 API');
+    }
     document.getElementById('tbRight').innerHTML =
-      '<div class="status-badge st-ok"><div class="st-dot"></div><span>'+t('cp_ok')+'</span></div>' +
-      '<div class="status-badge st-ok"><div class="st-dot"></div><span>'+t('cp_acc')+'</span></div>';
+      '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_ok') + '</span></div>' +
+      '<div class="status-badge st-ok"><div class="st-dot"></div><span>' + t('cp_acc') + '</span></div>';
     document.getElementById('infoBar').innerHTML =
-      '✅ <span>'+t('cp_ready_msg')+'</span>';
+      '✅ <span>' + t('cp_ready_msg') + '</span>';
     updateBtns();
-    console.log('[CoolProp] v7.0.0 ready — PropsSI available:', typeof Module.PropsSI);
   },
-  print:    function(msg){ console.log('[CoolProp]', msg); },
-  printErr: function(msg){ console.warn('[CoolProp]', msg); }
+
+  print:    function(msg) { console.log('[CoolProp]', msg); },
+  printErr: function(msg) { console.warn('[CoolProp]', msg); }
 };
 
-(function(){
+(function() {
   const srcs = [
-    'coolprop.js',  // CoolProp v7.0.0 lowercase — primary
+    'coolprop.js',  // v7.0.0 lowercase — primary
     'CoolProp.js',  // old capitalised fallback
   ];
   let idx = 0;
-  let cpLoadTimer = null;
+  let timer = null;
 
-  function tryNext(){
-    if(idx >= srcs.length){
-      console.warn('[CoolProp] JS file not found — running on PR EOS fallback (±1%)');
+  function tryNext() {
+    if (idx >= srcs.length) {
+      console.warn('[CoolProp] JS file not found — using PR EOS fallback (±1%)');
       document.getElementById('tbRight').innerHTML =
-        '<div class="status-badge st-warn"><div class="st-dot"></div><span>'+t('cp_pr')+'</span></div>' +
-        '<div class="status-badge st-warn"><div class="st-dot"></div><span>'+t('cp_missing')+'</span></div>';
+        '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_pr') + '</span></div>' +
+        '<div class="status-badge st-warn"><div class="st-dot"></div><span>' + t('cp_missing') + '</span></div>';
       document.getElementById('infoBar').innerHTML =
-        '⚠️ <span><strong>'+t('cp_missing')+'.</strong> '+t('cp_miss')+
+        '⚠️ <span><strong>' + t('cp_missing') + '.</strong> ' + t('cp_miss') +
         ' <a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.js/download" ' +
         'style="color:#7dd3fc" target="_blank">coolprop.js</a> (161 kB) + ' +
         '<a href="https://sourceforge.net/projects/coolprop/files/CoolProp/7.0.0/Javascript/coolprop.wasm/download" ' +
@@ -1029,18 +1045,17 @@ var Module = {
     const script = document.createElement('script');
     script.src = src;
 
-    script.onerror = function(){
+    script.onerror = function() {
       console.log('[CoolProp] JS not found:', src);
-      clearTimeout(cpLoadTimer);
+      clearTimeout(timer);
       tryNext();
     };
 
-    script.onload = function(){
-      console.log('[CoolProp] JS loaded:', src, '— waiting for WASM init…');
-      // Wait up to 30s — 6.9 MB WASM needs time on slow connections
-      cpLoadTimer = setTimeout(function(){
-        if(!cpReady){
-          console.warn('[CoolProp] WASM timeout on:', src, '— trying next');
+    script.onload = function() {
+      console.log('[CoolProp] JS loaded:', src, '— WASM compiling (up to 30s for 6.9 MB)…');
+      timer = setTimeout(function() {
+        if (!cpReady) {
+          console.warn('[CoolProp] WASM compile timeout — trying next source');
           tryNext();
         }
       }, 30000);
