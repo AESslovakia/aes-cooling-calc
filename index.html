@@ -190,6 +190,54 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 .cond-mini input:focus{outline:none;border-color:#2563eb;border-style:solid}
 .acc-note{font-size:9.5px;color:#9aa3b8;background:#f8faff;border:1px solid #e4e9f4;border-radius:6px;padding:6px 10px;margin-top:6px;line-height:1.5}
 .acc-note strong{color:#2563eb}
+/* ── MANUAL MODAL ── */
+.manual-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:3000;display:flex;align-items:stretch;justify-content:flex-end;backdrop-filter:blur(3px)}
+.manual-panel{width:min(860px,100vw);background:#f0f3f9;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.3);overflow:hidden}
+.manual-topbar{background:#0d1f3c;padding:12px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.manual-topbar h2{flex:1;color:#fff;font-size:14px;font-weight:700;font-family:'Inter',sans-serif}
+.manual-lang-btns{display:flex;gap:5px}
+.manual-lang-btn{padding:4px 12px;border:1.5px solid rgba(255,255,255,.2);border-radius:6px;background:transparent;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
+.manual-lang-btn.active{background:#2563eb;border-color:#2563eb;color:#fff}
+.manual-close-btn{width:28px;height:28px;border-radius:7px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.manual-close-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.manual-body{flex:1;overflow-y:auto;padding:28px 24px}
+/* manual content styles */
+.man-cover{background:linear-gradient(135deg,#0d1f3c,#1a3254);border-radius:12px;padding:28px 28px 24px;margin-bottom:24px;text-align:center}
+.man-cover h1{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.5px}
+.man-cover h1 span{color:#3b82f6}
+.man-cover p{font-size:12px;color:rgba(122,163,204,.8);max-width:440px;margin:0 auto}
+.man-toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:7px;margin-bottom:28px}
+.man-toc-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid #e4e9f4;border-radius:8px;text-decoration:none;color:#1e2433;background:#fff;font-size:11px;font-weight:600;transition:all .12s;cursor:pointer}
+.man-toc-link:hover{border-color:#2563eb;color:#2563eb;background:#eef3ff}
+.man-toc-num{font-size:9px;font-weight:700;color:#9aa3b8;min-width:18px;font-family:'IBM Plex Mono',monospace}
+.man-sec{margin-bottom:28px}
+.man-sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid #e4e9f4}
+.man-sec-num{width:28px;height:28px;background:#0d1f3c;color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'IBM Plex Mono',monospace;flex-shrink:0}
+.man-sec-title{font-size:16px;font-weight:700;color:#0d1f3c}
+.man-step{background:#fff;border:1px solid #e4e9f4;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.man-step-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.man-step-icon.bl{background:#eff6ff}.man-step-icon.gr{background:#ecfdf5}.man-step-icon.am{background:#fffbeb}.man-step-icon.dk{background:#f1f5ff}
+.man-step-title{font-size:12px;font-weight:700;color:#0d1f3c;margin-bottom:3px}
+.man-step-desc{font-size:11.5px;color:#4b5563;line-height:1.6}
+.man-step-desc code{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-size:10.5px;color:#0d1f3c;font-family:'IBM Plex Mono',monospace}
+.man-note{display:flex;gap:10px;padding:11px 14px;border-radius:8px;margin:10px 0;font-size:11.5px;line-height:1.5}
+.man-note.bl{background:#eff6ff;border:1px solid #bfdbfe}
+.man-note.gr{background:#ecfdf5;border:1px solid #a7f3d0}
+.man-note.am{background:#fffbeb;border:1px solid #fde68a}
+.man-mock{background:#0d1f3c;border-radius:8px;padding:12px 16px;margin:8px 0;font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.7;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.08)}
+.man-mock .hl{color:#3b82f6;font-weight:600}.man-mock .gn{color:#34d399}.man-mock .am{color:#fbbf24}.man-mock .dm{color:rgba(255,255,255,.3)}
+.man-mock .tk{display:inline-block;border-radius:4px;padding:1px 6px;font-size:9.5px;margin:1px}
+.man-mock .tk-b{background:rgba(37,99,235,.25);border:1px solid rgba(37,99,235,.5);color:#93c5fd}
+.man-mock .tk-g{background:rgba(5,150,105,.2);border:1px solid rgba(5,150,105,.4);color:#6ee7b7}
+.man-mock .tk-y{background:rgba(180,83,9,.2);border:1px solid rgba(180,83,9,.4);color:#fcd34d}
+.man-col2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.man-ref-table{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
+.man-ref-table th{background:#0d1f3c;color:#fff;padding:7px 10px;text-align:left;font-weight:600;font-size:10px}
+.man-ref-table td{padding:6px 10px;border-bottom:1px solid #e4e9f4}
+.man-ref-table tr:hover td{background:#fafbfd}
+.man-section{display:none}.man-section.active{display:block}
+.man-badge{display:inline-block;font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.mb-en{background:#dbeafe;color:#1e40af}.mb-cc{background:#f3e8ff;color:#5b21b6}.mb-ash{background:#dcfce7;color:#14532d}.mb-ari{background:#fef3c7;color:#92400e}
 
 /* ── MULTI-MEASUREMENT ── */
 .meas-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
@@ -303,6 +351,7 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
   <!-- Language bar + Standards editor button -->
   <div class="lang-bar">
     <button class="edit-stds-btn" onclick="openStdEditor()">⚙️ <span data-i18n="edit_stds_btn">Edit Standards</span></button>
+    <button class="edit-stds-btn" onclick="openManual()" style="color:#059669;border-color:#6ee7b7">📖 Manual</button>
     <span class="lang-label" style="margin-left:8px">Language</span>
     <button class="lang-btn active" id="lb_en" onclick="setLang('en')"><span class="lang-flag">🇬🇧</span> English</button>
     <button class="lang-btn" id="lb_de" onclick="setLang('de')"><span class="lang-flag">🇩🇪</span> Deutsch</button>
@@ -465,6 +514,256 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
     </div>
 
   </div>
+  <!-- ═══ MANUAL MODAL ═══ -->
+  <div class="manual-overlay" id="manualModal" style="display:none" onclick="if(event.target===this)closeManual()">
+    <div class="manual-panel">
+      <div class="manual-topbar">
+        <h2>📖 AES Cooling Calculator — User Manual</h2>
+        <div class="manual-lang-btns">
+          <button class="manual-lang-btn active" onclick="setManualLang('en')">🇬🇧 EN</button>
+          <button class="manual-lang-btn" onclick="setManualLang('de')">🇩🇪 DE</button>
+          <button class="manual-lang-btn" onclick="setManualLang('sk')">🇸🇰 SK</button>
+        </div>
+        <button class="manual-close-btn" onclick="closeManual()">✕</button>
+      </div>
+      <div class="manual-body" id="manualBody">
+
+        <!-- ═══ ENGLISH ═══ -->
+        <div class="man-section active" id="man-en">
+          <div class="man-cover"><h1>AES <span>Cooling</span> Calculator</h1><p>Guide to calculating compressor cooling capacity · EN 12900 · CECOMAF · ASHRAE · ARI 540 · v3.1</p></div>
+          <div class="man-toc">
+            <div class="man-toc-link" onclick="manScroll('en-s1')"><span class="man-toc-num">01</span>Login (PIN)</div>
+            <div class="man-toc-link" onclick="manScroll('en-s2')"><span class="man-toc-num">02</span>Interface Overview</div>
+            <div class="man-toc-link" onclick="manScroll('en-s3')"><span class="man-toc-num">03</span>Adding Measurements</div>
+            <div class="man-toc-link" onclick="manScroll('en-s4')"><span class="man-toc-num">04</span>Pasting Excel Data</div>
+            <div class="man-toc-link" onclick="manScroll('en-s5')"><span class="man-toc-num">05</span>Selecting a Standard</div>
+            <div class="man-toc-link" onclick="manScroll('en-s6')"><span class="man-toc-num">06</span>Calculating</div>
+            <div class="man-toc-link" onclick="manScroll('en-s7')"><span class="man-toc-num">07</span>Debug Panel</div>
+            <div class="man-toc-link" onclick="manScroll('en-s8')"><span class="man-toc-num">08</span>Export to Word</div>
+            <div class="man-toc-link" onclick="manScroll('en-s9')"><span class="man-toc-num">09</span>Edit Header &amp; Logo</div>
+            <div class="man-toc-link" onclick="manScroll('en-s10')"><span class="man-toc-num">10</span>Standards Editor</div>
+            <div class="man-toc-link" onclick="manScroll('en-s11')"><span class="man-toc-num">11</span>Standards Reference</div>
+          </div>
+
+          <div class="man-sec" id="en-s1"><div class="man-sec-head"><div class="man-sec-num">01</div><div class="man-sec-title">Login (PIN)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">🔐</div><div><div class="man-step-title">Enter your 4-digit PIN to access the calculator</div><div class="man-step-desc">When you open the page, a PIN screen appears. Use the on-screen keypad or keyboard number keys (0–9 and Backspace). Default PIN: <code>1234</code>. After 4 digits the lock opens automatically — no confirm button needed.</div></div></div>
+            <div class="man-note bl"><span>💡</span><div>PIN can be changed in the source code — find <code>const PIN = '1234'</code> and set your value.</div></div>
+          </div>
+
+          <div class="man-sec" id="en-s2"><div class="man-sec-head"><div class="man-sec-num">02</div><div class="man-sec-title">Interface Overview</div></div>
+            <div class="man-mock"><span class="hl">Topbar (dark)</span> — Company name · Logo · CoolProp status · ✏️ Edit header<br><span class="am">Settings bar</span> — ⚙️ Standards · 📖 Manual · 🇬🇧🇩🇪🇸🇰 Language<br><span class="gn">Toolbar</span> — ＋ Add measurement · 🧮 Calc all · 📄 Export .docx · ✕ Clear all<br><span class="dm">────────────────────────────────────────────────────────</span><br><span class="hl">Left panel</span> — Measurement rows (unlimited, independent)<br><span class="hl">Right panel</span> — 🔧 Debug — intermediate calculation values</div>
+          </div>
+
+          <div class="man-sec" id="en-s3"><div class="man-sec-head"><div class="man-sec-num">03</div><div class="man-sec-title">Adding Measurements</div></div>
+            <div class="man-step"><div class="man-step-icon bl">➕</div><div><div class="man-step-title">Click "＋ Add measurement"</div><div class="man-step-desc">Each click adds a new independent row. No limit. Each row has its own data, standard and result.</div></div></div>
+            <div class="man-step"><div class="man-step-icon dk">🗑</div><div><div class="man-step-title">Delete a row</div><div class="man-step-desc">Click the 🗑 icon on the right of any row header to delete that measurement.</div></div></div>
+            <div class="man-step"><div class="man-step-icon am">✕</div><div><div class="man-step-title">Clear all</div><div class="man-step-desc">The <strong>✕ Clear all</strong> button removes all rows and resets the debug panel.</div></div></div>
+          </div>
+
+          <div class="man-sec" id="en-s4"><div class="man-sec-head"><div class="man-sec-num">04</div><div class="man-sec-title">Pasting Excel Data</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📋</div><div><div class="man-step-title">Copy row 3 (cols A–AK) → Ctrl+V in the measurement row textarea</div><div class="man-step-desc">In Excel click on row number 3 → <code>Ctrl+C</code>. In the calculator click in the paste area → <code>Ctrl+V</code>. Parsing is automatic — no Parse button needed.</div></div></div>
+            <div class="man-mock"><span class="dm">After paste, two coloured strips appear:</span><br><span class="tk tk-y">Calo</span><span class="tk tk-y">Order</span><span class="tk tk-y">Te −35.0°C</span><span class="tk tk-y">Tc 40.0°C</span><span class="tk tk-y">220 V</span><span class="tk tk-y">50 Hz</span> <span class="am">← SET VALUES (B–U)</span><br><span class="tk tk-g">Te −35.00°C</span><span class="tk tk-g">Tc 39.98°C</span><span class="tk tk-g">Qv 395.2 W</span><span class="tk tk-g">P1 267.4 W</span><span class="tk tk-g">I 1.89 A</span> <span class="gn">← MEASURED VALUES (W–AK)</span></div>
+            <div class="man-note am"><span>⚠️</span><div><strong>Column count:</strong> Parser expects ≥41 columns. A warning tag appears if fewer — check you copied the correct row.</div></div>
+          </div>
+
+          <div class="man-sec" id="en-s5"><div class="man-sec-head"><div class="man-sec-num">05</div><div class="man-sec-title">Selecting a Standard</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📐</div><div><div class="man-step-title">Click the standard button in the measurement row</div><div class="man-step-desc">Each row has its own buttons: EN 12900 LBP/MBP/HBP · CECOMAF · ASHRAE · ARI 540 · Custom. Active standard is highlighted blue. Selecting <strong>Custom</strong> reveals Te/Tc/Tsuc/Tliq input fields — each row can have different custom values.</div></div></div>
+            <table class="man-ref-table"><thead><tr><th>Standard</th><th>Range</th><th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th></tr></thead><tbody>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>LBP</td><td>−35°C</td><td>40°C</td><td>20°C</td><td>40°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>MBP</td><td>−10°C</td><td>45°C</td><td>20°C</td><td>45°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>HBP</td><td>+5°C</td><td>50°C</td><td>20°C</td><td>50°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>LBP</td><td>−25°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>MBP</td><td>−10°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>LBP</td><td>−23.3°C</td><td>54.4°C</td><td>32.2°C</td><td>32.2°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>LBP</td><td>−23.3°C</td><td>49°C</td><td>4.4°C</td><td>49°C</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="man-sec" id="en-s6"><div class="man-sec-head"><div class="man-sec-num">06</div><div class="man-sec-title">Calculating</div></div>
+            <div class="man-col2">
+              <div class="man-step"><div class="man-step-icon gr">🧮</div><div><div class="man-step-title">Single row</div><div class="man-step-desc">Click <strong>🧮 Calculate — [Standard]</strong> inside the row. Result: Qo (3dp), COP (3dp), P1 (2dp), mass flow (3dp).</div></div></div>
+              <div class="man-step"><div class="man-step-icon gr">⚡</div><div><div class="man-step-title">All rows</div><div class="man-step-desc">Click <strong>🧮 Calculate all</strong> in the toolbar — calculates every row with data using its own selected standard.</div></div></div>
+            </div>
+            <div class="man-note bl"><span>💡</span><div>Formula: <strong>Qo = Qvessel × CF_ρ × CF_Δh</strong>. With CoolProp.js loaded (green badge) accuracy is &lt;0.01%. Without it: PR EOS fallback ≈±1%.</div></div>
+          </div>
+
+          <div class="man-sec" id="en-s7"><div class="man-sec-head"><div class="man-sec-num">07</div><div class="man-sec-title">Debug Panel</div></div>
+            <div class="man-step"><div class="man-step-icon dk">🔧</div><div><div class="man-step-title">View all intermediate thermodynamic values</div><div class="man-step-desc">After calculating, click <strong>debug →</strong> in the result line or choose a row from the dropdown at top of the panel. Four tabs: <strong>Measurement</strong> (pe, pc, enthalpies, density) · <strong>Ref. conditions</strong> · <strong>Corrections</strong> (CF_ρ, CF_Δh to 8dp) · <strong>Result</strong>.</div></div></div>
+          </div>
+
+          <div class="man-sec" id="en-s8"><div class="man-sec-head"><div class="man-sec-num">08</div><div class="man-sec-title">Export to Word (.docx)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📄</div><div><div class="man-step-title">Click "📄 Export .docx" in the toolbar</div><div class="man-step-desc">Active once ≥1 measurement calculated. The Word document contains: <strong>Summary table</strong> (all results) + one detail page per measurement with:<br>• <strong>Set values B–U</strong> — identification + set conditions<br>• <strong>Measured values W–AK</strong> — temperatures, current, voltage, RPM<br>• <strong>Result</strong> — Qo, COP, P1, mass flow</div></div></div>
+            <div class="man-note gr"><span>✅</span><div>Logo and company name from the header editor are automatically embedded in the Word document.</div></div>
+          </div>
+
+          <div class="man-sec" id="en-s9"><div class="man-sec-head"><div class="man-sec-num">09</div><div class="man-sec-title">Edit Header &amp; Logo</div></div>
+            <div class="man-step"><div class="man-step-icon bl">✏️</div><div><div class="man-step-title">Click anywhere on the topbar or "✏️ Edit header"</div><div class="man-step-desc">Upload a <strong>PNG/JPG logo</strong> (shown in topbar, embedded in Word). Edit <strong>Company title</strong>, <strong>Subtitle</strong>, and <strong>Footer text</strong> used in Word exports. Click Apply to save.</div></div></div>
+          </div>
+
+          <div class="man-sec" id="en-s10"><div class="man-sec-head"><div class="man-sec-num">10</div><div class="man-sec-title">Standards Editor</div></div>
+            <div class="man-step"><div class="man-step-icon bl">⚙️</div><div><div class="man-step-title">Click "⚙️ Edit Standards" in the settings bar</div><div class="man-step-desc">Edit Te/Tc/Tsuc/Tliq for any standard, rename, delete, or add new ones. Changes apply immediately. Note: session-only — resets on page reload.</div></div></div>
+          </div>
+
+          <div class="man-sec" id="en-s11"><div class="man-sec-head"><div class="man-sec-num">11</div><div class="man-sec-title">Standards Reference</div></div>
+            <table class="man-ref-table"><thead><tr><th>Standard</th><th>Range</th><th>Application</th><th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th></tr></thead><tbody>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>LBP</td><td>Freezer</td><td>−35°C</td><td>40°C</td><td>20°C</td><td>40°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>MBP</td><td>Refrigerator</td><td>−10°C</td><td>45°C</td><td>20°C</td><td>45°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>HBP</td><td>Air conditioning</td><td>+5°C</td><td>50°C</td><td>20°C</td><td>50°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>LBP</td><td>European freezer</td><td>−25°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>MBP</td><td>European fridge</td><td>−10°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>HBP</td><td>European A/C</td><td>+5°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>LBP</td><td>N. American freezer</td><td>−23.3°C</td><td>54.4°C</td><td>32.2°C</td><td>32.2°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>MBP</td><td>N. American fridge</td><td>−6.7°C</td><td>54.4°C</td><td>35°C</td><td>46.1°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>LBP</td><td>AHRI freezer</td><td>−23.3°C</td><td>49°C</td><td>4.4°C</td><td>49°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>MBP</td><td>AHRI fridge</td><td>−6.7°C</td><td>49°C</td><td>18°C</td><td>49°C</td></tr>
+            </tbody></table>
+          </div>
+        </div><!-- man-en -->
+
+        <!-- ═══ DEUTSCH ═══ -->
+        <div class="man-section" id="man-de">
+          <div class="man-cover"><h1>AES <span>Kälte</span>rechner</h1><p>Anleitung zur Berechnung der Kälteleistung · EN 12900 · CECOMAF · ASHRAE · ARI 540 · v3.1</p></div>
+          <div class="man-toc">
+            <div class="man-toc-link" onclick="manScroll('de-s1')"><span class="man-toc-num">01</span>Anmeldung (PIN)</div>
+            <div class="man-toc-link" onclick="manScroll('de-s2')"><span class="man-toc-num">02</span>Übersicht</div>
+            <div class="man-toc-link" onclick="manScroll('de-s3')"><span class="man-toc-num">03</span>Messung hinzufügen</div>
+            <div class="man-toc-link" onclick="manScroll('de-s4')"><span class="man-toc-num">04</span>Excel-Daten einfügen</div>
+            <div class="man-toc-link" onclick="manScroll('de-s5')"><span class="man-toc-num">05</span>Norm auswählen</div>
+            <div class="man-toc-link" onclick="manScroll('de-s6')"><span class="man-toc-num">06</span>Berechnen</div>
+            <div class="man-toc-link" onclick="manScroll('de-s7')"><span class="man-toc-num">07</span>Debug-Panel</div>
+            <div class="man-toc-link" onclick="manScroll('de-s8')"><span class="man-toc-num">08</span>Word-Export</div>
+            <div class="man-toc-link" onclick="manScroll('de-s9')"><span class="man-toc-num">09</span>Kopfzeile &amp; Logo</div>
+            <div class="man-toc-link" onclick="manScroll('de-s10')"><span class="man-toc-num">10</span>Normen-Editor</div>
+            <div class="man-toc-link" onclick="manScroll('de-s11')"><span class="man-toc-num">11</span>Normenreferenz</div>
+          </div>
+          <div class="man-sec" id="de-s1"><div class="man-sec-head"><div class="man-sec-num">01</div><div class="man-sec-title">Anmeldung (PIN)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">🔐</div><div><div class="man-step-title">4-stellige PIN eingeben</div><div class="man-step-desc">Beim Öffnen erscheint eine PIN-Maske. Zifferntasten 0–9 und Rücktaste funktionieren auch auf der Tastatur. Standard-PIN: <code>1234</code>. Nach 4 Ziffern öffnet sich die App automatisch.</div></div></div>
+            <div class="man-note bl"><span>💡</span><div>PIN im Quellcode ändern: <code>const PIN = '1234'</code></div></div>
+          </div>
+          <div class="man-sec" id="de-s2"><div class="man-sec-head"><div class="man-sec-num">02</div><div class="man-sec-title">Oberfläche — Übersicht</div></div>
+            <div class="man-mock"><span class="hl">Kopfleiste</span> — Firmenname · Logo · CoolProp-Status · ✏️ Bearbeiten<br><span class="am">Einstellungsleiste</span> — ⚙️ Normen · 📖 Handbuch · Sprache<br><span class="gn">Werkzeugleiste</span> — ＋ Hinzufügen · 🧮 Alle berechnen · 📄 Export · ✕ Löschen<br><span class="hl">Links</span> — Messungszeilen (unbegrenzt, unabhängig)<br><span class="hl">Rechts</span> — 🔧 Debug-Panel (Zwischenwerte)</div>
+          </div>
+          <div class="man-sec" id="de-s3"><div class="man-sec-head"><div class="man-sec-num">03</div><div class="man-sec-title">Messung hinzufügen</div></div>
+            <div class="man-step"><div class="man-step-icon bl">➕</div><div><div class="man-step-title">„＋ Add measurement" klicken</div><div class="man-step-desc">Jeder Klick fügt eine unabhängige Zeile hinzu. Unbegrenzte Anzahl. Jede Zeile hat eigene Daten, Norm und Ergebnis. 🗑 zum Löschen einer Zeile. <strong>✕ Clear all</strong> löscht alle.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s4"><div class="man-sec-head"><div class="man-sec-num">04</div><div class="man-sec-title">Excel-Daten einfügen</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📋</div><div><div class="man-step-title">Zeile 3 (Spalten A–AK) kopieren → Strg+V in Messungszeile</div><div class="man-step-desc">In Excel auf Zeilennummer 3 klicken → <code>Strg+C</code>. Im Rechner ins Textfeld der Zeile klicken → <code>Strg+V</code>. Parsen erfolgt automatisch.</div></div></div>
+            <div class="man-mock"><span class="tk tk-y">Calo</span><span class="tk tk-y">Bestellung</span><span class="tk tk-y">Te −35,0°C</span><span class="tk tk-y">Tc 40,0°C</span><span class="tk tk-y">220 V</span> <span class="am">← SOLLWERTE (B–U)</span><br><span class="tk tk-g">Te −35,00°C</span><span class="tk tk-g">Tc 39,98°C</span><span class="tk tk-g">Qv 395,2 W</span><span class="tk tk-g">P1 267,4 W</span> <span class="gn">← MESSWERTE (W–AK)</span></div>
+          </div>
+          <div class="man-sec" id="de-s5"><div class="man-sec-head"><div class="man-sec-num">05</div><div class="man-sec-title">Norm auswählen</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📐</div><div><div class="man-step-title">Norm-Schaltfläche in der Messungszeile klicken</div><div class="man-step-desc">Jede Zeile hat eigene Norm-Buttons: EN 12900 · CECOMAF · ASHRAE · ARI 540 · Benutzerdefiniert. Bei <strong>Custom</strong> erscheinen Felder für Te, Tc, Tsuc, Tliq — jede Zeile kann eigene Werte haben.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s6"><div class="man-sec-head"><div class="man-sec-num">06</div><div class="man-sec-title">Berechnen</div></div>
+            <div class="man-col2">
+              <div class="man-step"><div class="man-step-icon gr">🧮</div><div><div class="man-step-title">Einzelne Zeile</div><div class="man-step-desc"><strong>🧮 Calculate — [Norm]</strong> klicken. Ergebnis: Qo, COP, P1, Massenstrom.</div></div></div>
+              <div class="man-step"><div class="man-step-icon gr">⚡</div><div><div class="man-step-title">Alle Zeilen</div><div class="man-step-desc"><strong>🧮 Calculate all</strong> in der Werkzeugleiste berechnet alle Zeilen mit Daten.</div></div></div>
+            </div>
+            <div class="man-note bl"><span>💡</span><div>Formel: <strong>Qo = Qvessel × CF_ρ × CF_Δh</strong>. Mit CoolProp.js (grüner Badge): &lt;0,01% Genauigkeit.</div></div>
+          </div>
+          <div class="man-sec" id="de-s7"><div class="man-sec-head"><div class="man-sec-num">07</div><div class="man-sec-title">Debug-Panel</div></div>
+            <div class="man-step"><div class="man-step-icon dk">🔧</div><div><div class="man-step-title">Alle Zwischenwerte einsehen</div><div class="man-step-desc">Nach der Berechnung <strong>debug →</strong> klicken oder Zeile im Dropdown wählen. Reiter: <strong>Messung</strong> · <strong>Ref.-Bedingungen</strong> · <strong>Korrekturen</strong> (CF_ρ, CF_Δh mit 8 Nachkommastellen) · <strong>Ergebnis</strong>.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s8"><div class="man-sec-head"><div class="man-sec-num">08</div><div class="man-sec-title">Word-Export (.docx)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📄</div><div><div class="man-step-title">„📄 Export .docx" in der Werkzeugleiste klicken</div><div class="man-step-desc">Aktiv sobald ≥1 Messung berechnet. Enthält: <strong>Zusammenfassung</strong> aller Ergebnisse + Detailseite pro Messung mit Sollwerten (B–U), Messwerten (W–AK) und Berechnungsergebnis.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s9"><div class="man-sec-head"><div class="man-sec-num">09</div><div class="man-sec-title">Kopfzeile &amp; Logo bearbeiten</div></div>
+            <div class="man-step"><div class="man-step-icon bl">✏️</div><div><div class="man-step-title">Auf Kopfleiste klicken oder „✏️ Edit header"</div><div class="man-step-desc">Logo hochladen (PNG/JPG), Haupttitel, Untertitel und Fußzeilentext für Word-Exporte bearbeiten. Alles wird automatisch in .docx eingebettet.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s10"><div class="man-sec-head"><div class="man-sec-num">10</div><div class="man-sec-title">Normen-Editor</div></div>
+            <div class="man-step"><div class="man-step-icon bl">⚙️</div><div><div class="man-step-title">„⚙️ Edit Standards" klicken</div><div class="man-step-desc">Te/Tc/Tsuc/Tliq für jede Norm bearbeiten, Normen umbenennen, löschen oder neue hinzufügen. Sitzungs-basiert — nach Neuladen zurückgesetzt.</div></div></div>
+          </div>
+          <div class="man-sec" id="de-s11"><div class="man-sec-head"><div class="man-sec-num">11</div><div class="man-sec-title">Normenreferenz</div></div>
+            <table class="man-ref-table"><thead><tr><th>Norm</th><th>Bereich</th><th>Anwendung</th><th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th></tr></thead><tbody>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>LBP</td><td>Tiefkühlung</td><td>−35°C</td><td>40°C</td><td>20°C</td><td>40°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>MBP</td><td>Kühlung</td><td>−10°C</td><td>45°C</td><td>20°C</td><td>45°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>LBP</td><td>Europ. Tiefkühlung</td><td>−25°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>LBP</td><td>Nordamerik. Tiefkühlung</td><td>−23,3°C</td><td>54,4°C</td><td>32,2°C</td><td>32,2°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>LBP</td><td>AHRI-Tiefkühlung</td><td>−23,3°C</td><td>49°C</td><td>4,4°C</td><td>49°C</td></tr>
+            </tbody></table>
+          </div>
+        </div><!-- man-de -->
+
+        <!-- ═══ SLOVENSKY ═══ -->
+        <div class="man-section" id="man-sk">
+          <div class="man-cover"><h1>AES <span>Chladiaci</span> kalkulátor</h1><p>Návod na výpočet chladiaceho výkonu · EN 12900 · CECOMAF · ASHRAE · ARI 540 · v3.1</p></div>
+          <div class="man-toc">
+            <div class="man-toc-link" onclick="manScroll('sk-s1')"><span class="man-toc-num">01</span>Prihlásenie (PIN)</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s2')"><span class="man-toc-num">02</span>Prehľad rozhrania</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s3')"><span class="man-toc-num">03</span>Pridanie merania</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s4')"><span class="man-toc-num">04</span>Vloženie dát z Excelu</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s5')"><span class="man-toc-num">05</span>Výber normy</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s6')"><span class="man-toc-num">06</span>Výpočet</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s7')"><span class="man-toc-num">07</span>Debug panel</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s8')"><span class="man-toc-num">08</span>Export do Wordu</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s9')"><span class="man-toc-num">09</span>Hlavička a logo</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s10')"><span class="man-toc-num">10</span>Editor noriem</div>
+            <div class="man-toc-link" onclick="manScroll('sk-s11')"><span class="man-toc-num">11</span>Referencia noriem</div>
+          </div>
+          <div class="man-sec" id="sk-s1"><div class="man-sec-head"><div class="man-sec-num">01</div><div class="man-sec-title">Prihlásenie (PIN)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">🔐</div><div><div class="man-step-title">Zadajte 4-ciferný PIN</div><div class="man-step-desc">Po otvorení stránky sa zobrazí PIN obrazovka. Číselné klávesy 0–9 a Backspace fungujú priamo na klávesnici. Predvolený PIN: <code>1234</code>. Po 4 cifrách sa app automaticky otvorí.</div></div></div>
+            <div class="man-note bl"><span>💡</span><div>PIN zmeníte v zdrojovom kóde: vyhľadajte <code>const PIN = '1234'</code></div></div>
+          </div>
+          <div class="man-sec" id="sk-s2"><div class="man-sec-head"><div class="man-sec-num">02</div><div class="man-sec-title">Prehľad rozhrania</div></div>
+            <div class="man-mock"><span class="hl">Topbar (tmavý)</span> — Názov firmy · Logo · Stav CoolProp · ✏️ Upraviť<br><span class="am">Lišta nastavení</span> — ⚙️ Normy · 📖 Manuál · Jazyk (EN/DE/SK)<br><span class="gn">Panel meraní</span> — ＋ Pridať · 🧮 Vypočítať všetky · 📄 Export · ✕ Vymazať<br><span class="hl">Vľavo</span> — Riadky meraní (neobmedzene, každý nezávislý)<br><span class="hl">Vpravo</span> — 🔧 Debug panel (medzivýsledky výpočtu)</div>
+          </div>
+          <div class="man-sec" id="sk-s3"><div class="man-sec-head"><div class="man-sec-num">03</div><div class="man-sec-title">Pridanie merania</div></div>
+            <div class="man-step"><div class="man-step-icon bl">➕</div><div><div class="man-step-title">Kliknite na „＋ Add measurement"</div><div class="man-step-desc">Každý klik pridá nový nezávislý riadok. Bez limitu. Každý riadok má vlastné dáta, normu a výsledok. 🗑 maže jednotlivý riadok. <strong>✕ Clear all</strong> vymaže všetky.</div></div></div>
+          </div>
+          <div class="man-sec" id="sk-s4"><div class="man-sec-head"><div class="man-sec-num">04</div><div class="man-sec-title">Vloženie dát z Excelu</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📋</div><div><div class="man-step-title">Skopírujte riadok 3 (stĺpce A–AK) → Ctrl+V do meracieho riadku</div><div class="man-step-desc">V Exceli kliknite na číslo riadku 3 → <code>Ctrl+C</code>. V kalkulátore kliknite do textového poľa → <code>Ctrl+V</code>. Parsovanie je automatické.</div></div></div>
+            <div class="man-mock"><span class="tk tk-y">Calo</span><span class="tk tk-y">Objednávka</span><span class="tk tk-y">Te −35,0°C</span><span class="tk tk-y">Tc 40,0°C</span><span class="tk tk-y">220 V</span><span class="tk tk-y">50 Hz</span> <span class="am">← SET VALUES (B–U)</span><br><span class="tk tk-g">Te −35,00°C</span><span class="tk tk-g">Tc 39,98°C</span><span class="tk tk-g">Qv 395,2 W</span><span class="tk tk-g">P1 267,4 W</span><span class="tk tk-g">I 1,89 A</span> <span class="gn">← MEASURED VALUES (W–AK)</span></div>
+            <div class="man-note am"><span>⚠️</span><div><strong>Počet stĺpcov:</strong> Očakáva sa minimálne 41 stĺpcov. Varovný tag sa zobrazí pri menšom počte.</div></div>
+          </div>
+          <div class="man-sec" id="sk-s5"><div class="man-sec-head"><div class="man-sec-num">05</div><div class="man-sec-title">Výber normy</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📐</div><div><div class="man-step-title">Kliknite na tlačidlo normy v meracom riadku</div><div class="man-step-desc">Každý riadok má vlastné tlačidlá: EN 12900 LBP/MBP/HBP · CECOMAF · ASHRAE · ARI 540 · Custom. Aktívna norma je modrá. Pri <strong>Custom</strong> sa zobrazia polia Te/Tc/Tsuc/Tliq — každý riadok môže mať iné vlastné hodnoty.</div></div></div>
+            <table class="man-ref-table"><thead><tr><th>Norma</th><th>Rozsah</th><th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th></tr></thead><tbody>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>LBP</td><td>−35°C</td><td>40°C</td><td>20°C</td><td>40°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>MBP</td><td>−10°C</td><td>45°C</td><td>20°C</td><td>45°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>HBP</td><td>+5°C</td><td>50°C</td><td>20°C</td><td>50°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>LBP</td><td>−25°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>LBP</td><td>−23,3°C</td><td>54,4°C</td><td>32,2°C</td><td>32,2°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>LBP</td><td>−23,3°C</td><td>49°C</td><td>4,4°C</td><td>49°C</td></tr>
+            </tbody></table>
+          </div>
+          <div class="man-sec" id="sk-s6"><div class="man-sec-head"><div class="man-sec-num">06</div><div class="man-sec-title">Výpočet</div></div>
+            <div class="man-col2">
+              <div class="man-step"><div class="man-step-icon gr">🧮</div><div><div class="man-step-title">Jeden riadok</div><div class="man-step-desc">Kliknite na <strong>🧮 Calculate — [Norma]</strong>. Výsledok: Qo (3dp), COP (3dp), P1 (2dp), hm. prietok.</div></div></div>
+              <div class="man-step"><div class="man-step-icon gr">⚡</div><div><div class="man-step-title">Všetky riadky</div><div class="man-step-desc"><strong>🧮 Calculate all</strong> v paneli — vypočíta každý riadok s dátami jeho zvolenou normou.</div></div></div>
+            </div>
+            <div class="man-note bl"><span>💡</span><div>Vzorec: <strong>Qo = Qvessel × CF_ρ × CF_Δh</strong>. S CoolProp.js (zelený badge): presnosť &lt;0,01%. Bez neho: PR EOS ≈±1%.</div></div>
+          </div>
+          <div class="man-sec" id="sk-s7"><div class="man-sec-head"><div class="man-sec-num">07</div><div class="man-sec-title">Debug panel</div></div>
+            <div class="man-step"><div class="man-step-icon dk">🔧</div><div><div class="man-step-title">Zobrazenie všetkých medzivýsledkov</div><div class="man-step-desc">Po výpočte kliknite na <strong>debug →</strong> v riadku výsledku, alebo vyberte meranie z rolovacieho menu. Záložky: <strong>Meranie</strong> (pe, pc, entalpie, hustota) · <strong>Ref. podmienky</strong> · <strong>Korekcie</strong> (CF_ρ, CF_Δh na 8 dp) · <strong>Výsledok</strong>.</div></div></div>
+          </div>
+          <div class="man-sec" id="sk-s8"><div class="man-sec-head"><div class="man-sec-num">08</div><div class="man-sec-title">Export do Wordu (.docx)</div></div>
+            <div class="man-step"><div class="man-step-icon bl">📄</div><div><div class="man-step-title">Kliknite na „📄 Export .docx" v paneli meraní</div><div class="man-step-desc">Aktívne po výpočte ≥1 merania. Word dokument obsahuje: <strong>Súhrnnú tabuľku</strong> + detailnú stranu pre každé meranie s:<br>• Set values B–U — identifikácia a nastavené podmienky<br>• Measured values W–AK — teploty, prúd, napätie, RPM<br>• Výsledok — Qo, COP, P1, hmotnostný prietok</div></div></div>
+            <div class="man-note gr"><span>✅</span><div>Logo a názov firmy z editora hlavičky sú automaticky vložené do Word dokumentu.</div></div>
+          </div>
+          <div class="man-sec" id="sk-s9"><div class="man-sec-head"><div class="man-sec-num">09</div><div class="man-sec-title">Úprava hlavičky a loga</div></div>
+            <div class="man-step"><div class="man-step-icon bl">✏️</div><div><div class="man-step-title">Kliknite na topbar alebo „✏️ Edit header"</div><div class="man-step-desc">Nahrajte <strong>logo</strong> (PNG/JPG — zobrazí sa v topbare a vo Word exporte). Zmeňte <strong>hlavný nadpis</strong>, <strong>podnadpis</strong> a <strong>text päty</strong> Word reportov. Kliknite Apply na uloženie.</div></div></div>
+          </div>
+          <div class="man-sec" id="sk-s10"><div class="man-sec-head"><div class="man-sec-num">10</div><div class="man-sec-title">Editor noriem</div></div>
+            <div class="man-step"><div class="man-step-icon bl">⚙️</div><div><div class="man-step-title">Kliknite na „⚙️ Edit Standards"</div><div class="man-step-desc">Upravte Te/Tc/Tsuc/Tliq pre ľubovoľnú normu, premenujte, vymažte alebo pridajte nové. Zmeny platia okamžite pre všetky merania. Platnosť: len pre aktuálnu reláciu.</div></div></div>
+          </div>
+          <div class="man-sec" id="sk-s11"><div class="man-sec-head"><div class="man-sec-num">11</div><div class="man-sec-title">Referencia noriem</div></div>
+            <table class="man-ref-table"><thead><tr><th>Norma</th><th>Rozsah</th><th>Použitie</th><th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th></tr></thead><tbody>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>LBP</td><td>Mraziace zariadenia</td><td>−35°C</td><td>40°C</td><td>20°C</td><td>40°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>MBP</td><td>Chladiace zariadenia</td><td>−10°C</td><td>45°C</td><td>20°C</td><td>45°C</td></tr>
+              <tr><td><span class="man-badge mb-en">EN 12900</span></td><td>HBP</td><td>Klimatizácia</td><td>+5°C</td><td>50°C</td><td>20°C</td><td>50°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>LBP</td><td>Europ. mraziace</td><td>−25°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-cc">CECOMAF</span></td><td>MBP</td><td>Europ. chladiace</td><td>−10°C</td><td>55°C</td><td>32°C</td><td>55°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>LBP</td><td>Sev.-amer. mraziace</td><td>−23,3°C</td><td>54,4°C</td><td>32,2°C</td><td>32,2°C</td></tr>
+              <tr><td><span class="man-badge mb-ash">ASHRAE</span></td><td>MBP</td><td>Sev.-amer. chladiace</td><td>−6,7°C</td><td>54,4°C</td><td>35°C</td><td>46,1°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>LBP</td><td>AHRI mraziace</td><td>−23,3°C</td><td>49°C</td><td>4,4°C</td><td>49°C</td></tr>
+              <tr><td><span class="man-badge mb-ari">ARI 540</span></td><td>MBP</td><td>AHRI chladiace</td><td>−6,7°C</td><td>49°C</td><td>18°C</td><td>49°C</td></tr>
+            </tbody></table>
+          </div>
+        </div><!-- man-sk -->
+
+      </div><!-- manualBody -->
+    </div><!-- manual-panel -->
+  </div><!-- manualModal -->
+
 </div><!-- end app -->
 
 <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
@@ -1909,6 +2208,35 @@ async function exportToWord(){
     if(btn){ btn.disabled=false; btn.textContent='📄 Export .docx'; updateBtns(); }
   }
 }
+
+// =================================================================
+//  MANUAL MODAL
+// =================================================================
+function openManual(){
+  document.getElementById('manualModal').style.display='flex';
+  // Sync manual language with app language
+  setManualLang(activeLang||'en');
+}
+function closeManual(){
+  document.getElementById('manualModal').style.display='none';
+}
+function setManualLang(lang){
+  document.querySelectorAll('.man-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.manual-lang-btn').forEach(b=>b.classList.remove('active'));
+  const sec=document.getElementById('man-'+lang);
+  if(sec) sec.classList.add('active');
+  const btn=document.querySelector('[onclick="setManualLang(\''+lang+'\')"]');
+  if(btn) btn.classList.add('active');
+  document.getElementById('manualBody').scrollTop=0;
+}
+function manScroll(id){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+// Close manual with Escape key
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeManual();
+});
 
 // =================================================================
 //  HEADER EDITOR
