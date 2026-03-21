@@ -1051,17 +1051,34 @@ function makeInstantiateWasm() {
     });
 })();
 
-// Unified property functions — use CoolProp if available, else THERMO
+// ── Unified property functions ─────────────────────────────────────
+// KEY FIX: CoolProp's PropsSI('H','P',Psat(T),'T',T,fluid) is ambiguous
+// at the saturation curve (could be liquid OR vapor) → returns NaN/±Inf.
+// This happens when Tliq = Tc (all EN/CECOMAF/ARI reference conditions).
+// Solution: liquid enthalpy → use T+Q=0 (unambiguous saturated liquid).
+//           vapor enthalpy  → use P+T (superheated, always unambiguous).
+//           density         → use P+T (superheated vapor, always valid).
+
 function satP(T_C, fluid){
   if(cpReady && typeof Module.PropsSI==='function')
     return Module.PropsSI('P','T',T_C+273.15,'Q',0,fluid)/1e5;
   return THERMO.satP(T_C, fluid);
 }
+
 function H(P_bar, T_C, fluid, phase){
-  if(cpReady && typeof Module.PropsSI==='function')
-    return Module.PropsSI('H','P',P_bar*1e5,'T',T_C+273.15,fluid)/1000;
+  if(cpReady && typeof Module.PropsSI==='function'){
+    if(phase === 'liquid'){
+      // Use T,Q=0 — saturated (or subcooled) liquid.
+      // Pressure correction for subcooling is <0.5 kJ/kg for refrigerants → negligible.
+      return Module.PropsSI('H','T',T_C+273.15,'Q',0,fluid)/1000;
+    } else {
+      // Superheated vapor: P,T is always unambiguous
+      return Module.PropsSI('H','P',P_bar*1e5,'T',T_C+273.15,fluid)/1000;
+    }
+  }
   return THERMO.H(P_bar, T_C, fluid, phase||'vapor');
 }
+
 function RHO(P_bar, T_C, fluid){
   if(cpReady && typeof Module.PropsSI==='function')
     return Module.PropsSI('D','P',P_bar*1e5,'T',T_C+273.15,fluid);
