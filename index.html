@@ -149,6 +149,14 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 .cancel-std-btn:hover{border-color:#E24B4A;color:#E24B4A}
 .edit-stds-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1.5px solid #e4e9f4;border-radius:8px;background:#fafbfd;font-size:11px;font-weight:700;color:#2563eb;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
 .edit-stds-btn:hover{background:#eef3ff;border-color:#2563eb}
+/* Topbar edit pencil */
+.tb-edit-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tb-edit-btn:hover{background:rgba(255,255,255,.22)}
+/* Logo upload area */
+.logo-upload-area{width:80px;height:80px;border:2px dashed #93b4f0;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;background:#f8faff;flex-shrink:0}
+.logo-upload-area:hover{border-color:#2563eb;background:#eef3ff}
+.logo-upload-area img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.logo-upload-area .lu-hint{font-size:9px;color:#9aa3b8;text-align:center;padding:4px;line-height:1.3}
 
 .info-bar{background:#0d1f3c;border:1px solid #1e3a5f;border-radius:10px;padding:10px 16px;margin-bottom:14px;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:10px;line-height:1.5}
 .info-bar strong{color:#7dd3fc}
@@ -182,6 +190,74 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 .cond-mini input:focus{outline:none;border-color:#2563eb;border-style:solid}
 .acc-note{font-size:9.5px;color:#9aa3b8;background:#f8faff;border:1px solid #e4e9f4;border-radius:6px;padding:6px 10px;margin-top:6px;line-height:1.5}
 .acc-note strong{color:#2563eb}
+
+/* ── MULTI-MEASUREMENT ── */
+.meas-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.add-meas-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;background:linear-gradient(135deg,#2563eb,#1a4db5);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.add-meas-btn:hover{opacity:.9;transform:translateY(-1px)}
+.clear-all-btn{padding:9px 16px;background:#fff;border:1.5px solid #e4e9f4;color:#7a8299;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.clear-all-btn:hover{border-color:#E24B4A;color:#E24B4A}
+.calc-all-meas-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;margin-left:auto;box-shadow:0 2px 8px rgba(5,150,105,.25)}
+.calc-all-meas-btn:hover{opacity:.9;transform:translateY(-1px)}
+.calc-all-meas-btn:disabled{background:#b0bfd8;cursor:not-allowed;transform:none;box-shadow:none}
+.export-word-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;background:linear-gradient(135deg,#0d1f3c,#1a3254);color:#7dd3fc;border:1.5px solid #1e3a5f;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.export-word-btn:hover:not(:disabled){background:linear-gradient(135deg,#122a52,#1e3a5f);border-color:#3b82f6}
+.export-word-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Measurement row card */
+.mrow-card{background:#fff;border:1.5px solid #e4e9f4;border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .15s}
+.mrow-card.has-result{border-color:#6ee7b7}
+.mrow-card.has-error{border-color:#fca5a5}
+.mrow-head{display:flex;align-items:center;gap:10px;padding:11px 16px;background:#f8faff;border-bottom:1px solid #f0f3f9;cursor:pointer;user-select:none}
+.mrow-num{width:24px;height:24px;background:linear-gradient(135deg,#2563eb,#1a4db5);color:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.mrow-id{font-size:12px;font-weight:700;color:#0d1f3c;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow-std-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;background:#eef3ff;color:#2563eb;border:1px solid #93c5fd;white-space:nowrap;flex-shrink:0}
+.mrow-qo{font-size:12px;font-weight:800;color:#059669;white-space:nowrap;flex-shrink:0;min-width:70px;text-align:right}
+.mrow-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:16px;padding:0 3px;transition:color .15s;flex-shrink:0}
+.mrow-del:hover{color:#E24B4A}
+.mrow-body{padding:14px 16px}
+.mrow-paste-row{display:flex;gap:7px;margin-bottom:10px}
+.mrow-paste{flex:1;padding:8px 10px;border:1.5px dashed #93b4f0;border-radius:8px;font-size:11px;color:#1e2433;font-family:'Inter',sans-serif;background:#f8faff;resize:none;height:44px;line-height:1.4}
+.mrow-paste:focus{outline:none;border-color:#2563eb;border-style:solid;background:#fff}
+.mrow-parse-btn{padding:8px 14px;background:linear-gradient(135deg,#2563eb,#1a4db5);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.mrow-std-sel{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.mrow-std-lbl{font-size:9px;font-weight:700;color:#7a8299;text-transform:uppercase;letter-spacing:1px;margin-right:3px;white-space:nowrap}
+.mrow-std-btn{padding:5px 10px;border:1.5px solid #e4e9f4;border-radius:7px;cursor:pointer;background:#fafbfd;font-size:10px;font-weight:700;color:#7a8299;transition:all .12s;white-space:nowrap}
+.mrow-std-btn:hover{border-color:#93b4f0;background:#f0f5ff;color:#2563eb}
+.mrow-std-btn.active{border-color:#2563eb;background:#eef3ff;color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.12)}
+.mrow-result{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-top:8px}
+.mrow-ri{background:#f8faff;border:1px solid #e4e9f4;border-radius:8px;padding:8px 10px;text-align:center}
+.mrow-ri.hl{border-color:#6ee7b7;background:#f0fdf8}
+.mrow-ri-lbl{font-size:8px;color:#9aa3b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.mrow-ri-val{font-size:16px;font-weight:800;color:#0d1f3c}
+.mrow-ri.hl .mrow-ri-val{color:#059669}
+.mrow-ri-u{font-size:9px;color:#9aa3b8}
+.mrow-parsed-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.mrow-tag{font-size:9.5px;background:#f0fdf8;border:1px solid #6ee7b7;border-radius:5px;padding:2px 7px;color:#065f46;font-weight:600}
+.mrow-tag.warn{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+.mrow-err{font-size:11px;color:#f87171;padding:8px;background:#fef2f2;border-radius:7px;margin-top:6px}
+.mrow-calc-btn{width:100%;padding:10px;background:linear-gradient(135deg,#2563eb,#1a4db5);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;margin-top:6px}
+.mrow-calc-btn:hover:not(:disabled){opacity:.9}
+.mrow-calc-btn:disabled{background:#b0bfd8;cursor:not-allowed}
+/* inline custom conditions per row */
+.mrow-custom{display:none;background:#f8faff;border:1.5px dashed #93b4f0;border-radius:9px;padding:10px 12px;margin:6px 0 4px}
+.mrow-custom.visible{display:block}
+.mrow-custom-title{font-size:9px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.mrow-custom .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.mrow-custom label{font-size:9px;color:#7a8299;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.mrow-custom input{width:100%;padding:6px 8px;border:1.5px solid #e4e9f4;border-radius:7px;font-size:11.5px;font-family:'Inter',sans-serif;background:#fff;color:#1e2433}
+.mrow-custom input:focus{outline:none;border-color:#2563eb}
+/* Set values strip */
+.mrow-setvals{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px;padding:8px 10px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:8px}
+.mrow-setvals-title{font-size:8.5px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:1px;width:100%;margin-bottom:4px}
+.sv-tag{font-size:10.5px;background:#fff;border:1px solid #fde68a;border-radius:5px;padding:3px 8px;color:#78350f;font-weight:600}
+.sv-tag span{font-size:8.5px;color:#b45309;font-weight:700;text-transform:uppercase;margin-right:3px}
+/* Measured values strip — teal */
+.mrow-measvals{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px;padding:8px 10px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:8px}
+.mrow-measvals-title{font-size:8.5px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:1px;width:100%;margin-bottom:4px}
+.mv-tag{font-size:10.5px;background:#fff;border:1px solid #a7f3d0;border-radius:5px;padding:3px 8px;color:#065f46;font-weight:600}
+.mv-tag span{font-size:8.5px;color:#059669;font-weight:700;text-transform:uppercase;margin-right:3px}
+.meas-count-badge{font-size:10px;font-weight:700;padding:3px 9px;background:#eef3ff;border:1px solid #93c5fd;border-radius:6px;color:#2563eb}
 
 /* ── LANGUAGE SWITCHER ── */
 .lang-bar{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-bottom:12px}
@@ -266,19 +342,61 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
     </div>
   </div>
   <div class="topbar">
-    <div class="tb-logo"><div class="tb-logo-inner">❄</div></div>
-    <div class="tb-info">
-      <div class="tb-title" data-i18n="tb_title">AES — Compressor Cooling Capacity</div>
-      <div class="tb-sub" data-i18n="tb_sub">EN 12900 · CECOMAF · ARI 520 · ASHRAE · Custom conditions | AES s.r.o. — Advanced Energy Systems</div>
+    <div class="tb-logo" id="tbLogoWrap" onclick="openHeaderEditor()" title="Click to edit header" style="cursor:pointer">
+      <div class="tb-logo-inner" id="tbLogoInner">❄</div>
     </div>
-    <div class="tb-right" id="tbRight">
-      <div class="status-badge st-ok">
-        <div class="st-dot"></div>
-        <span>PR EOS · Offline</span>
+    <div class="tb-info" onclick="openHeaderEditor()" style="cursor:pointer" title="Click to edit header">
+      <div class="tb-title" id="tbTitleEl">AES — Compressor Cooling Capacity</div>
+      <div class="tb-sub" id="tbSubEl">EN 12900 · CECOMAF · ARI 520 · ASHRAE · Custom conditions | AES s.r.o. — Advanced Energy Systems</div>
+    </div>
+    <div class="tb-right" id="tbRight" style="gap:6px">
+      <button class="tb-edit-btn" onclick="openHeaderEditor()">✏️ Edit header</button>
+      <div class="status-badge st-ok"><div class="st-dot"></div><span>PR EOS · Offline</span></div>
+      <div class="status-badge st-warn"><div class="st-dot"></div><span data-i18n="acc_pct">±1% accuracy</span></div>
+    </div>
+  </div>
+
+  <!-- Header Editor Modal -->
+  <div class="modal-overlay" id="headerModal" style="display:none" onclick="if(event.target===this)closeHeaderEditor()">
+    <div class="modal-box" style="max-width:560px">
+      <div class="modal-head">
+        <div class="modal-head-icon">✏️</div>
+        <div class="modal-title">Edit Header</div>
+        <button class="modal-close" onclick="closeHeaderEditor()">✕</button>
       </div>
-      <div class="status-badge st-warn">
-        <div class="st-dot"></div>
-        <span data-i18n="acc_pct">±1% accuracy</span>
+      <div class="modal-body">
+        <div style="display:flex;gap:18px;align-items:flex-start">
+          <!-- Logo upload -->
+          <div>
+            <div style="font-size:9.5px;font-weight:700;color:#7a8299;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Logo</div>
+            <div class="logo-upload-area" id="logoUploadArea" onclick="document.getElementById('logoFileInput').click()">
+              <div id="logoPreview" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+                <div class="lu-hint">📷<br>Click to<br>upload logo</div>
+              </div>
+            </div>
+            <input type="file" id="logoFileInput" accept="image/*" style="display:none" onchange="handleLogoUpload(event)">
+            <button onclick="clearLogo()" style="margin-top:5px;width:80px;font-size:10px;padding:4px;border:1px solid #e4e9f4;border-radius:5px;cursor:pointer;background:#fff;color:#E24B4A">✕ Remove</button>
+          </div>
+          <!-- Text fields -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+            <div class="f">
+              <label>Company / Title</label>
+              <input type="text" id="hdr_title" value="AES — Compressor Cooling Capacity" placeholder="Company name or title">
+            </div>
+            <div class="f">
+              <label>Subtitle</label>
+              <input type="text" id="hdr_sub" value="EN 12900 · CECOMAF · ARI 520 · ASHRAE · Custom conditions | AES s.r.o. — Advanced Energy Systems" placeholder="Subtitle / standards info">
+            </div>
+            <div class="f">
+              <label>Footer text (used in Word export)</label>
+              <input type="text" id="hdr_footer" value="AES s.r.o. — Advanced Energy Systems | www.aes-slovakia.eu | Farská 50, 949 01 Nitra, Slovakia" placeholder="Footer line for Word report">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="cancel-std-btn" onclick="closeHeaderEditor()">Cancel</button>
+        <button class="save-std-btn" onclick="saveHeader()">✓ Apply</button>
       </div>
     </div>
   </div>
@@ -290,145 +408,56 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
   <div class="main-layout">
     <div>
 
-      <!-- CARD 1: Paste -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">1</div>
-          <div class="card-title" data-i18n="c1_title">Measured data — row from Excel</div>
-          <div class="card-hint" data-i18n="c1_hint">Ctrl+C row A3–AT3 → Ctrl+V here</div>
-        </div>
-        <div class="f">
-          <label data-i18n="c1_label">Paste entire row A3–AT3 (tab-separated Excel)</label>
-          <textarea id="pasteArea" data-i18n-ph="c1_ph"
-            placeholder="Copy row 3 from Excel (Ctrl+C) and paste here (Ctrl+V)...&#10;&#10;Parser recognises: Factory · Calo · Kit# · Compressor · Refrigerant · P1[W] · Te_meas · Tc_meas · Qvessel · Tsuc · Tliq"></textarea>
-        </div>
-        <div class="parse-row">
-          <button class="parse-btn" onclick="parsePaste()" data-i18n="c1_parse">⚡ Process data</button>
-          <button class="clear-btn" onclick="clearAll()" data-i18n="c1_clear">✕ Clear</button>
-        </div>
-        <div id="parsedPreview" style="display:none">
-          <div class="sec-label" data-i18n="c1_recog">Recognised values</div>
-          <div class="parsed-grid" id="parsedGrid"></div>
-        </div>
-      </div>
-
-      <!-- CARD 2: Standard -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">2</div>
-          <div class="card-title" data-i18n="c2_title">Standard and reference conditions</div>
-          <div class="card-hint" data-i18n="c2_hint">Click standard or enter manually</div>
-        </div>
-
-        <!-- Dynamic standards panel — built by renderStdButtons() -->
+      <!-- hidden global refs needed by setStd() -->
+      <div style="display:none">
+        <input type="number" id="req_Te" value="-35">
+        <input type="number" id="req_Tc" value="40">
+        <input type="number" id="req_Tamb" value="32">
+        <input type="number" id="req_Tsuc" value="20">
+        <input type="number" id="req_Tliq" value="40">
         <div id="stdButtonsPanel"></div>
-
-        <div class="sec-label" data-i18n="c2_cond">Conditions (K4–O4)</div>
-        <div class="g5">
-          <div class="f"><label>Te [°C]</label><input type="number" id="req_Te" value="-35" step="0.5" oninput="setStd('custom',true)"></div>
-          <div class="f"><label>Tc [°C]</label><input type="number" id="req_Tc" value="40" step="0.5" oninput="setStd('custom',true)"></div>
-          <div class="f"><label>Tamb [°C]</label><input type="number" id="req_Tamb" value="32" step="0.5" oninput="setStd('custom',true)"></div>
-          <div class="f"><label>Tsuc [°C]</label><input type="number" id="req_Tsuc" value="20" step="0.5" oninput="setStd('custom',true)"></div>
-          <div class="f"><label>Tliq [°C]</label><input type="number" id="req_Tliq" value="40" step="0.5" oninput="setStd('custom',true)"></div>
-        </div>
-        <div class="cond-mini">
-          <div class="f">
-            <label data-i18n="c2_paste_lbl">Or paste K4–O4 directly (5 values, Ctrl+V)</label>
-            <input type="text" id="condPasteLine" data-i18n-ph="c2_paste_ph" placeholder="Paste from Excel here…" onpaste="parseCondPaste(event)">
-          </div>
-        </div>
+        <select id="refrigerant"><option value="R290">R290</option><option value="R134a">R134a</option><option value="R404A">R404A</option><option value="R407C">R407C</option><option value="R410A">R410A</option><option value="R22">R22</option><option value="R507A">R507A</option><option value="R600a">R600a</option><option value="R32">R32</option><option value="R1234yf">R1234yf</option><option value="R744">R744</option></select>
+        <input type="text" id="refrigerantCustom">
       </div>
 
-      <!-- CARD 3: Refrigerant -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-num">3</div>
-          <div class="card-title" data-i18n="c3_title">Refrigerant</div>
-          <div class="card-hint" data-i18n="c3_hint">Auto-detected from data · editable</div>
-        </div>
-        <div class="g2">
-          <div class="f">
-            <label data-i18n="c3_ref_lbl">Refrigerant</label>
-            <select id="refrigerant">
-              <option value="R290">R290 — Propane</option>
-              <option value="R134a">R134a</option>
-              <option value="R404A">R404A</option>
-              <option value="R407C">R407C</option>
-              <option value="R410A">R410A</option>
-              <option value="R22">R22</option>
-              <option value="R507A">R507A</option>
-              <option value="R600a">R600a — Isobutane</option>
-              <option value="R32">R32</option>
-              <option value="R1234yf">R1234yf</option>
-              <option value="R744">R744 — CO2</option>
-            </select>
-          </div>
-          <div class="f">
-            <label data-i18n="c3_custom_lbl">Custom (CoolProp.js only)</label>
-            <input type="text" id="refrigerantCustom" placeholder="R448A, R452A…">
-          </div>
-        </div>
-        <div class="acc-note" data-i18n="c3_note">
-          <strong>Built-in PR EOS</strong> covers: R290, R134a, R404A, R407C, R410A, R22, R507A, R600a, R32, R1234yf, R744.
-          For custom blends add <code>coolprop.js</code> to GitHub repository.
-        </div>
+      <!-- MEASUREMENTS TOOLBAR -->
+      <div class="meas-toolbar">
+        <span class="meas-count-badge" id="measCountBadge">0 measurements</span>
+        <button class="add-meas-btn" onclick="addMeasRow()">＋ <span data-i18n="add_meas">Add measurement</span></button>
+        <button class="calc-all-meas-btn" id="calcAllMeasBtn" onclick="calcAllMeas()" disabled>
+          🧮 <span data-i18n="calc_all_meas">Calculate all</span>
+        </button>
+        <button class="export-word-btn" id="exportWordBtn" onclick="exportToWord()" disabled title="Export all calculated results to Word (.docx)">
+          📄 Export .docx
+        </button>
+        <button class="clear-all-btn" onclick="clearAllMeas()" data-i18n="c1_clear">✕ Clear all</button>
       </div>
 
-      <button class="calc-btn" id="calcBtn" onclick="calcSingle()" disabled data-i18n="btn_single">🧮 Calculate — selected standard</button>
-      <button class="calc-btn all" id="calcAllBtn" onclick="calcAll()" disabled data-i18n="btn_all">⚡ Calculate ALL standards at once</button>
-
-      <!-- Single Result -->
-      <div class="card result-card" id="resultCard" style="display:none">
-        <div class="card-header">
-          <div class="card-num" style="background:linear-gradient(135deg,#059669,#047857)">✓</div>
-          <div class="card-title"><span data-i18n="res_title">Result —</span> <span id="resultStdName">—</span></div>
-        </div>
-        <div class="result-main">
-          <div class="res-label" data-i18n="res_qo_lbl">Cooling capacity Qo</div>
-          <div><span class="res-big" id="resQo">—</span><span class="res-unit">W</span></div>
-        </div>
-        <div class="result-row3">
-          <div class="ri hl"><div class="ri-lbl" data-i18n="res_p1">Power input P1</div><div class="ri-val" id="resP1">—</div><div class="ri-u">W</div></div>
-          <div class="ri hl"><div class="ri-lbl">COP</div><div class="ri-val" id="resCOP">—</div><div class="ri-u">W/W</div></div>
-          <div class="ri"><div class="ri-lbl" data-i18n="res_mdot">Mass flow ṁ</div><div class="ri-val" id="resMdot">—</div><div class="ri-u">g/s</div></div>
-        </div>
-        <div style="margin-top:10px;font-size:10px;color:#9aa3b8;text-align:center;line-height:1.6" id="resultMeta"></div>
-      </div>
-
-      <!-- Comparison Table -->
-      <div class="card" id="compCard" style="display:none">
-        <div class="card-header">
-          <div class="card-num" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">✦</div>
-          <div class="card-title" data-i18n="comp_title">Comparison of all standards</div>
-          <div class="card-hint" data-i18n="comp_hint">Highlighted = selected standard</div>
-        </div>
-        <div class="comp-wrap">
-          <table class="comp-table">
-            <thead><tr>
-              <th data-i18n="th_std">Standard</th>
-              <th data-i18n="th_range">Range</th>
-              <th>Te</th><th>Tc</th><th>Tsuc</th><th>Tliq</th>
-              <th>Qo [W]</th><th>COP</th><th>ṁ [g/s]</th>
-              <th style="text-align:right" data-i18n="th_vs">vs. selected</th>
-            </tr></thead>
-            <tbody id="compTableBody"></tbody>
-          </table>
-        </div>
-      </div>
+      <!-- Dynamic measurement rows -->
+      <div id="measRowsContainer"></div>
 
     </div><!-- end left -->
 
-    <!-- RIGHT: DEBUG -->
+    <!-- RIGHT: DEBUG (sticky) -->
     <div>
-      <div class="card debug-card">
-        <div class="card-header"><div class="card-title" style="color:#e2e8f0" data-i18n="dbg_title">🔧 Debug — intermediate calculations</div></div>
+      <div class="card debug-card" style="position:sticky;top:16px">
+        <div class="card-header">
+          <div class="card-title" style="color:#e2e8f0" data-i18n="dbg_title">🔧 Debug — intermediate calculations</div>
+        </div>
+        <!-- Row selector dropdown -->
+        <div style="margin-bottom:10px">
+          <select id="debugRowSelect" onchange="debugSelectRow(this.value)"
+            style="width:100%;padding:7px 10px;border:1.5px solid #1e3a5f;border-radius:8px;background:#0a1628;color:#94a3b8;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer">
+            <option value="">— select measurement row —</option>
+          </select>
+        </div>
         <div class="dtab-row" id="debugTabs" style="display:none">
           <div class="dtab active" onclick="showTab('measured')" data-i18n="dbg_meas">Measurement</div>
           <div class="dtab" onclick="showTab('requested')" data-i18n="dbg_req">Ref. conditions</div>
           <div class="dtab" onclick="showTab('factors')" data-i18n="dbg_fact">Corrections</div>
           <div class="dtab" onclick="showTab('result')" data-i18n="dbg_res">Result</div>
         </div>
-        <div id="dc_measured" class="dcontent active"><div id="dm"><div class="dph" data-i18n="dbg_ph">Insert data and press<br><strong style="color:#7dd3fc">Calculate</strong><br><br>All intermediate<br>results appear here.</div></div></div>
+        <div id="dc_measured" class="dcontent active"><div id="dm"><div class="dph">Add a measurement,<br>paste data and press<br><strong style="color:#7dd3fc">Calculate</strong><br><br>Debug values appear here.</div></div></div>
         <div id="dc_requested" class="dcontent"><div id="dr"><div class="dph">—</div></div></div>
         <div id="dc_factors" class="dcontent"><div id="df"><div class="dph">—</div></div></div>
         <div id="dc_result" class="dcontent"><div id="dres"><div class="dph">—</div></div></div>
@@ -438,6 +467,7 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
   </div>
 </div><!-- end app -->
 
+<script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════════
 //  INTERNATIONALISATION (i18n)
@@ -948,7 +978,7 @@ const THERMO = (function(){
 // ═══════════════════════════════════════════════════════════════════
 //  CoolProp.js INTEGRATION
 //  CoolProp v7.0.0 is an ES Module — must use dynamic import(), NOT
-//  classic <script> tag. The Module config is passed to the factory fn.
+//  classic SCRIPT tag. The Module config is passed to the factory fn.
 // ═══════════════════════════════════════════════════════════════════
 let cpReady = false;
 var Module = {}; // populated after factory call
@@ -1028,7 +1058,7 @@ function makeInstantiateWasm() {
     })
     .catch(function(err) {
       console.warn('[CoolProp] ES import failed:', err.message, '— trying classic script');
-      // Fallback: classic <script> for older coolprop.js builds
+      // Fallback: classic SCRIPT tag for older coolprop.js builds
       var s = document.createElement('script');
       s.src = 'coolprop.js';
       s.onerror = function() { cpFallback('JS file not found'); };
@@ -1139,294 +1169,53 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Backspace') pinBack();
 });
 
-function updateBtns(){
-  const ok=measData;
-  ['calcBtn','calcAllBtn'].forEach(id=>{
-    document.getElementById(id).disabled=!ok;
-  });
-  if(ok){
-    document.getElementById('calcBtn').textContent=t('btn_single');
-    document.getElementById('calcAllBtn').textContent=t('btn_all');
-  } else {
-    document.getElementById('calcBtn').textContent=t('btn_need_data');
-    document.getElementById('calcAllBtn').textContent=t('btn_need_data');
-  }
-}
-
 // ═══════════════════════════════════════════════════════════════════
-//  PASTE PARSER (columns A3–AT3)
-// ═══════════════════════════════════════════════════════════════════
-const C={factory:0,calo:1,order:2,kitNo:3,compType:4,refrigerant:19,P1:22,
-          Te_meas:27,Tc_meas:28,Qvessel:29,Tsuc_meas:31,Pe_uncorr:38,Tliq_meas:39,Tvout_meas:40};
+//  COLUMN MAP + MULTI-MEASUREMENT ENGINE
+// =================================================================
+const C={
+  // A-J: identification
+  factory:0,calo:1,order:2,kitNo:3,compType:4,
+  date:5,time:6,code:7,operator:8,remark:9,
+  // K-U: set values (conditions)
+  Te_set:10,Tc_set:11,Tamb_set:12,Tsuc_set:13,Tliq_set:14,
+  voltage:15,freq:16,cooling:17,rpm:18,refrigerant:19,capacitor:20,
+  // V(21): empty gap
+  // W-AK: measured values
+  P1:22,
+  Qo_ashrae:23,COP_ashrae:24,Qo_cecomaf:25,COP_cecomaf:26,
+  Te_meas:27,Tc_meas:28,Qvessel:29,
+  Tcomp_meas:30,Tsuc_meas:31,Tdisch_meas:32,Tamb_meas:33,
+  current_meas:34,voltage_meas:35,rpm_meas:36,
+  Pe_uncorr:38,Tliq_meas:39,Tvout_meas:40
+};
 const FLUID_MAP={'R-290':'R290','R-134a':'R134a','R-404A':'R404A','R-22':'R22',
-                  'R-407C':'R407C','R-410A':'R410A','R-600a':'R600a','R-32':'R32'};
+  'R-407C':'R407C','R-410A':'R410A','R-600a':'R600a','R-32':'R32'};
 
-function parsePaste(){
-  const raw=document.getElementById('pasteArea').value.trim();
-  if(!raw){ alert(t('c1_parse')); return; }
+function parseRowCols(raw){
   const c=raw.split(/\t/);
-  const s=i=>(c[i]||'').trim();
-  const n=i=>parseFloat(c[i])||0;
-  let fluid=s(C.refrigerant);
-  fluid=FLUID_MAP[fluid]||fluid||'R290';
-  measData={
+  const s=i=>(c[i]||'').trim(), n=i=>parseFloat(c[i])||0;
+  let fluid=s(C.refrigerant); fluid=FLUID_MAP[fluid]||fluid||'R290';
+  return {
     factory:s(C.factory),calo:s(C.calo),order:s(C.order),
     kitNo:s(C.kitNo),compType:s(C.compType),
-    refrigerant:fluid,P1:n(C.P1),
+    date:s(C.date),time:s(C.time),code:s(C.code),
+    operator:s(C.operator),remark:s(C.remark),
+    refrigerant:fluid,
+    // Set values (K-U)
+    Te_set:n(C.Te_set),Tc_set:n(C.Tc_set),Tamb_set:n(C.Tamb_set),
+    Tsuc_set:n(C.Tsuc_set),Tliq_set:n(C.Tliq_set),
+    voltage:n(C.voltage),freq:n(C.freq),cooling:s(C.cooling),
+    rpm:n(C.rpm),capacitor:n(C.capacitor),
+    // Measured values (W-AK)
+    P1:n(C.P1),
+    Qo_ashrae:n(C.Qo_ashrae),COP_ashrae:n(C.COP_ashrae),
+    Qo_cecomaf:n(C.Qo_cecomaf),COP_cecomaf:n(C.COP_cecomaf),
     Te_meas:n(C.Te_meas),Tc_meas:n(C.Tc_meas),Qvessel:n(C.Qvessel),
-    Tsuc_meas:n(C.Tsuc_meas),Tliq_meas:n(C.Tliq_meas),
-    Tvout_meas:n(C.Tvout_meas),Pe_uncorr:n(C.Pe_uncorr),colCount:c.length
-  };
-  const sel=document.getElementById('refrigerant');
-  for(let i=0;i<sel.options.length;i++) if(sel.options[i].value===fluid){sel.selectedIndex=i;break;}
-  renderPreview(); updateBtns();
-}
-
-function renderPreview(){
-  if(!measData) return;
-  const d=measData;
-  document.getElementById('parsedPreview').style.display='block';
-  const items=[
-    {l:t('pv_comp'),   v:d.kitNo||d.compType, ok:!!(d.kitNo||d.compType)},
-    {l:t('pv_ref'),    v:d.refrigerant, ok:true, bold:true},
-    {l:'Te',           v:d.Te_meas.toFixed(4)+' °C', ok:d.Te_meas!==0},
-    {l:'Tc',           v:d.Tc_meas.toFixed(4)+' °C', ok:d.Tc_meas!==0},
-    {l:'Q vessel',     v:d.Qvessel.toFixed(4)+' W', ok:d.Qvessel>0, bold:true},
-    {l:'P1',           v:d.P1.toFixed(4)+' W', ok:d.P1>0, bold:true},
-    {l:'Tsuc',         v:d.Tsuc_meas.toFixed(4)+' °C', ok:true},
-    {l:'Tliq',         v:d.Tliq_meas.toFixed(4)+' °C', ok:true},
-    {l:'Tvout',        v:d.Tvout_meas.toFixed(4)+' °C', ok:true},
-    {l:t('pv_cols'),   v:d.colCount+'', ok:d.colCount>=41, warn:d.colCount<41},
-  ];
-  document.getElementById('parsedGrid').innerHTML=items.map(it=>
-    `<div class="pv${it.ok?' ok':''}${it.bold?' bold':''}${it.warn?' warn':''}">
-      <div class="pv-label">${it.l}</div><div class="pv-val">${it.v}</div></div>`
-  ).join('');
-}
-
-function clearAll(){
-  document.getElementById('pasteArea').value='';
-  document.getElementById('parsedPreview').style.display='none';
-  document.getElementById('resultCard').style.display='none';
-  document.getElementById('compCard').style.display='none';
-  document.getElementById('debugTabs').style.display='none';
-  document.getElementById('dm').innerHTML='<div class="dph">'+t('dbg_ph')+'</div>';
-  window._lastDebugArgs=null;
-  measData=null; updateBtns();
-}
-
-function parseCondPaste(e){
-  setTimeout(()=>{
-    const raw=document.getElementById('condPasteLine').value.trim();
-    const cols=raw.split(/\t/);
-    if(cols.length>=5){
-      ['req_Te','req_Tc','req_Tamb','req_Tsuc','req_Tliq'].forEach((id,i)=>{
-        const v=parseFloat(cols[i]); if(!isNaN(v)) document.getElementById(id).value=v;
-      });
-      setStd('custom',true);
-      document.getElementById('condPasteLine').value='';
-    }
-  },10);
-}
-
-// ═══════════════════════════════════════════════════════════════════
-//  STANDARDS — dynamic render + editor
-// ═══════════════════════════════════════════════════════════════════
-
-// Build grouped buttons from STANDARDS dynamically
-function renderStdButtons(){
-  const panel = document.getElementById('stdButtonsPanel');
-  if(!panel) return;
-
-  // Group by label
-  const groups = {};
-  ALL_STD_KEYS.forEach(k=>{
-    const p = STANDARDS[k];
-    if(!p) return;
-    if(!groups[p.label]) groups[p.label] = {badge:p.badge, entries:[]};
-    groups[p.label].entries.push({key:k, p});
-  });
-  // Custom entry
-  groups['__custom__'] = {badge:'', entries:[{key:'custom', p:STANDARDS['custom']}]};
-
-  let html = '';
-  Object.entries(groups).forEach(([label, grp])=>{
-    if(label === '__custom__'){
-      html += `<div class="std-family">
-        <div class="std-family-label">${t('std_custom_lbl')}</div>
-        <div class="std-row">
-          <div class="std-btn" id="std_custom" onclick="setStd('custom')">
-            <div class="std-name">${t('std_custom_name')}</div>
-            <div class="std-sub">${t('std_custom_sub')}</div>
-          </div>
-        </div>
-      </div>`;
-      return;
-    }
-    html += `<div class="std-family"><div class="std-family-label">${label}</div><div class="std-row">`;
-    grp.entries.forEach(({key, p})=>{
-      const isActive = key === activeStd;
-      const Te = p.Te >= 0 ? '+'+p.Te : String(p.Te);
-      html += `<div class="std-btn${isActive?' active':''}" id="std_${key}" onclick="setStd('${key}')">
-        <div class="std-name">${p.range}</div>
-        <div class="std-sub">Te ${Te} / Tc ${p.Tc}°C</div>
-      </div>`;
-    });
-    html += `</div></div>`;
-  });
-  panel.innerHTML = html;
-}
-
-function setStd(key, silent){
-  if(!silent){ activeStd=key; }
-  else { activeStd='custom'; key='custom'; }
-  // Update active class
-  document.querySelectorAll('[id^="std_"]').forEach(el=>el.classList.remove('active'));
-  const el = document.getElementById('std_'+key);
-  if(el) el.classList.add('active');
-  const p = STANDARDS[key];
-  if(p && key!=='custom'){
-    document.getElementById('req_Te').value  = p.Te;
-    document.getElementById('req_Tc').value  = p.Tc;
-    document.getElementById('req_Tamb').value= p.Tc;
-    document.getElementById('req_Tsuc').value= p.Tsuc;
-    document.getElementById('req_Tliq').value= p.Tliq;
-  }
-}
-
-// ── STANDARDS EDITOR ──────────────────────────────────────────────
-let _editorRows = []; // working copy during editing
-
-function openStdEditor(){
-  // Deep copy current standards (excluding 'custom')
-  _editorRows = ALL_STD_KEYS.map(k=>({
-    key: k,
-    label: STANDARDS[k]?.label || '',
-    range: STANDARDS[k]?.range || '',
-    Te:    STANDARDS[k]?.Te ?? 0,
-    Tc:    STANDARDS[k]?.Tc ?? 0,
-    Tsuc:  STANDARDS[k]?.Tsuc ?? 0,
-    Tliq:  STANDARDS[k]?.Tliq ?? 0,
-    badge: STANDARDS[k]?.badge || 'nb-en',
-    isNew: false
-  }));
-  renderEditorTable();
-  document.getElementById('stdModal').style.display = 'flex';
-}
-
-function closeStdEditor(){
-  document.getElementById('stdModal').style.display = 'none';
-}
-
-function renderEditorTable(){
-  const BADGES = ['nb-en','nb-cc','nb-ash','nb-ari'];
-  let rows = '';
-  _editorRows.forEach((r, i)=>{
-    const canDel = _editorRows.length > 1;
-    const badgeSel = BADGES.map(b=>
-      `<option value="${b}" ${r.badge===b?'selected':''}>${b.replace('nb-','')}</option>`
-    ).join('');
-    rows += `<tr class="${r.isNew?'new-row':''}">
-      <td><input type="text" value="${r.label}" oninput="_editorRows[${i}].label=this.value" placeholder="EN 12900…" style="min-width:90px"></td>
-      <td><input type="text" value="${r.range}" oninput="_editorRows[${i}].range=this.value" class="narrow" placeholder="LBP"></td>
-      <td><input type="number" value="${r.Te}"   oninput="_editorRows[${i}].Te=parseFloat(this.value)||0"   class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tc}"   oninput="_editorRows[${i}].Tc=parseFloat(this.value)||0"   class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tsuc}" oninput="_editorRows[${i}].Tsuc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tliq}" oninput="_editorRows[${i}].Tliq=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
-      <td><button class="ed-del" onclick="delStdRow(${i})" ${canDel?'':'disabled'}>🗑</button></td>
-    </tr>`;
-  });
-  document.getElementById('stdEditorBody').innerHTML = rows;
-}
-
-function addStdRow(){
-  const lastLabel = _editorRows[_editorRows.length-1]?.label || 'Custom';
-  _editorRows.push({
-    key: 'custom_'+Date.now(),
-    label: lastLabel,
-    range: 'NEW',
-    Te: 0, Tc: 40, Tsuc: 20, Tliq: 40,
-    badge: 'nb-en',
-    isNew: true
-  });
-  renderEditorTable();
-  // Scroll to bottom of modal body
-  const body = document.querySelector('.modal-body');
-  if(body) body.scrollTop = body.scrollHeight;
-}
-
-function delStdRow(i){
-  if(_editorRows.length <= 1) return;
-  _editorRows.splice(i, 1);
-  renderEditorTable();
-}
-
-function saveStds(){
-  // Validate
-  for(const r of _editorRows){
-    if(!r.label.trim() || !r.range.trim()){
-      alert('All standards must have a label and range name.'); return;
-    }
-  }
-
-  // Rebuild STANDARDS and ALL_STD_KEYS from editor rows
-  ALL_STD_KEYS = [];
-  _editorRows.forEach((r, i)=>{
-    const key = r.isNew ? ('std_'+i+'_'+r.range.toLowerCase().replace(/\s+/g,'_')) : r.key;
-    STANDARDS[key] = {
-      Te:    r.Te,
-      Tc:    r.Tc,
-      Tsuc:  r.Tsuc,
-      Tliq:  r.Tliq,
-      label: r.label.trim(),
-      range: r.range.trim(),
-      badge: r.badge || 'nb-en'
-    };
-    ALL_STD_KEYS.push(key);
-  });
-
-  // Reset active standard if it no longer exists
-  if(!ALL_STD_KEYS.includes(activeStd)) {
-    activeStd = ALL_STD_KEYS[0] || 'custom';
-  }
-
-  closeStdEditor();
-  renderStdButtons();
-  setStd(activeStd);
-}
-
-// ═══════════════════════════════════════════════════════════════════
-//  CORE CALCULATION (EN 12900 correction factor method)
-// ═══════════════════════════════════════════════════════════════════
-function computeQo(m, Te_r, Tc_r, Tsuc_r, Tliq_r, fluid){
-  // MEASURED
-  const pe_m=satP(m.Te_meas, fluid);
-  const pc_m=satP(m.Tc_meas, fluid);
-  const hA_m=H(pc_m, m.Tliq_meas, fluid, 'liquid');  // subcooled liquid at condensing P
-  const hB_m=H(pe_m, m.Tsuc_meas, fluid, 'vapor');   // superheated vapor at evap P
-  const dh_m=hB_m-hA_m;
-  const rho_m=RHO(pe_m, m.Tsuc_meas, fluid);
-  const mdot=m.Qvessel/(dh_m*1000);
-
-  // REQUESTED
-  const pe_r=satP(Te_r, fluid);
-  const pc_r=satP(Tc_r, fluid);
-  const hA_r=H(pc_r, Tliq_r, fluid, 'liquid');
-  const hB_r=H(pe_r, Tsuc_r, fluid, 'vapor');
-  const dh_r=hB_r-hA_r;
-  const rho_r=RHO(pe_r, Tsuc_r, fluid);
-
-  // CORRECTION FACTORS
-  const CF_rho=rho_r/rho_m;
-  const CF_dh=dh_r/dh_m;
-
-  // RESULT
-  const Qo=m.Qvessel*CF_rho*CF_dh;
-  const COP=Qo/m.P1;
-
-  return {pe_m,pc_m,hA_m,hB_m,dh_m,rho_m,mdot,
-          pe_r,pc_r,hA_r,hB_r,dh_r,rho_r,
-          CF_rho,CF_dh,Qo,COP};
+    Tcomp_meas:n(C.Tcomp_meas),Tsuc_meas:n(C.Tsuc_meas),
+    Tdisch_meas:n(C.Tdisch_meas),Tamb_meas:n(C.Tamb_meas),
+    current_meas:n(C.current_meas),voltage_meas:n(C.voltage_meas),rpm_meas:n(C.rpm_meas),
+    Tliq_meas:n(C.Tliq_meas),Tvout_meas:n(C.Tvout_meas),Pe_uncorr:n(C.Pe_uncorr),
+    colCount:c.length};
 }
 
 function getFluid(){
@@ -1434,171 +1223,759 @@ function getFluid(){
       || document.getElementById('refrigerant').value;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-//  CALCULATE SINGLE
-// ═══════════════════════════════════════════════════════════════════
-function calcSingle(){
-  if(!measData) return;
-  const fluid=getFluid();
-  const Te_r=parseFloat(document.getElementById('req_Te').value);
-  const Tc_r=parseFloat(document.getElementById('req_Tc').value);
-  const Tsuc_r=parseFloat(document.getElementById('req_Tsuc').value);
-  const Tliq_r=parseFloat(document.getElementById('req_Tliq').value);
-  try {
-    const r=computeQo(measData,Te_r,Tc_r,Tsuc_r,Tliq_r,fluid);
-    renderSingle(r,fluid);
-    renderDebug(r,fluid,Te_r,Tc_r,Tsuc_r,Tliq_r);
-  } catch(e){ showErr(e); }
+// =================================================================
+//  CORE CALCULATION — EN 12900 correction factor method
+// =================================================================
+function computeQo(m, Te_r, Tc_r, Tsuc_r, Tliq_r, fluid){
+  const pe_m=satP(m.Te_meas,fluid), pc_m=satP(m.Tc_meas,fluid);
+  const hA_m=H(pc_m,m.Tliq_meas,fluid,'liquid'), hB_m=H(pe_m,m.Tsuc_meas,fluid,'vapor');
+  const dh_m=hB_m-hA_m, rho_m=RHO(pe_m,m.Tsuc_meas,fluid), mdot=m.Qvessel/(dh_m*1000);
+  const pe_r=satP(Te_r,fluid), pc_r=satP(Tc_r,fluid);
+  const hA_r=H(pc_r,Tliq_r,fluid,'liquid'), hB_r=H(pe_r,Tsuc_r,fluid,'vapor');
+  const dh_r=hB_r-hA_r, rho_r=RHO(pe_r,Tsuc_r,fluid);
+  const CF_rho=rho_r/rho_m, CF_dh=dh_r/dh_m;
+  const Qo=m.Qvessel*CF_rho*CF_dh, COP=Qo/m.P1;
+  return {pe_m,pc_m,hA_m,hB_m,dh_m,rho_m,mdot,pe_r,pc_r,hA_r,hB_r,dh_r,rho_r,CF_rho,CF_dh,Qo,COP};
 }
 
-// ═══════════════════════════════════════════════════════════════════
-//  CALCULATE ALL
-// ═══════════════════════════════════════════════════════════════════
-function calcAll(){
-  if(!measData) return;
-  const fluid=getFluid();
-  const results={};
+function updateBtns(){
+  const btn=document.getElementById('calcAllMeasBtn');
+  if(btn) btn.disabled=measRows.length===0;
+  const exp=document.getElementById('exportWordBtn');
+  if(exp) exp.disabled=!measRows.some(r=>r.result);
+}
+
+// =================================================================
+//  STANDARDS
+// =================================================================
+function renderStdButtons(){
+  const panel=document.getElementById('stdButtonsPanel');
+  if(!panel) return;
+  const groups={};
   ALL_STD_KEYS.forEach(k=>{
-    const p=STANDARDS[k];
-    try { results[k]=computeQo(measData,p.Te,p.Tc,p.Tsuc,p.Tliq,fluid); }
-    catch(e){ results[k]=null; }
+    const p=STANDARDS[k]; if(!p) return;
+    if(!groups[p.label]) groups[p.label]=[];
+    groups[p.label].push({key:k,p});
   });
-  // Also compute selected (for debug)
-  const selKey=ALL_STD_KEYS.includes(activeStd)?activeStd:'en_lbp';
-  if(results[selKey]){
-    const p=STANDARDS[selKey];
-    renderSingle(results[selKey],fluid);
-    renderDebug(results[selKey],fluid,p.Te,p.Tc,p.Tsuc,p.Tliq);
-  }
-  renderCompTable(results,selKey);
-}
-
-function renderSingle(r,fluid){
-  const s=STANDARDS[activeStd];
-  document.getElementById('resultStdName').textContent=(s?s.label+' '+s.range:activeStd);
-  document.getElementById('resQo').textContent=r.Qo.toFixed(2);
-  document.getElementById('resP1').textContent=measData.P1.toFixed(2);
-  document.getElementById('resCOP').textContent=r.COP.toFixed(4);
-  document.getElementById('resMdot').textContent=(r.mdot*1000).toFixed(4);
-  document.getElementById('resultMeta').textContent=
-    t('fluid_lbl')+fluid+' | '+t('meta_formula')+
-    measData.Qvessel.toFixed(3)+' × '+r.CF_rho.toFixed(5)+' × '+r.CF_dh.toFixed(5)+
-    (cpReady?'' : ' | ±1% (PR EOS)');
-  document.getElementById('resultCard').style.display='block';
-  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function renderCompTable(results,selectedKey){
-  const refQo=results[selectedKey]?.Qo||null;
-  let rows='';
-  ALL_STD_KEYS.forEach(k=>{
-    const p=STANDARDS[k], r=results[k], isSel=(k===selectedKey);
-    let qStr='—',copStr='—',mStr='—',diffStr='';
-    if(r){
-      qStr=r.Qo.toFixed(2); copStr=r.COP.toFixed(4); mStr=(r.mdot*1000).toFixed(4);
-      if(refQo&&!isSel){
-        const d=r.Qo-refQo,pct=(d/refQo*100).toFixed(1),cls=d>=0?'pos':'neg';
-        diffStr=`<span class="dv ${cls}">${d>=0?'+':''}${d.toFixed(2)} W (${d>=0?'+':''}${pct}%)</span>`;
-      } else if(isSel){
-        diffStr=`<span style="font-size:10px;color:#2563eb;font-weight:700">${t('comp_sel')}</span>`;
+  groups['__custom__']=[{key:'custom',p:STANDARDS['custom']}];
+  let html='';
+  Object.entries(groups).forEach(([label,entries])=>{
+    const isCustom=label==='__custom__';
+    html+=`<div class="std-family"><div class="std-family-label">${isCustom?t('std_custom_lbl'):label}</div><div class="std-row">`;
+    entries.forEach(({key,p})=>{
+      const isA=key===activeStd;
+      const Te=p.Te>=0?'+'+p.Te:String(p.Te);
+      if(isCustom){
+        html+=`<div class="std-btn${isA?' active':''}" id="std_custom" onclick="setStd('custom')">
+          <div class="std-name">${t('std_custom_name')}</div><div class="std-sub">${t('std_custom_sub')}</div></div>`;
+      } else {
+        html+=`<div class="std-btn${isA?' active':''}" id="std_${key}" onclick="setStd('${key}')">
+          <div class="std-name">${p.range}</div><div class="std-sub">Te ${Te}/Tc ${p.Tc}°C</div></div>`;
       }
-    }
-    rows+=`<tr class="${isSel?'sel':''}">
-      <td><span class="nb ${p.badge}">${p.label}</span></td>
-      <td>${p.range}</td>
-      <td>${p.Te}</td><td>${p.Tc}</td><td>${p.Tsuc}</td><td>${p.Tliq}</td>
-      <td><span class="qv">${qStr}</span></td>
-      <td>${copStr}</td><td>${mStr}</td>
-      <td style="text-align:right">${diffStr}</td>
+    });
+    html+='</div></div>';
+  });
+  panel.innerHTML=html;
+}
+
+function setStd(key,silent){
+  if(!silent){activeStd=key;} else {activeStd='custom';key='custom';}
+  document.querySelectorAll('[id^="std_"]').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('std_'+key); if(el) el.classList.add('active');
+  const p=STANDARDS[key];
+  if(p&&key!=='custom'){
+    document.getElementById('req_Te').value=p.Te;
+    document.getElementById('req_Tc').value=p.Tc;
+    document.getElementById('req_Tamb').value=p.Tc;
+    document.getElementById('req_Tsuc').value=p.Tsuc;
+    document.getElementById('req_Tliq').value=p.Tliq;
+  }
+}
+
+// ── STANDARDS EDITOR ─────────────────────────────────────────────
+let _editorRows=[];
+function openStdEditor(){
+  _editorRows=ALL_STD_KEYS.map(k=>({
+    key:k,label:STANDARDS[k]?.label||'',range:STANDARDS[k]?.range||'',
+    Te:STANDARDS[k]?.Te??0,Tc:STANDARDS[k]?.Tc??0,
+    Tsuc:STANDARDS[k]?.Tsuc??0,Tliq:STANDARDS[k]?.Tliq??0,
+    badge:STANDARDS[k]?.badge||'nb-en',isNew:false}));
+  renderEditorTable();
+  document.getElementById('stdModal').style.display='flex';
+}
+function closeStdEditor(){document.getElementById('stdModal').style.display='none';}
+function renderEditorTable(){
+  let rows='';
+  _editorRows.forEach((r,i)=>{
+    const canDel=_editorRows.length>1;
+    rows+=`<tr class="${r.isNew?'new-row':''}">
+      <td><input type="text" value="${r.label}" oninput="_editorRows[${i}].label=this.value" style="min-width:90px"></td>
+      <td><input type="text" value="${r.range}" oninput="_editorRows[${i}].range=this.value" class="narrow"></td>
+      <td><input type="number" value="${r.Te}" oninput="_editorRows[${i}].Te=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tc}" oninput="_editorRows[${i}].Tc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tsuc}" oninput="_editorRows[${i}].Tsuc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tliq}" oninput="_editorRows[${i}].Tliq=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><button class="ed-del" onclick="delStdRow(${i})" ${canDel?'':'disabled'}>🗑</button></td>
     </tr>`;
   });
-  document.getElementById('compTableBody').innerHTML=rows;
-  document.getElementById('compCard').style.display='block';
-  document.getElementById('compCard').scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('stdEditorBody').innerHTML=rows;
+}
+function addStdRow(){
+  const lastLabel=_editorRows[_editorRows.length-1]?.label||'Custom';
+  _editorRows.push({key:'custom_'+Date.now(),label:lastLabel,range:'NEW',
+    Te:0,Tc:40,Tsuc:20,Tliq:40,badge:'nb-en',isNew:true});
+  renderEditorTable();
+  const body=document.querySelector('.modal-body');if(body)body.scrollTop=body.scrollHeight;
+}
+function delStdRow(i){if(_editorRows.length<=1)return;_editorRows.splice(i,1);renderEditorTable();}
+function saveStds(){
+  for(const r of _editorRows){if(!r.label.trim()||!r.range.trim()){alert('Label and range required');return;}}
+  ALL_STD_KEYS=[];
+  _editorRows.forEach((r,i)=>{
+    const key=r.isNew?('std_'+i+'_'+r.range.toLowerCase().replace(/\s+/g,'_')):r.key;
+    STANDARDS[key]={Te:r.Te,Tc:r.Tc,Tsuc:r.Tsuc,Tliq:r.Tliq,
+      label:r.label.trim(),range:r.range.trim(),badge:r.badge||'nb-en'};
+    ALL_STD_KEYS.push(key);
+  });
+  if(!ALL_STD_KEYS.includes(activeStd)) activeStd=ALL_STD_KEYS[0]||'custom';
+  closeStdEditor(); renderStdButtons(); setStd(activeStd); renderAllRows();
 }
 
-// ═══════════════════════════════════════════════════════════════════
-//  DEBUG PANEL
-// ═══════════════════════════════════════════════════════════════════
-function showTab(t){
-  const tabs=['measured','requested','factors','result'];
-  document.querySelectorAll('.dtab').forEach((el,i)=>el.classList.toggle('active',tabs[i]===t));
-  document.querySelectorAll('.dcontent').forEach(el=>el.classList.remove('active'));
-  document.getElementById('dc_'+t).classList.add('active');
+// =================================================================
+//  MULTI-MEASUREMENT ROWS
+// =================================================================
+let measRows=[], rowCounter=0;
+
+function addMeasRow(){
+  const id=++rowCounter;
+  measRows.push({id,data:null,stdKey:activeStd,result:null});
+  renderAllRows(); updateBtns();
+  setTimeout(()=>{const el=document.getElementById('mrow_'+id);if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
 }
 
-function renderDebug(r,fluid,Te_r,Tc_r,Tsuc_r,Tliq_r){
-  window._lastDebugArgs=[r,fluid,Te_r,Tc_r,Tsuc_r,Tliq_r];
+function deleteMeasRow(id){
+  measRows=measRows.filter(r=>r.id!==id);
+  renderAllRows(); updateBtns();
+}
+
+function clearAllMeas(){
+  measRows=[]; rowCounter=0; renderAllRows(); updateBtns();
+  document.getElementById('dm').innerHTML='<div class="dph">Add a measurement,<br>paste data and press<br><strong style="color:#7dd3fc">Calculate</strong></div>';
+  document.getElementById('debugTabs').style.display='none';
+  document.getElementById('debugRowLabel').textContent='';
+}
+
+function renderAllRows(){
+  const container=document.getElementById('measRowsContainer');
+  const badge=document.getElementById('measCountBadge');
+  if(badge) badge.textContent=measRows.length+' measurement'+(measRows.length!==1?'s':'');
+  if(measRows.length===0){
+    container.innerHTML='<div style="text-align:center;padding:40px;color:#9aa3b8;font-size:13px;border:2px dashed #e4e9f4;border-radius:12px"><div style="font-size:28px;margin-bottom:10px">📋</div><strong style="color:#7a8299">No measurements yet</strong><br><span style="font-size:11px">Click + Add measurement to start</span></div>';
+    return;
+  }
+  container.innerHTML=measRows.map((row,idx)=>buildRowHTML(row,idx+1)).join('');
+  measRows.forEach(row=>{
+    const ta=document.getElementById('mrow_ta_'+row.id);
+    if(ta){
+      ta.addEventListener('paste',()=>setTimeout(()=>parseRowPaste(row.id),30));
+      ta.addEventListener('input',()=>{ if(!ta.value.trim()) { const r=measRows.find(x=>x.id===row.id); if(r){r.rawPaste='';} } });
+    }
+  });
+}
+
+function buildRowHTML(row,num){
+  const d=row.data, r=row.result;
+  const compId=d?(d.kitNo||d.compType||'—'):'—';
+  const stdLabel=STANDARDS[row.stdKey]?STANDARDS[row.stdKey].label+' '+STANDARDS[row.stdKey].range:row.stdKey;
+  const qoStr=r?r.Qo.toFixed(3)+' W':'';
+  const isCustom=row.stdKey==='custom';
+
+  // Standard buttons including Custom — use single quotes inside onclick attr
+  const stdBtns=ALL_STD_KEYS.concat(['custom']).map(k=>{
+    const p=STANDARDS[k]; if(!p) return '';
+    const isA=k===row.stdKey;
+    const cls='mrow-std-btn'+(isA?' active':'');
+    return '<button class="'+cls+'" data-key="'+k+'" onclick="setRowStd('+row.id+',\''+k+'\')">'+p.label+' '+p.range+'</button>';
+  }).join('');
+
+  // Custom condition inputs (shown only when Custom is selected)
+  const cust=row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40};
+  const customBlock='<div class="mrow-custom'+(isCustom?' visible':'')+'" id="mrow_cust_'+row.id+'">'
+    +'<div class="mrow-custom-title">Custom conditions</div>'
+    +'<div class="g5">'
+    +'<div><label>Te [°C]</label><input type="number" value="'+cust.Te+'" step="0.5" id="mrow_Te_'+row.id+'" oninput="updateRowCustom('+row.id+')"></div>'
+    +'<div><label>Tc [°C]</label><input type="number" value="'+cust.Tc+'" step="0.5" id="mrow_Tc_'+row.id+'" oninput="updateRowCustom('+row.id+')"></div>'
+    +'<div><label>Tsuc [°C]</label><input type="number" value="'+cust.Tsuc+'" step="0.5" id="mrow_Tsuc_'+row.id+'" oninput="updateRowCustom('+row.id+')"></div>'
+    +'<div><label>Tliq [°C]</label><input type="number" value="'+cust.Tliq+'" step="0.5" id="mrow_Tliq_'+row.id+'" oninput="updateRowCustom('+row.id+')"></div>'
+    +'</div></div>';
+
+  let tags='';
+  let setVals='';
+  if(d){
+    tags='<div class="mrow-parsed-tags">'
+      +'<span class="mrow-tag">'+d.refrigerant+'</span>'
+      +'<span class="mrow-tag">Te_meas '+d.Te_meas.toFixed(2)+'°C</span>'
+      +'<span class="mrow-tag">Tc_meas '+d.Tc_meas.toFixed(2)+'°C</span>'
+      +'<span class="mrow-tag">Qv '+d.Qvessel.toFixed(1)+' W</span>'
+      +'<span class="mrow-tag">P1 '+d.P1.toFixed(1)+' W</span>'
+      +(d.colCount<41?'<span class="mrow-tag warn">⚠ '+d.colCount+' cols</span>':'')
+      +'</div>';
+    setVals='<div class="mrow-setvals">'
+      +'<div class="mrow-setvals-title">Set values (B–U)</div>'
+      // B-J: identification
+      +(d.calo?'<span class="sv-tag"><span>Calo</span>'+d.calo+'</span>':'')
+      +(d.order?'<span class="sv-tag"><span>Order</span>'+d.order+'</span>':'')
+      +(d.code?'<span class="sv-tag"><span>Code</span>'+d.code+'</span>':'')
+      +(d.operator?'<span class="sv-tag"><span>Operator</span>'+d.operator+'</span>':'')
+      +(d.date?'<span class="sv-tag"><span>Date</span>'+d.date+'</span>':'')
+      +(d.time?'<span class="sv-tag"><span>Time</span>'+d.time+'</span>':'')
+      +(d.remark?'<span class="sv-tag"><span>Remark</span>'+d.remark+'</span>':'')
+      // K-U: conditions
+      +'<span class="sv-tag"><span>Te</span>'+(+d.Te_set).toFixed(1)+'°C</span>'
+      +'<span class="sv-tag"><span>Tc</span>'+(+d.Tc_set).toFixed(1)+'°C</span>'
+      +'<span class="sv-tag"><span>Tamb</span>'+(+d.Tamb_set).toFixed(1)+'°C</span>'
+      +'<span class="sv-tag"><span>Tsuc</span>'+(+d.Tsuc_set).toFixed(1)+'°C</span>'
+      +'<span class="sv-tag"><span>Tliq</span>'+(+d.Tliq_set).toFixed(1)+'°C</span>'
+      +'<span class="sv-tag"><span>V</span>'+d.voltage+' V</span>'
+      +'<span class="sv-tag"><span>Hz</span>'+d.freq+' Hz</span>'
+      +(d.cooling?'<span class="sv-tag"><span>Cooling</span>'+d.cooling+'</span>':'')
+      +(d.rpm?'<span class="sv-tag"><span>RPM</span>'+d.rpm+'</span>':'')
+      +'<span class="sv-tag"><span>Ref.</span>'+d.refrigerant+'</span>'
+      +(d.capacitor?'<span class="sv-tag"><span>Cap</span>'+d.capacitor+' µF</span>':'')
+      +'</div>'
+      // Measured values (W-AK) — same strip style, teal colour
+      +'<div class="mrow-measvals">'
+      +'<div class="mrow-measvals-title">Measured values (W–AK)</div>'
+      +'<span class="mv-tag"><span>P1</span>'+d.P1.toFixed(2)+' W</span>'
+      +'<span class="mv-tag"><span>Te</span>'+d.Te_meas.toFixed(2)+'°C</span>'
+      +'<span class="mv-tag"><span>Tc</span>'+d.Tc_meas.toFixed(2)+'°C</span>'
+      +'<span class="mv-tag"><span>Qvessel</span>'+d.Qvessel.toFixed(2)+' W</span>'
+      +'<span class="mv-tag"><span>Tsuc</span>'+d.Tsuc_meas.toFixed(2)+'°C</span>'
+      +'<span class="mv-tag"><span>Tliq</span>'+d.Tliq_meas.toFixed(2)+'°C</span>'
+      +(d.Tcomp_meas?'<span class="mv-tag"><span>T comp</span>'+d.Tcomp_meas.toFixed(2)+'°C</span>':'')
+      +(d.Tdisch_meas?'<span class="mv-tag"><span>T disch</span>'+d.Tdisch_meas.toFixed(2)+'°C</span>':'')
+      +(d.Tamb_meas?'<span class="mv-tag"><span>T amb</span>'+d.Tamb_meas.toFixed(2)+'°C</span>':'')
+      +(d.current_meas?'<span class="mv-tag"><span>I</span>'+d.current_meas.toFixed(2)+' A</span>':'')
+      +(d.voltage_meas?'<span class="mv-tag"><span>V</span>'+d.voltage_meas.toFixed(2)+' V</span>':'')
+      +(d.rpm_meas?'<span class="mv-tag"><span>RPM</span>'+d.rpm_meas.toFixed(0)+'</span>':'')
+      +(d.Qo_ashrae?'<span class="mv-tag"><span>Qo ASHRAE</span>'+d.Qo_ashrae.toFixed(2)+' W</span>':'')
+      +(d.Qo_cecomaf?'<span class="mv-tag"><span>Qo CECOMAF</span>'+d.Qo_cecomaf.toFixed(2)+' W</span>':'')
+      +'</div>';
+  }
+  let resultHtml='';
+  if(r){
+    resultHtml='<div class="mrow-result">'
+      +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">Cooling Qo</div><div class="mrow-ri-val">'+r.Qo.toFixed(3)+'</div><div class="mrow-ri-u">W</div></div>'
+      +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">COP</div><div class="mrow-ri-val">'+r.COP.toFixed(3)+'</div><div class="mrow-ri-u">W/W</div></div>'
+      +'<div class="mrow-ri"><div class="mrow-ri-lbl">Power P1</div><div class="mrow-ri-val">'+d.P1.toFixed(2)+'</div><div class="mrow-ri-u">W</div></div>'
+      +'<div class="mrow-ri"><div class="mrow-ri-lbl">Mass flow</div><div class="mrow-ri-val">'+(r.mdot*1000).toFixed(3)+'</div><div class="mrow-ri-u">g/s</div></div>'
+      +'</div>'
+      +'<div style="margin-top:6px;font-size:9.5px;color:#9aa3b8;text-align:center">'
+      +d.refrigerant+' | Qo='+d.Qvessel.toFixed(2)+'×'+r.CF_rho.toFixed(5)+'×'+r.CF_dh.toFixed(5)
+      +' <span style="margin-left:8px;cursor:pointer;color:#7dd3fc;text-decoration:underline" onclick="showDebugForRow('+row.id+')">debug →</span>'
+      +'</div>';
+  }
+  return '<div class="mrow-card'+(r?' has-result':'')+'" id="mrow_'+row.id+'">'
+    +'<div class="mrow-head" onclick="toggleRowBody('+row.id+')">'
+    +'<div class="mrow-num">'+num+'</div>'
+    +'<div class="mrow-id">'+compId+'</div>'
+    +'<div class="mrow-std-badge">'+stdLabel+'</div>'
+    +'<div class="mrow-qo">'+qoStr+'</div>'
+    +'<button class="mrow-del" onclick="event.stopPropagation();deleteMeasRow('+row.id+')" title="Delete">🗑</button>'
+    +'</div>'
+    +'<div class="mrow-body" id="mrow_body_'+row.id+'">'
+    +'<div class="mrow-paste-row">'
+    +'<textarea class="mrow-paste" id="mrow_ta_'+row.id+'" placeholder="Paste row A3-AT3 from Excel (Ctrl+V)...">'+(row.rawPaste||'')+'</textarea>'
+    +'<button class="mrow-parse-btn" onclick="parseRowPaste('+row.id+')">⚡ Parse</button>'
+    +'</div>'
+    +tags
+    +setVals
+    +'<div class="mrow-std-sel"><span class="mrow-std-lbl">Standard:</span>'+stdBtns+'</div>'
+    +customBlock
+    +'<button class="mrow-calc-btn" onclick="calcRow('+row.id+')"'+(d?'':' disabled')+'>🧮 Calculate — '+stdLabel+'</button>'
+    +resultHtml
+    +'</div>'
+    +'</div>';
+}
+
+function toggleRowBody(id){
+  const b=document.getElementById('mrow_body_'+id);
+  if(b) b.style.display=b.style.display==='none'?'':'none';
+}
+
+function updateRowCustom(id){
+  const row=measRows.find(r=>r.id===id);if(!row)return;
+  row.custom={
+    Te: parseFloat(document.getElementById('mrow_Te_'+id)?.value)||0,
+    Tc: parseFloat(document.getElementById('mrow_Tc_'+id)?.value)||0,
+    Tsuc: parseFloat(document.getElementById('mrow_Tsuc_'+id)?.value)||0,
+    Tliq: parseFloat(document.getElementById('mrow_Tliq_'+id)?.value)||0
+  };
+}
+
+function setRowStd(id,stdKey){
+  const row=measRows.find(r=>r.id===id);if(!row)return;
+  row.stdKey=stdKey;row.result=null;
+
+  // Update standard buttons active state using data-key
+  const body=document.getElementById('mrow_body_'+id);
+  if(body){
+    body.querySelectorAll('.mrow-std-btn').forEach(btn=>{
+      btn.classList.toggle('active', btn.getAttribute('data-key')===stdKey);
+    });
+  }
+
+  // Show/hide custom block
+  const custBlock=document.getElementById('mrow_cust_'+id);
+  if(custBlock) custBlock.className='mrow-custom'+(stdKey==='custom'?' visible':'');
+
+  // Update calculate button label
+  const calcBtn=document.querySelector('#mrow_body_'+id+' .mrow-calc-btn');
+  if(calcBtn){
+    const stdLabel=STANDARDS[stdKey]?STANDARDS[stdKey].label+' '+STANDARDS[stdKey].range:stdKey;
+    calcBtn.textContent='🧮 Calculate — '+stdLabel;
+    calcBtn.disabled=!row.data;
+  }
+
+  // Update header badge
+  const badge=document.querySelector('#mrow_'+id+' .mrow-std-badge');
+  if(badge) badge.textContent=STANDARDS[stdKey]?STANDARDS[stdKey].label+' '+STANDARDS[stdKey].range:stdKey;
+
+  // Clear result display if present
+  const existing=body?body.querySelector('.mrow-result'):null;
+  if(existing) existing.remove();
+}
+function parseRowPaste(id){
+  const ta=document.getElementById('mrow_ta_'+id);if(!ta)return;
+  const raw=ta.value.trim();if(!raw)return;
+  const row=measRows.find(r=>r.id===id);if(!row)return;
+  row.rawPaste=raw;  // save so textarea keeps its value after re-render
+  row.data=parseRowCols(raw);row.result=null;renderAllRows();
+}
+
+function calcRow(id){
+  const row=measRows.find(r=>r.id===id);if(!row||!row.data)return;
+  const fluid=document.getElementById('refrigerantCustom').value.trim()||row.data.refrigerant||document.getElementById('refrigerant').value;
+  let p;
+  if(row.stdKey==='custom'){
+    // Use per-row custom values (read live from inputs)
+    updateRowCustom(id);
+    const c=row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40};
+    p={Te:c.Te,Tc:c.Tc,Tsuc:c.Tsuc,Tliq:c.Tliq,label:'Custom',range:'—'};
+  } else {
+    p=STANDARDS[row.stdKey];
+    if(!p){alert('Unknown standard: '+row.stdKey);return;}
+  }
+  try{
+    const result=computeQo(row.data,p.Te,p.Tc,p.Tsuc,p.Tliq,fluid);
+    row.result=result;row.result._fluid=fluid;row.result._stdKey=row.stdKey;
+    renderAllRows();updateDebugDropdown();updateBtns();showDebugForRow(id);
+    setTimeout(()=>{const el=document.getElementById('mrow_'+id);if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
+  }catch(e){showErrForRow(id,e);}
+}
+function calcAllMeas(){
+  measRows.forEach(row=>{if(row.data)calcRow(row.id);});
+}
+function updateDebugDropdown(){
+  const sel=document.getElementById('debugRowSelect');
+  if(!sel) return;
+  const cur=sel.value;
+  const opts=measRows.filter(r=>r.result);
+  sel.innerHTML='<option value="">— select measurement row —</option>'
+    +opts.map(r=>{
+      const compId=r.data?(r.data.kitNo||r.data.compType||'Row #'+r.id):'Row #'+r.id;
+      const p=r.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[r.stdKey]||{label:r.stdKey,range:''});
+      const qo=r.result?r.result.Qo.toFixed(2)+' W':'';
+      return '<option value="'+r.id+'"'+(String(r.id)===String(cur)?' selected':'')+'>'
+        +'#'+r.id+' '+compId+' · '+p.label+' '+p.range+(qo?' · '+qo:'')+'</option>';
+    }).join('');
+}
+
+function debugSelectRow(idStr){
+  if(!idStr) return;
+  showDebugForRow(parseInt(idStr,10));
+}
+
+function showDebugForRow(id){
+  const row=measRows.find(r=>r.id===id);if(!row||!row.result||!row.data)return;
+  const fluid=row.result._fluid||row.data.refrigerant;
+  let p;
+  if(row.stdKey==='custom'){
+    const c=row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40};
+    p={Te:c.Te,Tc:c.Tc,Tsuc:c.Tsuc,Tliq:c.Tliq,label:'Custom',range:'—'};
+  } else {
+    p=STANDARDS[row.stdKey]||{Te:0,Tc:0,Tsuc:0,Tliq:0,label:row.stdKey,range:''};
+  }
+  // Sync dropdown
+  const sel=document.getElementById('debugRowSelect');
+  if(sel) sel.value=String(id);
+  renderDebug(row.result,fluid,p.Te,p.Tc,p.Tsuc,p.Tliq,row.data);
+}
+function showErrForRow(id,e){
+  document.getElementById('debugRowLabel').textContent='Row #'+id+' — error';
   document.getElementById('debugTabs').style.display='flex';
-  // Re-apply tab labels from i18n
-  const tabs=document.querySelectorAll('.dtab');
-  const tabKeys=['dbg_meas','dbg_req','dbg_fact','dbg_res'];
-  tabs.forEach((el,i)=>{ if(tabKeys[i]) el.textContent=t(tabKeys[i]); });
+  document.getElementById('dm').innerHTML='<div style="color:#f87171;padding:16px;font-size:11.5px;line-height:1.7"><strong>'+t('err_calc')+'</strong><br>'+String(e)+'<br><br>'+t('err_check')+'</div>';
+  showTab('measured');
+}
 
-  const row=(k,v,u,d=6)=>
-    `<div class="drow"><span class="dk">${k}</span><span class="dv2">${typeof v==='number'?v.toFixed(d):v}</span><span class="du">${u||''}</span></div>`;
-  const sect=s=>`<div class="dsect">${s}</div>`;
+// =================================================================
+//  DEBUG PANEL
+// =================================================================
+function showTab(tab){
+  const tabs=['measured','requested','factors','result'];
+  document.querySelectorAll('.dtab').forEach((el,i)=>el.classList.toggle('active',tabs[i]===tab));
+  document.querySelectorAll('.dcontent').forEach(el=>el.classList.remove('active'));
+  document.getElementById('dc_'+tab).classList.add('active');
+}
+
+function renderDebug(r,fluid,Te_r,Tc_r,Tsuc_r,Tliq_r,m){
+  if(!m) return;
+  window._lastDebugArgs=[r,fluid,Te_r,Tc_r,Tsuc_r,Tliq_r,m];
+  document.getElementById('debugTabs').style.display='flex';
+  ['dbg_meas','dbg_req','dbg_fact','dbg_res'].forEach((k,i)=>{
+    const tabs=document.querySelectorAll('.dtab');if(tabs[i])tabs[i].textContent=t(k);
+  });
+  const row=(k,v,u,d=6)=>'<div class="drow"><span class="dk">'+k+'</span><span class="dv2">'+(typeof v==='number'?v.toFixed(d):v)+'</span><span class="du">'+(u||'')+'</span></div>';
+  const sect=s=>'<div class="dsect">'+s+'</div>';
   const eos=cpReady?'(CoolProp)':'(PR EOS ±1%)';
-
   document.getElementById('dm').innerHTML=
-    sect(t('ds_meas'))+
-    row(t('dk_fluid'),fluid,'')+
-    row(t('dk_te_m'),measData.Te_meas,'°C',5)+
-    row(t('dk_tc_m'),measData.Tc_meas,'°C',5)+
-    row(t('dk_tsuc_m'),measData.Tsuc_meas,'°C',5)+
-    row(t('dk_tliq_m'),measData.Tliq_meas,'°C',5)+
-    row(t('dk_qvessel'),measData.Qvessel,'W',4)+
-    row(t('dk_p1'),measData.P1,'W',4)+
+    sect(t('ds_meas'))+row(t('dk_fluid'),fluid,'')+
+    row(t('dk_te_m'),m.Te_meas,'°C',5)+row(t('dk_tc_m'),m.Tc_meas,'°C',5)+
+    row(t('dk_tsuc_m'),m.Tsuc_meas,'°C',5)+row(t('dk_tliq_m'),m.Tliq_meas,'°C',5)+
+    row(t('dk_qvessel'),m.Qvessel,'W',4)+row(t('dk_p1'),m.P1,'W',4)+
     sect(t('ds_thermo_m')+' '+eos)+
-    row(t('dk_pe_m'),r.pe_m,'bar',6)+
-    row(t('dk_pc_m'),r.pc_m,'bar',5)+
-    row(t('dk_ha_m'),r.hA_m,'kJ/kg',4)+
-    row(t('dk_hb_m'),r.hB_m,'kJ/kg',4)+
-    row(t('dk_dh_m'),r.dh_m,'kJ/kg',4)+
-    row(t('dk_mdot'),r.mdot,'kg/s',8)+
-    row(t('dk_rho_m'),r.rho_m,'kg/m³',5);
-
+    row(t('dk_pe_m'),r.pe_m,'bar',6)+row(t('dk_pc_m'),r.pc_m,'bar',5)+
+    row(t('dk_ha_m'),r.hA_m,'kJ/kg',4)+row(t('dk_hb_m'),r.hB_m,'kJ/kg',4)+
+    row(t('dk_dh_m'),r.dh_m,'kJ/kg',4)+row(t('dk_mdot'),r.mdot,'kg/s',8)+
+    row(t('dk_rho_m'),r.rho_m,'kg/m3',5);
   document.getElementById('dr').innerHTML=
     sect(t('ds_req'))+
-    row(t('dk_te_r'),Te_r,'°C',2)+
-    row(t('dk_tc_r'),Tc_r,'°C',2)+
-    row(t('dk_tsuc_r'),Tsuc_r,'°C',2)+
-    row(t('dk_tliq_r'),Tliq_r,'°C',2)+
+    row(t('dk_te_r'),Te_r,'°C',2)+row(t('dk_tc_r'),Tc_r,'°C',2)+
+    row(t('dk_tsuc_r'),Tsuc_r,'°C',2)+row(t('dk_tliq_r'),Tliq_r,'°C',2)+
     sect(t('ds_thermo_r')+' '+eos)+
-    row(t('dk_pe_r'),r.pe_r,'bar',6)+
-    row(t('dk_pc_r'),r.pc_r,'bar',5)+
-    row(t('dk_ha_r'),r.hA_r,'kJ/kg',4)+
-    row(t('dk_hb_r'),r.hB_r,'kJ/kg',4)+
-    row(t('dk_dh_r'),r.dh_r,'kJ/kg',4)+
-    row(t('dk_rho_r'),r.rho_r,'kg/m³',5);
-
+    row(t('dk_pe_r'),r.pe_r,'bar',6)+row(t('dk_pc_r'),r.pc_r,'bar',5)+
+    row(t('dk_ha_r'),r.hA_r,'kJ/kg',4)+row(t('dk_hb_r'),r.hB_r,'kJ/kg',4)+
+    row(t('dk_dh_r'),r.dh_r,'kJ/kg',4)+row(t('dk_rho_r'),r.rho_r,'kg/m3',5);
   document.getElementById('df').innerHTML=
     sect(t('ds_cf'))+
-    `<div class="cf-box"><span class="cf-key">${t('dk_cf_rho')}</span><span style="color:#3b82f6;font-size:14px">→</span><span class="cf-val">${r.CF_rho.toFixed(8)}</span></div>
-    <div class="cf-box"><span class="cf-key">${t('dk_cf_dh')}</span><span style="color:#3b82f6;font-size:14px">→</span><span class="cf-val">${r.CF_dh.toFixed(8)}</span></div>`+
+    '<div class="cf-box"><span class="cf-key">'+t('dk_cf_rho')+'</span><span style="color:#3b82f6;font-size:14px">→</span><span class="cf-val">'+r.CF_rho.toFixed(8)+'</span></div>'+
+    '<div class="cf-box"><span class="cf-key">'+t('dk_cf_dh')+'</span><span style="color:#3b82f6;font-size:14px">→</span><span class="cf-val">'+r.CF_dh.toFixed(8)+'</span></div>'+
     sect(t('ds_breakdown'))+
-    row(t('dk_qvessel2'),measData.Qvessel,'W',4)+
-    row('× CF_ρ',r.CF_rho,'',8)+
-    row('× CF_Δh',r.CF_dh,'',8);
-
+    row(t('dk_qvessel2'),m.Qvessel,'W',4)+row('× CF_ρ',r.CF_rho,'',8)+row('× CF_Δh',r.CF_dh,'',8);
   document.getElementById('dres').innerHTML=
-    `<div class="dres">
-      <div class="dres-lbl">${t('dres_lbl')}</div>
-      <div class="dres-val">${r.Qo.toFixed(4)} W</div>
-      <div style="font-size:10px;color:#475569;margin-top:6px">COP = Qo/P1 = ${r.Qo.toFixed(4)}/${measData.P1.toFixed(4)} = <strong style="color:#a78bfa">${r.COP.toFixed(5)}</strong></div>
-      <div style="font-size:10px;color:#475569;margin-top:3px">ṁ = ${(r.mdot*1000).toFixed(5)} g/s</div>
-      ${!cpReady?`<div style="font-size:9px;color:#64748b;margin-top:6px;border-top:1px solid #1e3a5f;padding-top:6px">${t('eos_note')}</div>`:''}
-    </div>`;
-
+    '<div class="dres"><div class="dres-lbl">'+t('dres_lbl')+'</div>'
+    +'<div class="dres-val">'+r.Qo.toFixed(4)+' W</div>'
+    +'<div style="font-size:10px;color:#475569;margin-top:6px">COP='+r.Qo.toFixed(4)+'/'+m.P1.toFixed(4)+'=<strong style="color:#a78bfa">'+r.COP.toFixed(5)+'</strong></div>'
+    +'<div style="font-size:10px;color:#475569;margin-top:3px">m\u0307='+(r.mdot*1000).toFixed(5)+' g/s</div>'
+    +(!cpReady?'<div style="font-size:9px;color:#64748b;margin-top:6px;border-top:1px solid #1e3a5f;padding-top:6px">'+t('eos_note')+'</div>':'')
+    +'</div>';
   showTab('measured');
 }
 
-function showErr(e){
-  document.getElementById('debugTabs').style.display='flex';
-  document.getElementById('dm').innerHTML=
-    `<div style="color:#f87171;padding:16px;font-size:11.5px;line-height:1.7">
-    <strong>${t('err_calc')}</strong><br>${String(e)}<br><br>${t('err_check')}</div>`;
-  showTab('measured');
+// =================================================================
+//  EXPORT TO WORD (.docx)
+// =================================================================
+async function exportToWord(){
+  const btn=document.getElementById('exportWordBtn');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Generating...'; }
+
+  try {
+    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+            AlignmentType, BorderStyle, WidthType, ShadingType, HeadingLevel } = docx;
+
+    const rows=measRows.filter(r=>r.result&&r.data);
+    if(!rows.length){ alert('No calculated results to export.'); return; }
+
+    // ── helpers ──────────────────────────────────────────────────
+    const brd={style:BorderStyle.SINGLE,size:4,color:'E4E9F4'};
+    const brdAll={top:brd,bottom:brd,left:brd,right:brd};
+    const brdTeal={style:BorderStyle.SINGLE,size:4,color:'6EE7B7'};
+    const brdAllTeal={top:brdTeal,bottom:brdTeal,left:brdTeal,right:brdTeal};
+    const brdYellow={style:BorderStyle.SINGLE,size:4,color:'FCD34D'};
+    const brdAllYellow={top:brdYellow,bottom:brdYellow,left:brdYellow,right:brdYellow};
+    const brdBlue={style:BorderStyle.SINGLE,size:4,color:'93C5FD'};
+    const brdAllBlue={top:brdBlue,bottom:brdBlue,left:brdBlue,right:brdBlue};
+    const m=(top,bottom,left,right)=>({top,bottom,left,right});
+
+    // Horizontal wide table helper
+    function WideTable(headers, values, hdrFill, hdrColor, valFill, valColor, borders){
+      const w=Math.floor(9360/headers.length);
+      const widths=headers.map(()=>w);
+      return new Table({
+        width:{size:9360,type:WidthType.DXA}, columnWidths:widths,
+        rows:[
+          new TableRow({children:headers.map(h=>new TableCell({
+            borders,margins:m(80,80,100,100),
+            shading:{fill:hdrFill,type:ShadingType.CLEAR},
+            children:[new Paragraph({children:[new TextRun({text:h,bold:true,size:17,color:hdrColor,font:'Calibri'})]})]
+          }))}),
+          new TableRow({children:values.map(v=>new TableCell({
+            borders,margins:m(80,80,100,100),
+            shading:{fill:valFill,type:ShadingType.CLEAR},
+            children:[new Paragraph({children:[new TextRun({text:String(v),size:18,font:'Calibri',color:valColor})]})]
+          }))})
+        ]
+      });
+    }
+
+    // Result box table (Qo, COP, P1, mass flow)
+    function ResultTable(r, d, fluid, stdLabel){
+      const cols=[
+        {h:'Standard',v:stdLabel,hl:false},
+        {h:'Refrigerant',v:fluid,hl:false},
+        {h:'Cooling capacity Qo',v:r.Qo.toFixed(2)+' W',hl:true},
+        {h:'COP',v:r.COP.toFixed(4)+' W/W',hl:true},
+        {h:'Power input P1',v:d.P1.toFixed(2)+' W',hl:false},
+        {h:'Mass flow ṁ',v:(r.mdot*1000).toFixed(4)+' g/s',hl:false},
+      ];
+      const w=Math.floor(9360/cols.length);
+      return new Table({
+        width:{size:9360,type:WidthType.DXA},columnWidths:cols.map(()=>w),
+        rows:[
+          new TableRow({children:cols.map(c=>new TableCell({
+            borders:brdAllBlue,margins:m(80,80,100,100),
+            shading:{fill:'0D1F3C',type:ShadingType.CLEAR},
+            children:[new Paragraph({children:[new TextRun({text:c.h,bold:true,size:17,color:'FFFFFF',font:'Calibri'})]})]
+          }))}),
+          new TableRow({children:cols.map(c=>new TableCell({
+            borders:brdAllBlue,margins:m(100,100,100,100),
+            shading:{fill:c.hl?'EFF6FF':'F8FAFF',type:ShadingType.CLEAR},
+            children:[new Paragraph({children:[new TextRun({text:c.v,bold:c.hl,size:c.hl?22:18,font:'Calibri',color:c.hl?'059669':'1E2433'})]})]
+          }))})
+        ]
+      });
+    }
+
+    function sp(after=160){ return new Paragraph({spacing:{after},children:[new TextRun({text:'',font:'Calibri'})]}); }
+    function sectionTitle(text,color){
+      return new Paragraph({spacing:{before:160,after:80},
+        children:[new TextRun({text,bold:true,size:22,color,font:'Calibri'})]});
+    }
+
+    // ── build document ───────────────────────────────────────────
+    const children=[];
+
+    // ── Title ────────────────────────────────────────────────────
+    // Logo (if uploaded)
+    if(headerData.logoDataUrl){
+      try {
+        const base64 = headerData.logoDataUrl.split(',')[1];
+        const mimeMatch = headerData.logoDataUrl.match(/data:([^;]+)/);
+        const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+        const ext = mime.split('/')[1] || 'png';
+        const { ImageRun } = docx;
+        children.push(new Paragraph({
+          alignment:AlignmentType.CENTER, spacing:{after:100},
+          children:[new ImageRun({data:base64,transformation:{width:120,height:60},type:ext})]
+        }));
+      } catch(imgErr){ console.warn('Logo insert failed:', imgErr); }
+    }
+    children.push(new Paragraph({
+      alignment:AlignmentType.CENTER, spacing:{after:100},
+      children:[new TextRun({text:headerData.title,bold:true,size:36,color:'0D1F3C',font:'Calibri'})]
+    }));
+    children.push(new Paragraph({
+      alignment:AlignmentType.CENTER, spacing:{after:80},
+      children:[new TextRun({text:headerData.sub,size:20,color:'7A8299',font:'Calibri'})]
+    }));
+    children.push(new Paragraph({
+      alignment:AlignmentType.CENTER, spacing:{after:300},
+      children:[new TextRun({text:'Generated: '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}),size:18,color:'9AA3B8',font:'Calibri',italics:true})]
+    }));
+
+    // ── Summary table ─────────────────────────────────────────────
+    children.push(new Paragraph({spacing:{after:100},
+      children:[new TextRun({text:'Summary',bold:true,size:28,color:'0D1F3C',font:'Calibri'})]}));
+    const sumHdrs=['#','Compressor','Standard','Refrigerant','Qo [W]','COP','P1 [W]'];
+    const sumWidths=[400,2200,1800,1400,1200,1200,1360];
+    children.push(new Table({
+      width:{size:9360,type:WidthType.DXA}, columnWidths:sumWidths,
+      rows:[
+        new TableRow({children:sumHdrs.map(h=>new TableCell({
+          borders:brdAll,margins:m(80,80,100,100),
+          shading:{fill:'0D1F3C',type:ShadingType.CLEAR},
+          children:[new Paragraph({children:[new TextRun({text:h,bold:true,size:18,color:'FFFFFF',font:'Calibri'})]})]
+        }))}),
+        ...rows.map((row,i)=>{
+          const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
+          return new TableRow({children:[
+            String(i+1),row.data.kitNo||row.data.compType||'—',p.label+' '+p.range,
+            row.result._fluid||row.data.refrigerant,
+            row.result.Qo.toFixed(2),row.result.COP.toFixed(4),row.data.P1.toFixed(2)
+          ].map((v,ci)=>new TableCell({
+            borders:brdAll,margins:m(80,80,100,100),
+            shading:{fill:i%2===0?'FFFFFF':'F8FAFF',type:ShadingType.CLEAR},
+            children:[new Paragraph({children:[new TextRun({
+              text:String(v),size:18,font:'Calibri',bold:ci===4,color:ci===4?'059669':'1E2433'
+            })]})]
+          }))});
+        })
+      ]
+    }));
+
+    // ── Detailed section per measurement ─────────────────────────
+    rows.forEach((row,i)=>{
+      const d=row.data, r=row.result;
+      const fluid=r._fluid||d.refrigerant;
+      const p=row.stdKey==='custom'
+        ?(row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40,label:'Custom',range:'—'})
+        :(STANDARDS[row.stdKey]||{Te:0,Tc:0,Tsuc:0,Tliq:0,label:row.stdKey,range:''});
+      const stdLabel=(p.label||'')+(p.range&&p.range!=='—'?' '+p.range:'');
+
+      // Page break before each measurement (except first)
+      if(i>0) children.push(new Paragraph({pageBreakBefore:true,children:[new TextRun({text:'',font:'Calibri'})]}));
+      else children.push(sp(300));
+
+      // Measurement heading
+      children.push(new Paragraph({spacing:{after:120},
+        children:[
+          new TextRun({text:String(i+1)+'.  ',bold:true,size:30,color:'2563EB',font:'Calibri'}),
+          new TextRun({text:(d.kitNo||d.compType||'—'),bold:true,size:30,color:'0D1F3C',font:'Calibri'}),
+          new TextRun({text:'   ·  '+stdLabel,size:22,color:'7A8299',font:'Calibri'})
+        ]
+      }));
+
+      // ── SET VALUES ────────────────────────────────────────────
+      children.push(sectionTitle('Set values  (B – U)','92400E'));
+      // Row 1: identification (B-J)
+      const idHdrs=['Factory','Calo','Order','Kit #','Compressor','Date','Time','Code','Operator','Remark'];
+      const idVals=[d.factory||'—',d.calo||'—',d.order||'—',d.kitNo||'—',d.compType||'—',
+                    d.date||'—',d.time||'—',d.code||'—',d.operator||'—',d.remark||'—'];
+      children.push(WideTable(idHdrs,idVals,'FEF3C7','92400E','FFFBEB','78350F',brdAllYellow));
+      children.push(sp(60));
+      // Row 2: conditions (K-U)
+      children.push(WideTable(
+        ['Te set','Tc set','Tamb set','Tsuc set','Tliq set','Voltage','Frequency','Cooling','RPM','Refrigerant','Capacitor'],
+        [d.Te_set+'°C',d.Tc_set+'°C',d.Tamb_set+'°C',d.Tsuc_set+'°C',d.Tliq_set+'°C',
+         d.voltage+' V',d.freq+' Hz',d.cooling||'—',d.rpm||'—',d.refrigerant,d.capacitor?d.capacitor+' µF':'—'],
+        'FEF3C7','92400E','FFFBEB','78350F',brdAllYellow
+      ));
+      children.push(sp(160));
+
+      // ── MEASURED VALUES ───────────────────────────────────────
+      children.push(sectionTitle('Measured values  (W – AK)','065F46'));
+      children.push(WideTable(
+        ['Te meas','Tc meas','Tsuc meas','Tliq meas','Qvessel','P1','T comp','T disch','T amb','Current','Voltage','RPM'],
+        [d.Te_meas.toFixed(2)+'°C',d.Tc_meas.toFixed(2)+'°C',
+         d.Tsuc_meas.toFixed(2)+'°C',d.Tliq_meas.toFixed(2)+'°C',
+         d.Qvessel.toFixed(2)+' W',d.P1.toFixed(2)+' W',
+         d.Tcomp_meas.toFixed(2)+'°C',d.Tdisch_meas.toFixed(2)+'°C',
+         d.Tamb_meas.toFixed(2)+'°C',d.current_meas.toFixed(2)+' A',
+         d.voltage_meas.toFixed(2)+' V',d.rpm_meas.toFixed(0)],
+        'D1FAE5','065F46','ECFDF5','065F46',brdAllTeal
+      ));
+      // Second row if Qo ASHRAE/CECOMAF exist
+      if(d.Qo_ashrae||d.Qo_cecomaf){
+        children.push(sp(60));
+        const h2=[],v2=[];
+        if(d.Qo_ashrae){h2.push('Qo ASHRAE');v2.push(d.Qo_ashrae.toFixed(2)+' W');}
+        if(d.COP_ashrae){h2.push('COP ASHRAE');v2.push(d.COP_ashrae.toFixed(4));}
+        if(d.Qo_cecomaf){h2.push('Qo CECOMAF');v2.push(d.Qo_cecomaf.toFixed(2)+' W');}
+        if(d.COP_cecomaf){h2.push('COP CECOMAF');v2.push(d.COP_cecomaf.toFixed(4));}
+        if(h2.length){
+          children.push(WideTable(h2,v2,'D1FAE5','065F46','ECFDF5','065F46',brdAllTeal));
+        }
+      }
+      children.push(sp(200));
+
+      // ── CALCULATION RESULT ────────────────────────────────────
+      children.push(sectionTitle('Calculation result  —  '+stdLabel,'1A4DB5'));
+      children.push(ResultTable(r,d,fluid,stdLabel));
+    });
+
+    // Footer
+    children.push(sp(300));
+    children.push(new Paragraph({
+      alignment:AlignmentType.CENTER, spacing:{after:0},
+      children:[new TextRun({text:headerData.footer,size:16,color:'AAAAAA',font:'Calibri',italics:true})]
+    }));
+
+    // ── generate & download ───────────────────────────────────────
+    const doc=new Document({sections:[{
+      properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
+      children
+    }]});
+    const blob=await Packer.toBlob(doc);
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='AES_Cooling_Report_'+new Date().toISOString().slice(0,10)+'.docx';
+    a.click(); URL.revokeObjectURL(url);
+
+  } catch(err){
+    console.error('Export error:',err);
+    alert('Export failed: '+err.message);
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='📄 Export .docx'; updateBtns(); }
+  }
+}
+
+// =================================================================
+//  HEADER EDITOR
+// =================================================================
+let headerData = {
+  title:  'AES — Compressor Cooling Capacity',
+  sub:    'EN 12900 · CECOMAF · ARI 520 · ASHRAE · Custom conditions | AES s.r.o. — Advanced Energy Systems',
+  footer: 'AES s.r.o. — Advanced Energy Systems | www.aes-slovakia.eu | Farská 50, 949 01 Nitra, Slovakia',
+  logoDataUrl: null
+};
+
+function openHeaderEditor(){
+  document.getElementById('hdr_title').value  = headerData.title;
+  document.getElementById('hdr_sub').value    = headerData.sub;
+  document.getElementById('hdr_footer').value = headerData.footer;
+  updateLogoPreview();
+  document.getElementById('headerModal').style.display='flex';
+}
+function closeHeaderEditor(){
+  document.getElementById('headerModal').style.display='none';
+}
+
+function saveHeader(){
+  headerData.title  = document.getElementById('hdr_title').value.trim() || headerData.title;
+  headerData.sub    = document.getElementById('hdr_sub').value.trim();
+  headerData.footer = document.getElementById('hdr_footer').value.trim();
+  applyHeader();
+  closeHeaderEditor();
+}
+
+function applyHeader(){
+  document.getElementById('tbTitleEl').textContent = headerData.title;
+  document.getElementById('tbSubEl').textContent   = headerData.sub;
+  // Update logo in topbar
+  const wrap = document.getElementById('tbLogoInner');
+  if(headerData.logoDataUrl){
+    wrap.innerHTML = '<img src="'+headerData.logoDataUrl+'" style="width:100%;height:100%;object-fit:contain;border-radius:8px">';
+    wrap.style.background = '#fff';
+  } else {
+    wrap.innerHTML = '❄';
+    wrap.style.background = '';
+  }
+}
+
+function handleLogoUpload(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    headerData.logoDataUrl = ev.target.result;
+    updateLogoPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearLogo(){
+  headerData.logoDataUrl = null;
+  document.getElementById('logoFileInput').value = '';
+  updateLogoPreview();
+}
+
+function updateLogoPreview(){
+  const prev = document.getElementById('logoPreview');
+  if(headerData.logoDataUrl){
+    prev.innerHTML = '<img src="'+headerData.logoDataUrl+'" style="width:76px;height:76px;object-fit:contain;border-radius:8px">';
+  } else {
+    prev.innerHTML = '<div class="lu-hint">📷<br>Click to<br>upload logo</div>';
+  }
 }
 
 // Apply default language (EN) on load
@@ -1606,8 +1983,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   setLang('en');
   renderStdButtons();
   setStd('en_lbp');
-  document.getElementById('pasteArea').addEventListener('paste',()=>setTimeout(parsePaste,50));
+  addMeasRow();
 });
+
 </script>
 </body>
 </html>
