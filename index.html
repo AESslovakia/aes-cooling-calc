@@ -152,6 +152,8 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 /* Topbar edit pencil */
 .tb-edit-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .tb-edit-btn:hover{background:rgba(255,255,255,.22)}
+/* Admin badge */
+.admin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:rgba(234,179,8,.15);border:1px solid rgba(234,179,8,.4);border-radius:5px;font-size:9.5px;font-weight:700;color:#fbbf24;font-family:'Inter',sans-serif;flex-shrink:0}
 /* Logo upload area */
 .logo-upload-area{width:80px;height:80px;border:2px dashed #93b4f0;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;background:#f8faff;flex-shrink:0}
 .logo-upload-area:hover{border-color:#2563eb;background:#eef3ff}
@@ -394,12 +396,12 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
     <div class="tb-logo" id="tbLogoWrap" onclick="openHeaderEditor()" title="Click to edit header" style="cursor:pointer">
       <div class="tb-logo-inner" id="tbLogoInner">❄</div>
     </div>
-    <div class="tb-info" onclick="openHeaderEditor()" style="cursor:pointer" title="Click to edit header">
+    <div class="tb-info" id="tbInfo" onclick="openHeaderEditor()" title="Click to edit header (Admin only)">
       <div class="tb-title" id="tbTitleEl">AES — Compressor Cooling Capacity</div>
       <div class="tb-sub" id="tbSubEl">EN 12900 · CECOMAF · ARI 520 · ASHRAE · Custom conditions | AES s.r.o. — Advanced Energy Systems</div>
     </div>
     <div class="tb-right" id="tbRight" style="gap:6px">
-      <button class="tb-edit-btn" onclick="openHeaderEditor()">✏️ Edit header</button>
+      <button class="tb-edit-btn admin-only" id="tbEditBtn" onclick="openHeaderEditor()" style="display:none">✏️ Edit header</button>
       <div class="status-badge st-ok"><div class="st-dot"></div><span>PR EOS · Offline</span></div>
       <div class="status-badge st-warn"><div class="st-dot"></div><span data-i18n="acc_pct">±1% accuracy</span></div>
     </div>
@@ -1417,7 +1419,59 @@ function RHO(P_bar, T_C, fluid){
 // ═══════════════════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════════════════
-const PIN = '1234'; // ← ZMENIŤ PIN TU
+const PIN_USER  = '1234'; // ← Standard user PIN
+const PIN_ADMIN = '0543'; // ← Admin PIN (can edit header/logo)
+
+// Access level — set on login
+let isAdmin = false;
+
+// ═══════════════════════════════════════════════════════════════════
+//  PIN
+// ═══════════════════════════════════════════════════════════════════
+let pinBuf='';
+function pinPress(d){ if(pinBuf.length>=4)return; pinBuf+=d; dots(); if(pinBuf.length===4)checkPin(); }
+function pinBack(){ pinBuf=pinBuf.slice(0,-1); dots(); document.getElementById('pinErr').textContent=''; }
+function dots(){ for(let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled',i<pinBuf.length); }
+function checkPin(){
+  if(pinBuf===PIN_ADMIN){
+    isAdmin=true;
+    unlockApp();
+  } else if(pinBuf===PIN_USER){
+    isAdmin=false;
+    unlockApp();
+  } else {
+    document.getElementById('pinErr').textContent=t('pin_wrong');
+    pinBuf=''; dots();
+    setTimeout(()=>document.getElementById('pinErr').textContent='',2000);
+  }
+}
+function unlockApp(){
+  document.getElementById('pinScreen').style.display='none';
+  document.getElementById('appMain').style.display='block';
+  setLang(activeLang);
+  // Show/hide admin-only controls
+  document.querySelectorAll('.admin-only').forEach(el=>{
+    el.style.display = isAdmin ? '' : 'none';
+  });
+  // Admin badge in topbar
+  const existing = document.getElementById('adminBadge');
+  if(isAdmin && !existing){
+    const badge = document.createElement('div');
+    badge.id='adminBadge';
+    badge.className='admin-badge';
+    badge.innerHTML='🔑 Admin';
+    const tbRight = document.getElementById('tbRight');
+    if(tbRight) tbRight.insertBefore(badge, tbRight.firstChild);
+  }
+  // Topbar cursor
+  const tbInfo = document.getElementById('tbInfo');
+  if(tbInfo) tbInfo.style.cursor = isAdmin ? 'pointer' : 'default';
+}
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('pinScreen').style.display==='none') return;
+  if(e.key>='0'&&e.key<='9') pinPress(e.key);
+  if(e.key==='Backspace') pinBack();
+});
 
 // STANDARDS — corrected per official table (image)
 // Pe=Te evaporating temp, Pc=Tc condensing temp
@@ -1443,30 +1497,6 @@ let STANDARDS = {
 let ALL_STD_KEYS = ['en_lbp','en_mbp','en_hbp','cc_lbp','cc_mbp','cc_hbp','ash_lbp','ash_mbp','ash_hbp','ari_lbp','ari_mbp','ari_hbp'];
 
 let measData=null, activeStd='en_lbp';
-
-// ═══════════════════════════════════════════════════════════════════
-//  PIN
-// ═══════════════════════════════════════════════════════════════════
-let pinBuf='';
-function pinPress(d){ if(pinBuf.length>=4)return; pinBuf+=d; dots(); if(pinBuf.length===4)checkPin(); }
-function pinBack(){ pinBuf=pinBuf.slice(0,-1); dots(); document.getElementById('pinErr').textContent=''; }
-function dots(){ for(let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled',i<pinBuf.length); }
-function checkPin(){
-  if(pinBuf===PIN){
-    document.getElementById('pinScreen').style.display='none';
-    document.getElementById('appMain').style.display='block';
-    setLang(activeLang); // apply language on unlock
-  } else {
-    document.getElementById('pinErr').textContent=t('pin_wrong');
-    pinBuf=''; dots();
-    setTimeout(()=>document.getElementById('pinErr').textContent='',2000);
-  }
-}
-document.addEventListener('keydown',e=>{
-  if(document.getElementById('pinScreen').style.display==='none') return;
-  if(e.key>='0'&&e.key<='9') pinPress(e.key);
-  if(e.key==='Backspace') pinBack();
-});
 
 // ═══════════════════════════════════════════════════════════════════
 //  COLUMN MAP + MULTI-MEASUREMENT ENGINE
@@ -2249,6 +2279,12 @@ let headerData = {
 };
 
 function openHeaderEditor(){
+  if(!isAdmin){
+    // Show brief tooltip instead of silent ignore
+    const btn = document.getElementById('tbEditBtn');
+    if(btn){ btn.textContent='🔒 Admin only'; setTimeout(()=>{ btn.textContent='✏️ Edit header'; },2000); }
+    return;
+  }
   document.getElementById('hdr_title').value  = headerData.title;
   document.getElementById('hdr_sub').value    = headerData.sub;
   document.getElementById('hdr_footer').value = headerData.footer;
