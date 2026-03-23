@@ -1551,9 +1551,41 @@ const C={
 const FLUID_MAP={'R-290':'R290','R-134a':'R134a','R-404A':'R404A','R-22':'R22',
   'R-407C':'R407C','R-410A':'R410A','R-600a':'R600a','R-32':'R32'};
 
+// ── Locale-aware number parser ─────────────────────────────────────
+// Handles both   1.234,56  (EU: dot=thousands, comma=decimal)
+//           and  1,234.56  (US: comma=thousands, dot=decimal)
+// Rules:
+//  1. If both . and , are present → whichever comes LAST is the decimal separator
+//  2. If only , → treat as decimal separator (e.g. "3,14")
+//  3. If only . → standard parseFloat
+//  4. Neither → parseInt fallback
+function parseNum(str){
+  if(str===null||str===undefined) return 0;
+  str=String(str).trim().replace(/\s/g,'');  // remove whitespace/nbsp
+  if(str===''||str==='-') return 0;
+  const lastDot   = str.lastIndexOf('.');
+  const lastComma = str.lastIndexOf(',');
+  if(lastDot > -1 && lastComma > -1){
+    // Both present — last one is decimal separator
+    if(lastComma > lastDot){
+      // EU format: 1.234,56 → remove dots, replace comma
+      str=str.replace(/\./g,'').replace(',','.');
+    } else {
+      // US format: 1,234.56 → remove commas
+      str=str.replace(/,/g,'');
+    }
+  } else if(lastComma > -1 && lastDot === -1){
+    // Only comma: treat as decimal → 3,14 → 3.14
+    str=str.replace(',','.');
+  }
+  // else: only dot or neither → parseFloat handles it
+  const v=parseFloat(str);
+  return isNaN(v)?0:v;
+}
+
 function parseRowCols(raw){
   const c=raw.split(/\t/);
-  const s=i=>(c[i]||'').trim(), n=i=>parseFloat(c[i])||0;
+  const s=i=>(c[i]||'').trim(), n=i=>parseNum(c[i]);
   let fluid=s(C.refrigerant); fluid=FLUID_MAP[fluid]||fluid||'R290';
   return {
     factory:s(C.factory),calo:s(C.calo),order:s(C.order),
@@ -1674,10 +1706,10 @@ function renderEditorTable(){
     rows+=`<tr class="${r.isNew?'new-row':''}">
       <td><input type="text" value="${r.label}" oninput="_editorRows[${i}].label=this.value" style="min-width:90px"></td>
       <td><input type="text" value="${r.range}" oninput="_editorRows[${i}].range=this.value" class="narrow"></td>
-      <td><input type="number" value="${r.Te}" oninput="_editorRows[${i}].Te=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tc}" oninput="_editorRows[${i}].Tc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tsuc}" oninput="_editorRows[${i}].Tsuc=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
-      <td><input type="number" value="${r.Tliq}" oninput="_editorRows[${i}].Tliq=parseFloat(this.value)||0" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Te}" oninput="_editorRows[${i}].Te=parseNum(this.value)" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tc}" oninput="_editorRows[${i}].Tc=parseNum(this.value)" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tsuc}" oninput="_editorRows[${i}].Tsuc=parseNum(this.value)" class="narrow" step="0.1"></td>
+      <td><input type="number" value="${r.Tliq}" oninput="_editorRows[${i}].Tliq=parseNum(this.value)" class="narrow" step="0.1"></td>
       <td><button class="ed-del" onclick="delStdRow(${i})" ${canDel?'':'disabled'}>🗑</button></td>
     </tr>`;
   });
@@ -1869,10 +1901,10 @@ function toggleRowBody(id){
 function updateRowCustom(id){
   const row=measRows.find(r=>r.id===id);if(!row)return;
   row.custom={
-    Te: parseFloat(document.getElementById('mrow_Te_'+id)?.value)||0,
-    Tc: parseFloat(document.getElementById('mrow_Tc_'+id)?.value)||0,
-    Tsuc: parseFloat(document.getElementById('mrow_Tsuc_'+id)?.value)||0,
-    Tliq: parseFloat(document.getElementById('mrow_Tliq_'+id)?.value)||0
+    Te: parseNum(document.getElementById('mrow_Te_'+id)?.value),
+    Tc: parseNum(document.getElementById('mrow_Tc_'+id)?.value),
+    Tsuc: parseNum(document.getElementById('mrow_Tsuc_'+id)?.value),
+    Tliq: parseNum(document.getElementById('mrow_Tliq_'+id)?.value)
   };
 }
 
