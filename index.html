@@ -315,6 +315,18 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 /* Set values strip */
 .mrow-setvals{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px;padding:8px 10px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:8px}
 .mrow-setvals-title{font-size:8.5px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:1px;width:100%;margin-bottom:4px}
+/* Volumetric fields */
+.mrow-vol-block{background:#f5f3ff;border:1.5px dashed #a78bfa;border-radius:9px;padding:10px 12px;margin:6px 0 4px}
+.mrow-vol-title{font-size:8.5px;font-weight:700;color:#6d28d9;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.mrow-vol-title span{background:#ede9fe;border:1px solid #c4b5fd;border-radius:4px;padding:1px 7px;font-size:8px;color:#7c3aed}
+.mrow-vol-block .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.mrow-vol-block label{font-size:9px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px}
+.mrow-vol-block input{width:100%;padding:6px 8px;border:1.5px solid #ddd6fe;border-radius:7px;font-size:12px;font-family:'Inter',sans-serif;background:#fff;color:#1e2433}
+.mrow-vol-block input:focus{outline:none;border-color:#7c3aed}
+.mrow-vol-hint{font-size:9px;color:#8b5cf6;margin-top:6px;line-height:1.4}
+/* Volumetric result card */
+.mrow-ri.vol{border-color:#c4b5fd;background:#f5f3ff}
+.mrow-ri.vol .mrow-ri-val{color:#6d28d9}
 .sv-tag{font-size:10.5px;background:#fff;border:1px solid #fde68a;border-radius:5px;padding:3px 8px;color:#78350f;font-weight:600}
 .sv-tag span{font-size:8.5px;color:#b45309;font-weight:700;text-transform:uppercase;margin-right:3px}
 /* Measured values strip — teal */
@@ -1775,6 +1787,14 @@ function renderAllRows(){
       ta.addEventListener('paste',()=>setTimeout(()=>parseRowPaste(row.id),30));
       ta.addEventListener('input',()=>{ if(!ta.value.trim()) { const r=measRows.find(x=>x.id===row.id); if(r){r.rawPaste='';} } });
     }
+    // Restore vol field values (not pre-filled in HTML to avoid re-render overwrite issues)
+    if(row.vol){
+      const vdEl=document.getElementById('mrow_Vd_'+row.id);
+      const etaEl=document.getElementById('mrow_etavol_'+row.id);
+      // RPM is pre-filled from row.vol.rpm in buildRowHTML value attr, skip
+      if(vdEl && row.vol.Vd) vdEl.value=row.vol.Vd;
+      if(etaEl && row.vol.etavol) etaEl.value=row.vol.etavol;
+    }
   });
 }
 
@@ -1857,16 +1877,42 @@ function buildRowHTML(row,num){
       +(d.Qo_cecomaf?'<span class="mv-tag"><span>Qo CECOMAF</span>'+d.Qo_cecomaf.toFixed(2)+' W</span>':'')
       +'</div>';
   }
+  // Volumetric fields (optional) - values stored in row.vol
+  const vol = row.vol || {};
+  const volBlock = '<div class="mrow-vol-block">'
+    +'<div class="mrow-vol-title">⚙️ Volumetric mass flow <span>optional</span></div>'
+    +'<div class="g3">'
+    +'<div><label>Vd [cm³/rev]</label><input type="number" id="mrow_Vd_'+row.id+'" value="'+(vol.Vd||'')+'" min="0" step="0.01" placeholder="e.g. 13.52" oninput="updateRowVol('+row.id+')"></div>'
+    +'<div><label>η<sub>vol</sub> [%]</label><input type="number" id="mrow_etavol_'+row.id+'" value="'+(vol.etavol||'')+'" min="0" max="100" step="0.1" placeholder="e.g. 75.0" oninput="updateRowVol('+row.id+')"></div>'
+    +'<div><label>RPM (auto)</label><input type="number" id="mrow_rpmvol_'+row.id+'" value="'+(d?d.rpm_meas||(vol.rpm||''):(vol.rpm||''))+'" min="0" step="1" placeholder="from meas." oninput="updateRowVol('+row.id+')"></div>'
+    +'</div>'
+    +'<div class="mrow-vol-hint">ṁ<sub>vol</sub> = (RPM/60) × Vd [m³] × η<sub>vol</sub> × ρ<sub>suc</sub> · If filled, volumetric ṁ appears in results alongside calorimetric ṁ</div>'
+    +'</div>';
+
   let resultHtml='';
   if(r){
+    // Compute volumetric mass flow if Vd and etavol are filled
+    let mdotVol=null;
+    const vd = parseNum(document.getElementById('mrow_Vd_'+row.id)?.value)||(vol.Vd||0);
+    const eta = parseNum(document.getElementById('mrow_etavol_'+row.id)?.value)||(vol.etavol||0);
+    const rpm = parseNum(document.getElementById('mrow_rpmvol_'+row.id)?.value)||(d?d.rpm_meas:0)||(vol.rpm||0);
+    if(vd>0 && eta>0 && rpm>0 && r.rho_m>0){
+      mdotVol = (rpm/60) * (vd/1e6) * (eta/100) * r.rho_m; // kg/s
+    }
+
     resultHtml='<div class="mrow-result">'
       +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">Cooling Qo</div><div class="mrow-ri-val">'+r.Qo.toFixed(3)+'</div><div class="mrow-ri-u">W</div></div>'
       +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">COP</div><div class="mrow-ri-val">'+r.COP.toFixed(3)+'</div><div class="mrow-ri-u">W/W</div></div>'
       +'<div class="mrow-ri"><div class="mrow-ri-lbl">Power P1</div><div class="mrow-ri-val">'+d.P1.toFixed(2)+'</div><div class="mrow-ri-u">W</div></div>'
-      +'<div class="mrow-ri"><div class="mrow-ri-lbl">Mass flow</div><div class="mrow-ri-val">'+(r.mdot*1000).toFixed(3)+'</div><div class="mrow-ri-u">g/s</div></div>'
+      +'<div class="mrow-ri"><div class="mrow-ri-lbl">ṁ calorim.</div><div class="mrow-ri-val">'+(r.mdot*1000).toFixed(3)+'</div><div class="mrow-ri-u">g/s</div></div>'
+      +(mdotVol!==null
+        ? '<div class="mrow-ri vol"><div class="mrow-ri-lbl">ṁ volumetr.</div><div class="mrow-ri-val">'+(mdotVol*1000).toFixed(3)+'</div><div class="mrow-ri-u">g/s</div></div>'
+          +'<div class="mrow-ri vol"><div class="mrow-ri-lbl">Δṁ</div><div class="mrow-ri-val">'+(((mdotVol-r.mdot)/r.mdot)*100).toFixed(2)+'</div><div class="mrow-ri-u">%</div></div>'
+        : '')
       +'</div>'
       +'<div style="margin-top:6px;font-size:9.5px;color:#9aa3b8;text-align:center">'
       +d.refrigerant+' | Qo='+d.Qvessel.toFixed(2)+'×'+r.CF_rho.toFixed(5)+'×'+r.CF_dh.toFixed(5)
+      +(mdotVol!==null?' | ṁ<sub>vol</sub>: Vd='+vd+' cm³ η='+eta+'% RPM='+Math.round(rpm):'')
       +' <span style="margin-left:8px;cursor:pointer;color:#7dd3fc;text-decoration:underline" onclick="showDebugForRow('+row.id+')">debug →</span>'
       +'</div>';
   }
@@ -1883,6 +1929,7 @@ function buildRowHTML(row,num){
     +'<textarea class="mrow-paste" id="mrow_ta_'+row.id+'" placeholder="Paste row A3-AT3 from Excel (Ctrl+V)...">'+(row.rawPaste||'')+'</textarea>'
     +'<button class="mrow-parse-btn" onclick="parseRowPaste('+row.id+')">⚡ Parse</button>'
     +'</div>'
+    +volBlock
     +tags
     +setVals
     +'<div class="mrow-std-sel"><span class="mrow-std-lbl">Standard:</span>'+stdBtns+'</div>'
@@ -1896,6 +1943,20 @@ function buildRowHTML(row,num){
 function toggleRowBody(id){
   const b=document.getElementById('mrow_body_'+id);
   if(b) b.style.display=b.style.display==='none'?'':'none';
+}
+
+function updateRowVol(id){
+  const row=measRows.find(r=>r.id===id);if(!row)return;
+  row.vol=row.vol||{};
+  row.vol.Vd     = parseNum(document.getElementById('mrow_Vd_'+id)?.value)||0;
+  row.vol.etavol = parseNum(document.getElementById('mrow_etavol_'+id)?.value)||0;
+  row.vol.rpm    = parseNum(document.getElementById('mrow_rpmvol_'+id)?.value)||0;
+  // If we have a result already, just refresh result section without full re-render
+  if(row.result) renderRowResult(id);
+}
+
+function renderRowResult(id){
+  renderAllRows();
 }
 
 function updateRowCustom(id){
@@ -1944,8 +2005,14 @@ function parseRowPaste(id){
   const ta=document.getElementById('mrow_ta_'+id);if(!ta)return;
   const raw=ta.value.trim();if(!raw)return;
   const row=measRows.find(r=>r.id===id);if(!row)return;
-  row.rawPaste=raw;  // save so textarea keeps its value after re-render
-  row.data=parseRowCols(raw);row.result=null;renderAllRows();
+  row.rawPaste=raw;
+  row.data=parseRowCols(raw);row.result=null;
+  // Auto-fill RPM from measured data if not manually set
+  if(row.data.rpm_meas && !(row.vol&&row.vol.rpm)){
+    row.vol=row.vol||{};
+    row.vol.rpm=row.data.rpm_meas;
+  }
+  renderAllRows();
 }
 
 function calcRow(id){
