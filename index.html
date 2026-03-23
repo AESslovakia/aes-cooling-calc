@@ -253,6 +253,21 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 .export-word-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;background:linear-gradient(135deg,#0d1f3c,#1a3254);color:#7dd3fc;border:1.5px solid #1e3a5f;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
 .export-word-btn:hover:not(:disabled){background:linear-gradient(135deg,#122a52,#1e3a5f);border-color:#3b82f6}
 .export-word-btn:disabled{opacity:.4;cursor:not-allowed}
+/* Export split button */
+.export-split{display:flex;align-items:stretch;border-radius:9px;overflow:visible;position:relative}
+.export-split .exp-main{display:flex;align-items:center;gap:6px;padding:9px 14px;background:linear-gradient(135deg,#0d1f3c,#1a3254);color:#7dd3fc;border:1.5px solid #1e3a5f;border-right:none;border-radius:9px 0 0 9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.export-split .exp-main:hover:not(:disabled){background:linear-gradient(135deg,#122a52,#1e3a5f);border-color:#3b82f6;color:#93c5fd}
+.export-split .exp-main:disabled{opacity:.4;cursor:not-allowed}
+.export-split .exp-arrow{display:flex;align-items:center;justify-content:center;padding:0 10px;background:linear-gradient(135deg,#0d1f3c,#1a3254);color:#7dd3fc;border:1.5px solid #1e3a5f;border-radius:0 9px 9px 0;cursor:pointer;font-size:10px;transition:all .15s;position:relative}
+.export-split .exp-arrow:hover{background:#1e3a5f;color:#93c5fd}
+.export-split .exp-arrow:disabled{opacity:.4;cursor:not-allowed}
+.exp-dropdown{position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1.5px solid #e4e9f4;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:999;min-width:180px;overflow:hidden;display:none}
+.exp-dropdown.open{display:block}
+.exp-opt{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;font-size:12px;font-weight:600;color:#1e2433;transition:background .12s;font-family:'Inter',sans-serif}
+.exp-opt:hover{background:#eef3ff;color:#2563eb}
+.exp-opt .exp-icon{font-size:16px;flex-shrink:0}
+.exp-opt .exp-lbl{flex:1}
+.exp-opt .exp-ext{font-size:9px;font-weight:700;color:#9aa3b8;font-family:'IBM Plex Mono',monospace}
 
 /* Measurement row card */
 .mrow-card{background:#fff;border:1.5px solid #e4e9f4;border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:border-color .15s}
@@ -478,9 +493,24 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
         <button class="calc-all-meas-btn" id="calcAllMeasBtn" onclick="calcAllMeas()" disabled>
           🧮 <span data-i18n="calc_all_meas">Calculate all</span>
         </button>
-        <button class="export-word-btn" id="exportWordBtn" onclick="exportToWord()" disabled title="Export all calculated results to Word (.docx)">
-          📄 Export .docx
-        </button>
+        <div class="export-split" id="exportSplit">
+          <button class="exp-main" id="exportWordBtn" onclick="exportToWord()" disabled>
+            📄 Export
+          </button>
+          <button class="exp-arrow" id="exportArrowBtn" onclick="toggleExportMenu(event)" disabled title="Choose format">▾</button>
+          <div class="exp-dropdown" id="exportDropdown">
+            <div class="exp-opt" onclick="exportToWord();closeExportMenu()">
+              <span class="exp-icon">📄</span>
+              <span class="exp-lbl">Word document</span>
+              <span class="exp-ext">.docx</span>
+            </div>
+            <div class="exp-opt" onclick="exportToExcel();closeExportMenu()">
+              <span class="exp-icon">📊</span>
+              <span class="exp-lbl">Excel spreadsheet</span>
+              <span class="exp-ext">.xlsx</span>
+            </div>
+          </div>
+        </div>
         <button class="clear-all-btn" onclick="clearAllMeas()" data-i18n="c1_clear">✕ Clear all</button>
       </div>
 
@@ -769,6 +799,7 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 </div><!-- end app -->
 
 <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════════
 //  INTERNATIONALISATION (i18n)
@@ -1570,8 +1601,11 @@ function computeQo(m, Te_r, Tc_r, Tsuc_r, Tliq_r, fluid){
 function updateBtns(){
   const btn=document.getElementById('calcAllMeasBtn');
   if(btn) btn.disabled=measRows.length===0;
+  const hasResults=measRows.some(r=>r.result);
   const exp=document.getElementById('exportWordBtn');
-  if(exp) exp.disabled=!measRows.some(r=>r.result);
+  if(exp) exp.disabled=!hasResults;
+  const arrow=document.getElementById('exportArrowBtn');
+  if(arrow) arrow.disabled=!hasResults;
 }
 
 // =================================================================
@@ -2339,6 +2373,172 @@ function updateLogoPreview(){
     prev.innerHTML = '<img src="'+headerData.logoDataUrl+'" style="width:76px;height:76px;object-fit:contain;border-radius:8px">';
   } else {
     prev.innerHTML = '<div class="lu-hint">📷<br>Click to<br>upload logo</div>';
+  }
+}
+
+// =================================================================
+//  EXPORT FORMAT SELECTOR
+// =================================================================
+function toggleExportMenu(e){
+  e.stopPropagation();
+  const dd=document.getElementById('exportDropdown');
+  dd.classList.toggle('open');
+}
+function closeExportMenu(){
+  document.getElementById('exportDropdown').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  const split=document.getElementById('exportSplit');
+  if(split&&!split.contains(e.target)) closeExportMenu();
+});
+
+// =================================================================
+//  EXPORT TO EXCEL (.xlsx)
+// =================================================================
+function exportToExcel(){
+  const btn=document.getElementById('exportWordBtn');
+  const arrow=document.getElementById('exportArrowBtn');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Generating...'; }
+
+  try {
+    const rows=measRows.filter(r=>r.result&&r.data);
+    if(!rows.length){ alert('No calculated results to export.'); return; }
+
+    const wb=XLSX.utils.book_new();
+
+    // ── SHEET 1: Summary ─────────────────────────────────────────
+    const sumData=[
+      ['AES — Compressor Cooling Capacity Report'],
+      [headerData.sub],
+      ['Generated: '+new Date().toLocaleDateString('en-GB')],
+      [],
+      ['#','Compressor','Refrigerant','Standard','Qo [W]','COP [W/W]','P1 [W]','Mass flow [g/s]']
+    ];
+    rows.forEach((row,i)=>{
+      const d=row.data,r=row.result;
+      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
+      sumData.push([
+        i+1,
+        d.kitNo||d.compType||'—',
+        r._fluid||d.refrigerant,
+        p.label+' '+p.range,
+        parseFloat(r.Qo.toFixed(3)),
+        parseFloat(r.COP.toFixed(3)),
+        parseFloat(d.P1.toFixed(2)),
+        parseFloat((r.mdot*1000).toFixed(3))
+      ]);
+    });
+    const wsSummary=XLSX.utils.aoa_to_sheet(sumData);
+    // Column widths
+    wsSummary['!cols']=[{wch:4},{wch:18},{wch:12},{wch:18},{wch:12},{wch:12},{wch:12},{wch:14}];
+    // Merge title cells
+    wsSummary['!merges']=[
+      {s:{r:0,c:0},e:{r:0,c:7}},
+      {s:{r:1,c:0},e:{r:1,c:7}},
+      {s:{r:2,c:0},e:{r:2,c:7}},
+    ];
+    XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+    // ── SHEET 2: All data ─────────────────────────────────────────
+    // Header row
+    const allHdr=[
+      '#','Compressor','Refrigerant','Standard',
+      // Set values
+      'Calo','Order','Kit#','Date','Time','Code','Operator','Remark',
+      'Te set [°C]','Tc set [°C]','Tamb set [°C]','Tsuc set [°C]','Tliq set [°C]',
+      'Voltage set [V]','Freq set [Hz]','Cooling','RPM set','Capacitor [µF]',
+      // Measured values
+      'P1 [W]',
+      'Te meas [°C]','Tc meas [°C]','Tsuc meas [°C]','Tliq meas [°C]',
+      'Qvessel [W]','T comp [°C]','T disch [°C]','T amb [°C]',
+      'Current [A]','Voltage meas [V]','RPM meas',
+      'Qo ASHRAE [W]','COP ASHRAE','Qo CECOMAF [W]','COP CECOMAF',
+      // Results
+      'Qo [W]','COP [W/W]','Mass flow [g/s]',
+      'CF_rho','CF_dh',
+      'pe meas [bar]','pc meas [bar]','hA meas [kJ/kg]','hB meas [kJ/kg]','dh meas [kJ/kg]',
+      'pe ref [bar]','pc ref [bar]','hA ref [kJ/kg]','hB ref [kJ/kg]','dh ref [kJ/kg]',
+      'rho meas [kg/m3]','rho ref [kg/m3]'
+    ];
+    const allData=[allHdr];
+    rows.forEach((row,i)=>{
+      const d=row.data,r=row.result;
+      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
+      const n=(v,dp=4)=>typeof v==='number'?parseFloat(v.toFixed(dp)):v||'';
+      allData.push([
+        i+1,
+        d.kitNo||d.compType||'—',
+        r._fluid||d.refrigerant,
+        p.label+' '+p.range,
+        // Set values
+        d.calo||'',d.order||'',d.kitNo||'',d.date||'',d.time||'',d.code||'',d.operator||'',d.remark||'',
+        n(d.Te_set,1),n(d.Tc_set,1),n(d.Tamb_set,1),n(d.Tsuc_set,1),n(d.Tliq_set,1),
+        n(d.voltage,0),n(d.freq,0),d.cooling||'',n(d.rpm,0),n(d.capacitor,1),
+        // Measured
+        n(d.P1,2),
+        n(d.Te_meas,2),n(d.Tc_meas,2),n(d.Tsuc_meas,2),n(d.Tliq_meas,2),
+        n(d.Qvessel,2),n(d.Tcomp_meas,2),n(d.Tdisch_meas,2),n(d.Tamb_meas,2),
+        n(d.current_meas,2),n(d.voltage_meas,2),n(d.rpm_meas,0),
+        n(d.Qo_ashrae,2),n(d.COP_ashrae,4),n(d.Qo_cecomaf,2),n(d.COP_cecomaf,4),
+        // Results
+        n(r.Qo,3),n(r.COP,3),n(r.mdot*1000,3),
+        n(r.CF_rho,8),n(r.CF_dh,8),
+        n(r.pe_m,6),n(r.pc_m,5),n(r.hA_m,4),n(r.hB_m,4),n(r.dh_m,4),
+        n(r.pe_r,6),n(r.pc_r,5),n(r.hA_r,4),n(r.hB_r,4),n(r.dh_r,4),
+        n(r.rho_m,5),n(r.rho_r,5)
+      ]);
+    });
+    const wsAll=XLSX.utils.aoa_to_sheet(allData);
+    wsAll['!cols']=allHdr.map(h=>({wch:Math.max(12,h.length+2)}));
+    XLSX.utils.book_append_sheet(wb, wsAll, 'All data');
+
+    // ── SHEET per measurement ─────────────────────────────────────
+    rows.forEach((row,i)=>{
+      const d=row.data,r=row.result;
+      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
+      const fluid=r._fluid||d.refrigerant;
+      const n=(v,dp=4)=>typeof v==='number'?parseFloat(v.toFixed(dp)):v||'';
+      const sheetData=[
+        ['AES — Compressor Cooling Capacity'],
+        ['Compressor:', d.kitNo||d.compType||'—', '', 'Standard:', p.label+' '+p.range],
+        ['Refrigerant:', fluid, '', 'Date:', d.date||''],
+        [],
+        // Set values header
+        ['SET VALUES (B–U)'],
+        ['Calo','Order','Kit#','Date','Time','Code','Operator','Remark'],
+        [d.calo||'',d.order||'',d.kitNo||'',d.date||'',d.time||'',d.code||'',d.operator||'',d.remark||''],
+        ['Te set [°C]','Tc set [°C]','Tamb set [°C]','Tsuc set [°C]','Tliq set [°C]','Voltage [V]','Freq [Hz]','Cooling','RPM','Capacitor [µF]'],
+        [n(d.Te_set,1),n(d.Tc_set,1),n(d.Tamb_set,1),n(d.Tsuc_set,1),n(d.Tliq_set,1),n(d.voltage,0),n(d.freq,0),d.cooling||'',n(d.rpm,0),n(d.capacitor,1)],
+        [],
+        // Measured values
+        ['MEASURED VALUES (W–AK)'],
+        ['P1 [W]','Te meas [°C]','Tc meas [°C]','Tsuc meas [°C]','Tliq meas [°C]','Qvessel [W]'],
+        [n(d.P1,2),n(d.Te_meas,2),n(d.Tc_meas,2),n(d.Tsuc_meas,2),n(d.Tliq_meas,2),n(d.Qvessel,2)],
+        ['T comp [°C]','T disch [°C]','T amb [°C]','Current [A]','Voltage [V]','RPM'],
+        [n(d.Tcomp_meas,2),n(d.Tdisch_meas,2),n(d.Tamb_meas,2),n(d.current_meas,2),n(d.voltage_meas,2),n(d.rpm_meas,0)],
+        [],
+        // Result
+        ['CALCULATION RESULT'],
+        ['Standard','Qo [W]','COP [W/W]','P1 [W]','Mass flow [g/s]'],
+        [p.label+' '+p.range, n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3)],
+        [],
+        ['CF_rho',n(r.CF_rho,8),'CF_dh',n(r.CF_dh,8)],
+        ['Formula: Qo = Qvessel × CF_rho × CF_dh','','= '+n(d.Qvessel,2)+' × '+n(r.CF_rho,8)+' × '+n(r.CF_dh,8)],
+      ];
+      const ws=XLSX.utils.aoa_to_sheet(sheetData);
+      ws['!cols']=[{wch:20},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:14}];
+      const name=(d.kitNo||d.compType||'Row'+(i+1)).replace(/[\\\/\?\*\[\]]/g,'').slice(0,25);
+      XLSX.utils.book_append_sheet(wb, ws, (i+1)+'. '+name);
+    });
+
+    // ── Download ─────────────────────────────────────────────────
+    XLSX.writeFile(wb, 'AES_Cooling_Report_'+new Date().toISOString().slice(0,10)+'.xlsx');
+
+  } catch(err){
+    console.error('Excel export error:',err);
+    alert('Excel export failed: '+err.message);
+  } finally {
+    if(btn){ btn.disabled=false; btn.textContent='📄 Export'; updateBtns(); }
   }
 }
 
