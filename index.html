@@ -1882,7 +1882,7 @@ function buildRowHTML(row,num){
   const volBlock = '<div class="mrow-vol-block">'
     +'<div class="mrow-vol-title">⚙️ Volumetric mass flow <span>optional</span></div>'
     +'<div class="g3">'
-    +'<div><label>Vd [cm³/rev]</label><input type="number" id="mrow_Vd_'+row.id+'" value="'+(vol.Vd||'')+'" min="0" step="0.01" placeholder="e.g. 13.52" oninput="updateRowVol('+row.id+')"></div>'
+    +'<div><label>Vd [cm³/rev]</label><input type="number" id="mrow_Vd_'+row.id+'" value="'+(vol.Vd||'')+'" step="any" placeholder="e.g. 13.52" oninput="updateRowVol('+row.id+')"></div>'
     +'<div><label>η<sub>vol</sub> [%]</label><input type="number" id="mrow_etavol_'+row.id+'" value="'+(vol.etavol||'')+'" min="0" max="100" step="0.1" placeholder="e.g. 75.0" oninput="updateRowVol('+row.id+')"></div>'
     +'<div><label>RPM (auto)</label><input type="number" id="mrow_rpmvol_'+row.id+'" value="'+(d?d.rpm_meas||(vol.rpm||''):(vol.rpm||''))+'" min="0" step="1" placeholder="from meas." oninput="updateRowVol('+row.id+')"></div>'
     +'</div>'
