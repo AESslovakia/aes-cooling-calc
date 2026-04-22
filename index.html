@@ -2496,7 +2496,6 @@ document.addEventListener('click',function(e){
 // =================================================================
 function exportToExcel(){
   const btn=document.getElementById('exportWordBtn');
-  const arrow=document.getElementById('exportArrowBtn');
   if(btn){ btn.disabled=true; btn.textContent='⏳ Generating...'; }
 
   try {
@@ -2504,133 +2503,145 @@ function exportToExcel(){
     if(!rows.length){ alert('No calculated results to export.'); return; }
 
     const wb=XLSX.utils.book_new();
+    const n=(v,dp=4)=>typeof v==='number'?parseFloat(v.toFixed(dp)):(v||'');
+    const dt=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
 
-    // ── SHEET 1: Summary ─────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
+    // SHEET 1: Summary  (mirrors Word summary table)
+    // ════════════════════════════════════════════════════════
     const sumData=[
-      ['AES — Compressor Cooling Capacity Report'],
+      [headerData.title],
       [headerData.sub],
-      ['Generated: '+new Date().toLocaleDateString('en-GB')],
+      ['Generated: '+dt],
       [],
-      ['#','Compressor','Refrigerant','Standard','Qo [W]','COP [W/W]','P1 [W]','Mass flow [g/s]']
+      ['SUMMARY'],
+      ['#','Compressor','Standard','Refrigerant','Qo [W]','COP [W/W]','P1 [W]','Mass flow cal. [g/s]']
     ];
     rows.forEach((row,i)=>{
       const d=row.data,r=row.result;
       const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
-      sumData.push([
-        i+1,
-        d.kitNo||d.compType||'—',
+      const vol=row.vol||{};
+      const vd=vol.Vd||0,eta=vol.etavol||0,rpm=d.rpm_meas||(vol.rpm||0);
+      const mdotVol=(vd>0&&eta>0&&rpm>0&&r.rho_m>0)?(rpm/60)*(vd/1e6)*(eta/100)*r.rho_m*1000:null;
+      const dataRow=[
+        i+1, d.kitNo||d.compType||'—', p.label+' '+p.range,
         r._fluid||d.refrigerant,
-        p.label+' '+p.range,
-        parseFloat(r.Qo.toFixed(3)),
-        parseFloat(r.COP.toFixed(3)),
-        parseFloat(d.P1.toFixed(2)),
-        parseFloat((r.mdot*1000).toFixed(3))
-      ]);
+        n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3)
+      ];
+      if(mdotVol!==null) dataRow.push(n(mdotVol,3), n(((mdotVol/1000-r.mdot)/r.mdot)*100,2)+'%');
+      sumData.push(dataRow);
     });
+    // Add vol header if any row has it
+    if(rows.some(row=>{ const v=row.vol||{}; return v.Vd&&v.etavol; })){
+      sumData[5].push('Mass flow vol. [g/s]','Δṁ [%]');
+    }
     const wsSummary=XLSX.utils.aoa_to_sheet(sumData);
-    // Column widths
-    wsSummary['!cols']=[{wch:4},{wch:18},{wch:12},{wch:18},{wch:12},{wch:12},{wch:12},{wch:14}];
-    // Merge title cells
+    wsSummary['!cols']=[{wch:4},{wch:20},{wch:18},{wch:12},{wch:12},{wch:12},{wch:12},{wch:18},{wch:12},{wch:10}];
     wsSummary['!merges']=[
-      {s:{r:0,c:0},e:{r:0,c:7}},
-      {s:{r:1,c:0},e:{r:1,c:7}},
-      {s:{r:2,c:0},e:{r:2,c:7}},
+      {s:{r:0,c:0},e:{r:0,c:9}},{s:{r:1,c:0},e:{r:1,c:9}},{s:{r:2,c:0},e:{r:2,c:9}},
     ];
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
 
-    // ── SHEET 2: All data ─────────────────────────────────────────
-    // Header row
-    const allHdr=[
-      '#','Compressor','Refrigerant','Standard',
-      // Set values
-      'Calo','Order','Kit#','Date','Time','Code','Operator','Remark',
-      'Te set [°C]','Tc set [°C]','Tamb set [°C]','Tsuc set [°C]','Tliq set [°C]',
-      'Voltage set [V]','Freq set [Hz]','Cooling','RPM set','Capacitor [µF]',
-      // Measured values
-      'P1 [W]',
-      'Te meas [°C]','Tc meas [°C]','Tsuc meas [°C]','Tliq meas [°C]',
-      'Qvessel [W]','T comp [°C]','T disch [°C]','T amb [°C]',
-      'Current [A]','Voltage meas [V]','RPM meas',
-      'Qo ASHRAE [W]','COP ASHRAE','Qo CECOMAF [W]','COP CECOMAF',
-      // Results
-      'Qo [W]','COP [W/W]','Mass flow [g/s]',
-      'CF_rho','CF_dh',
-      'pe meas [bar]','pc meas [bar]','hA meas [kJ/kg]','hB meas [kJ/kg]','dh meas [kJ/kg]',
-      'pe ref [bar]','pc ref [bar]','hA ref [kJ/kg]','hB ref [kJ/kg]','dh ref [kJ/kg]',
-      'rho meas [kg/m3]','rho ref [kg/m3]'
-    ];
-    const allData=[allHdr];
+    // ════════════════════════════════════════════════════════
+    // SHEET per measurement  (mirrors Word detail page exactly)
+    // ════════════════════════════════════════════════════════
     rows.forEach((row,i)=>{
       const d=row.data,r=row.result;
-      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
-      const n=(v,dp=4)=>typeof v==='number'?parseFloat(v.toFixed(dp)):v||'';
-      allData.push([
-        i+1,
-        d.kitNo||d.compType||'—',
-        r._fluid||d.refrigerant,
-        p.label+' '+p.range,
-        // Set values
-        d.calo||'',d.order||'',d.kitNo||'',d.date||'',d.time||'',d.code||'',d.operator||'',d.remark||'',
-        n(d.Te_set,1),n(d.Tc_set,1),n(d.Tamb_set,1),n(d.Tsuc_set,1),n(d.Tliq_set,1),
-        n(d.voltage,0),n(d.freq,0),d.cooling||'',n(d.rpm,0),n(d.capacitor,1),
-        // Measured
-        n(d.P1,2),
-        n(d.Te_meas,2),n(d.Tc_meas,2),n(d.Tsuc_meas,2),n(d.Tliq_meas,2),
-        n(d.Qvessel,2),n(d.Tcomp_meas,2),n(d.Tdisch_meas,2),n(d.Tamb_meas,2),
-        n(d.current_meas,2),n(d.voltage_meas,2),n(d.rpm_meas,0),
-        n(d.Qo_ashrae,2),n(d.COP_ashrae,4),n(d.Qo_cecomaf,2),n(d.COP_cecomaf,4),
-        // Results
-        n(r.Qo,3),n(r.COP,3),n(r.mdot*1000,3),
-        n(r.CF_rho,8),n(r.CF_dh,8),
-        n(r.pe_m,6),n(r.pc_m,5),n(r.hA_m,4),n(r.hB_m,4),n(r.dh_m,4),
-        n(r.pe_r,6),n(r.pc_r,5),n(r.hA_r,4),n(r.hB_r,4),n(r.dh_r,4),
-        n(r.rho_m,5),n(r.rho_r,5)
-      ]);
-    });
-    const wsAll=XLSX.utils.aoa_to_sheet(allData);
-    wsAll['!cols']=allHdr.map(h=>({wch:Math.max(12,h.length+2)}));
-    XLSX.utils.book_append_sheet(wb, wsAll, 'All data');
-
-    // ── SHEET per measurement ─────────────────────────────────────
-    rows.forEach((row,i)=>{
-      const d=row.data,r=row.result;
-      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
       const fluid=r._fluid||d.refrigerant;
-      const n=(v,dp=4)=>typeof v==='number'?parseFloat(v.toFixed(dp)):v||'';
-      const sheetData=[
-        ['AES — Compressor Cooling Capacity'],
-        ['Compressor:', d.kitNo||d.compType||'—', '', 'Standard:', p.label+' '+p.range],
-        ['Refrigerant:', fluid, '', 'Date:', d.date||''],
-        [],
-        // Set values header
-        ['SET VALUES (B–U)'],
-        ['Calo','Order','Kit#','Date','Time','Code','Operator','Remark'],
-        [d.calo||'',d.order||'',d.kitNo||'',d.date||'',d.time||'',d.code||'',d.operator||'',d.remark||''],
-        ['Te set [°C]','Tc set [°C]','Tamb set [°C]','Tsuc set [°C]','Tliq set [°C]','Voltage [V]','Freq [Hz]','Cooling','RPM','Capacitor [µF]'],
-        [n(d.Te_set,1),n(d.Tc_set,1),n(d.Tamb_set,1),n(d.Tsuc_set,1),n(d.Tliq_set,1),n(d.voltage,0),n(d.freq,0),d.cooling||'',n(d.rpm,0),n(d.capacitor,1)],
-        [],
-        // Measured values
-        ['MEASURED VALUES (W–AK)'],
-        ['P1 [W]','Te meas [°C]','Tc meas [°C]','Tsuc meas [°C]','Tliq meas [°C]','Qvessel [W]'],
-        [n(d.P1,2),n(d.Te_meas,2),n(d.Tc_meas,2),n(d.Tsuc_meas,2),n(d.Tliq_meas,2),n(d.Qvessel,2)],
-        ['T comp [°C]','T disch [°C]','T amb [°C]','Current [A]','Voltage [V]','RPM'],
-        [n(d.Tcomp_meas,2),n(d.Tdisch_meas,2),n(d.Tamb_meas,2),n(d.current_meas,2),n(d.voltage_meas,2),n(d.rpm_meas,0)],
-        [],
-        // Result
-        ['CALCULATION RESULT'],
-        ['Standard','Qo [W]','COP [W/W]','P1 [W]','Mass flow [g/s]'],
-        [p.label+' '+p.range, n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3)],
-        [],
-        ['CF_rho',n(r.CF_rho,8),'CF_dh',n(r.CF_dh,8)],
-        ['Formula: Qo = Qvessel × CF_rho × CF_dh','','= '+n(d.Qvessel,2)+' × '+n(r.CF_rho,8)+' × '+n(r.CF_dh,8)],
-      ];
-      const ws=XLSX.utils.aoa_to_sheet(sheetData);
-      ws['!cols']=[{wch:20},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:14}];
-      const name=(d.kitNo||d.compType||'Row'+(i+1)).replace(/[\\\/\?\*\[\]]/g,'').slice(0,25);
-      XLSX.utils.book_append_sheet(wb, ws, (i+1)+'. '+name);
+      const p=row.stdKey==='custom'
+        ?(row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40,label:'Custom',range:'—'})
+        :(STANDARDS[row.stdKey]||{Te:0,Tc:0,Tsuc:0,Tliq:0,label:row.stdKey,range:''});
+      const stdLabel=(p.label||'')+(p.range&&p.range!=='—'?' '+p.range:'');
+      const vol=row.vol||{};
+      const vd=vol.Vd||0,eta=vol.etavol||0,rpm=d.rpm_meas||(vol.rpm||0);
+      const mdotVol=(vd>0&&eta>0&&rpm>0&&r.rho_m>0)?(rpm/60)*(vd/1e6)*(eta/100)*r.rho_m:null;
+
+      const sd=[];  // sheetData array
+
+      // Header
+      sd.push([headerData.title]);
+      sd.push([headerData.sub]);
+      sd.push(['Generated: '+dt]);
+      sd.push([]);
+      sd.push([(i+1)+'.  '+(d.kitNo||d.compType||'—')+'   ·   '+stdLabel]);
+      sd.push([]);
+
+      // ── SET VALUES (B–U) ──────────────────────────────────
+      sd.push(['SET VALUES  (B – U)']);
+      sd.push(['Factory','Calo','Order','Kit #','Compressor','Date','Time','Code','Operator','Remark']);
+      sd.push([d.factory||'',d.calo||'',d.order||'',d.kitNo||'',d.compType||'',d.date||'',d.time||'',d.code||'',d.operator||'',d.remark||'']);
+      sd.push([]);
+      sd.push(['Te set [°C]','Tc set [°C]','Tamb set [°C]','Tsuc set [°C]','Tliq set [°C]','Voltage [V]','Frequency [Hz]','Cooling','RPM set','Refrigerant','Capacitor [µF]']);
+      sd.push([n(d.Te_set,1),n(d.Tc_set,1),n(d.Tamb_set,1),n(d.Tsuc_set,1),n(d.Tliq_set,1),n(d.voltage,0),n(d.freq,0),d.cooling||'',n(d.rpm,0),d.refrigerant,n(d.capacitor,1)]);
+      sd.push([]);
+
+      // ── MEASURED VALUES (W–AK) ─────────────────────────────
+      sd.push(['MEASURED VALUES  (W – AK)']);
+      sd.push(['Te meas [°C]','Tc meas [°C]','Tsuc meas [°C]','Tliq meas [°C]','Qvessel [W]','P1 [W]','T comp [°C]','T disch [°C]','T amb [°C]','Current [A]','Voltage meas [V]','RPM meas']);
+      sd.push([n(d.Te_meas,2),n(d.Tc_meas,2),n(d.Tsuc_meas,2),n(d.Tliq_meas,2),n(d.Qvessel,2),n(d.P1,2),n(d.Tcomp_meas,2),n(d.Tdisch_meas,2),n(d.Tamb_meas,2),n(d.current_meas,2),n(d.voltage_meas,2),n(d.rpm_meas,0)]);
+      if(d.Qo_ashrae||d.Qo_cecomaf){
+        sd.push([]);
+        sd.push(['Qo ASHRAE [W]','COP ASHRAE','Qo CECOMAF [W]','COP CECOMAF']);
+        sd.push([n(d.Qo_ashrae,2),n(d.COP_ashrae,4),n(d.Qo_cecomaf,2),n(d.COP_cecomaf,4)]);
+      }
+      sd.push([]);
+
+      // ── CALCULATION RESULT ─────────────────────────────────
+      sd.push(['CALCULATION RESULT  —  '+stdLabel]);
+      sd.push(['Standard','Refrigerant','Qo [W]','COP [W/W]','P1 [W]','Mass flow calorimetric [g/s]']);
+      sd.push([stdLabel, fluid, n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3)]);
+      if(mdotVol!==null){
+        sd.push([]);
+        sd.push(['VOLUMETRIC MASS FLOW']);
+        sd.push(['Vd [cm³/rev]','η_vol [%]','RPM','ρ_suc [kg/m³]','ṁ vol [g/s]','ṁ cal [g/s]','Δṁ [%]']);
+        sd.push([n(vd,2),n(eta,1),n(rpm,0),n(r.rho_m,4),n(mdotVol*1000,3),n(r.mdot*1000,3),n(((mdotVol-r.mdot)/r.mdot)*100,2)]);
+        sd.push(['Formula: ṁ = (RPM/60) × Vd[m³] × η_vol × ρ_suc']);
+      }
+      sd.push([]);
+
+      // ── THERMODYNAMICS (bonus — not in Word but useful in Excel) ─
+      sd.push(['THERMODYNAMICS']);
+      sd.push(['','pe meas [bar]','pc meas [bar]','hA meas [kJ/kg]','hB meas [kJ/kg]','Δh meas [kJ/kg]','ρ meas [kg/m³]']);
+      sd.push(['Measured',n(r.pe_m,6),n(r.pc_m,5),n(r.hA_m,4),n(r.hB_m,4),n(r.dh_m,4),n(r.rho_m,5)]);
+      sd.push(['','pe ref [bar]','pc ref [bar]','hA ref [kJ/kg]','hB ref [kJ/kg]','Δh ref [kJ/kg]','ρ ref [kg/m³]']);
+      sd.push(['Reference ('+stdLabel+')',n(r.pe_r,6),n(r.pc_r,5),n(r.hA_r,4),n(r.hB_r,4),n(r.dh_r,4),n(r.rho_r,5)]);
+      sd.push([]);
+      sd.push(['CF_ρ = ρ_ref / ρ_meas', n(r.CF_rho,8), '', 'CF_Δh = Δh_ref / Δh_meas', n(r.CF_dh,8)]);
+      sd.push(['Qo = '+n(d.Qvessel,2)+' × '+n(r.CF_rho,8)+' × '+n(r.CF_dh,8)+' = '+n(r.Qo,3)+' W']);
+
+      const ws=XLSX.utils.aoa_to_sheet(sd);
+      ws['!cols']=[{wch:32},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:14}];
+      const shName=((i+1)+'. '+(d.kitNo||d.compType||'Row'+(i+1))).replace(/[\\\/\?\*\[\]]/g,'').slice(0,31);
+      XLSX.utils.book_append_sheet(wb, ws, shName);
     });
 
-    // ── Download ─────────────────────────────────────────────────
+    // ════════════════════════════════════════════════════════
+    // LAST SHEET: Raw paste data  (exactly what was pasted)
+    // ════════════════════════════════════════════════════════
+    const rawData=[
+      ['RAW PASTE DATA — Original rows as pasted from Excel'],
+      ['Generated: '+dt],
+      [],
+      // Column headers from our mapping
+      ['Row','Factory','Calo','Order','Kit#','Compressor','Date','Time','Code','Operator','Remark',
+       'Te set','Tc set','Tamb set','Tsuc set','Tliq set','Voltage','Freq','Cooling','RPM set','Refrigerant','Capacitor',
+       '(V col)','P1','Qo ASHRAE','COP ASHRAE','Qo CECOMAF','COP CECOMAF',
+       'Te meas','Tc meas','Qvessel','AE','Tsuc meas','AG','AH','AI','AJ','AK','(AL)','Pe uncorr','Tliq meas','Tvout meas']
+    ];
+    // Then the raw tab-separated paste split into cells
+    rows.forEach((row,i)=>{
+      if(row.rawPaste){
+        const cells=row.rawPaste.split('\t');
+        rawData.push([(i+1)].concat(cells));
+      } else {
+        rawData.push([(i+1),'(no raw data stored)']);
+      }
+    });
+    const wsRaw=XLSX.utils.aoa_to_sheet(rawData);
+    wsRaw['!cols']=[{wch:6}].concat(Array(60).fill({wch:16}));
+    XLSX.utils.book_append_sheet(wb, wsRaw, 'Raw paste data');
+
+    // ── Download ──────────────────────────────────────────────
     XLSX.writeFile(wb, 'AES_Cooling_Report_'+new Date().toISOString().slice(0,10)+'.xlsx');
 
   } catch(err){
