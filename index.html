@@ -2540,39 +2540,97 @@ function exportToExcel(){
     const dt=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
 
     // ════════════════════════════════════════════════════════
-    // SHEET 1: Summary  (mirrors Word summary table)
+    // SHEET 1: Summary — with group headers and all requested columns
     // ════════════════════════════════════════════════════════
+    const hasVol=rows.some(row=>{ const v=row.vol||{}; return v.Vd&&v.etavol; });
+
+    // Row 1-3: title block
+    // Row 4: empty
+    // Row 5: group header labels (merged cells)
+    // Row 6: column sub-headers
+    // Row 7+: data
+
+    // Group definitions — [label, colCount]
+    const groups=[
+      ['IDENTIFICATION',         3],   // #, Compressor, Calo
+      ['TEST SETUP',             7],   // Order, Remark, Voltage, Freq, Cooling, RPM set, RPM meas, Capacitor
+      ['STANDARD',               5],   // Standard, Te ref, Tc ref, Tsuc ref, Tliq ref
+      ['RESULT',                 hasVol?5:3],  // Refrigerant, Qo, COP, P1, ṁ cal [+ ṁ vol, Δṁ]
+    ];
+    // Adjust last group
+    if(hasVol) groups[3][1]=5; else groups[3][1]=4;
+
+    // Build group header row (row index 5, 0-based = row 6)
+    const groupHdrRow=[];
+    groups.forEach(([lbl,cnt])=>{ groupHdrRow.push(lbl); for(let i=1;i<cnt;i++) groupHdrRow.push(''); });
+
+    // Build column sub-header row
+    const colHdr=['#','Compressor','Calo',
+      'Order','Remark','Voltage [V]','Freq [Hz]','Cooling','RPM set','RPM meas','Capacitor [µF]',
+      'Standard','Te ref [°C]','Tc ref [°C]','Tsuc ref [°C]','Tliq ref [°C]',
+      'Refrigerant','Qo [W]','COP [W/W]','P1 [W]','ṁ cal [g/s]',
+    ];
+    if(hasVol){ colHdr.push('ṁ vol [g/s]','Δṁ [%]'); }
+
     const sumData=[
       [headerData.title],
       [headerData.sub],
       ['Generated: '+dt],
       [],
-      ['SUMMARY'],
-      ['#','Compressor','Standard','Refrigerant','Qo [W]','COP [W/W]','P1 [W]','Mass flow cal. [g/s]']
+      groupHdrRow,
+      colHdr
     ];
+
     rows.forEach((row,i)=>{
       const d=row.data,r=row.result;
-      const p=row.stdKey==='custom'?{label:'Custom',range:'—'}:(STANDARDS[row.stdKey]||{label:row.stdKey,range:''});
+      const p=row.stdKey==='custom'
+        ?(row.custom||{Te:'—',Tc:'—',Tsuc:'—',Tliq:'—',label:'Custom',range:'—'})
+        :(STANDARDS[row.stdKey]||{Te:'—',Tc:'—',Tsuc:'—',Tliq:'—',label:row.stdKey,range:''});
       const vol=row.vol||{};
       const vd=vol.Vd||0,eta=vol.etavol||0,rpm=d.rpm_meas||(vol.rpm||0);
       const mdotVol=(vd>0&&eta>0&&rpm>0&&r.rho_m>0)?(rpm/60)*(vd/1e6)*(eta/100)*r.rho_m*1000:null;
+      const stdLabel=(p.label||'')+(p.range&&p.range!=='—'?' '+p.range:'');
       const dataRow=[
-        i+1, d.kitNo||d.compType||'—', p.label+' '+p.range,
-        r._fluid||d.refrigerant,
-        n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3)
+        // IDENTIFICATION
+        i+1, d.kitNo||d.compType||'—', d.calo||'—',
+        // TEST SETUP
+        d.order||'—', d.remark||'', n(d.voltage,0), n(d.freq,0),
+        d.cooling||'', n(d.rpm,0), n(d.rpm_meas,0), d.capacitor?n(d.capacitor,1):'',
+        // STANDARD + ref conditions
+        stdLabel, n(p.Te,1), n(p.Tc,1), n(p.Tsuc,1), n(p.Tliq,1),
+        // RESULT
+        r._fluid||d.refrigerant, n(r.Qo,3), n(r.COP,3), n(d.P1,2), n(r.mdot*1000,3),
       ];
-      if(mdotVol!==null) dataRow.push(n(mdotVol,3), n(((mdotVol/1000-r.mdot)/r.mdot)*100,2)+'%');
+      if(hasVol) dataRow.push(mdotVol!==null?n(mdotVol,3):'', mdotVol!==null?n(((mdotVol/1000-r.mdot)/r.mdot)*100,2):'');
       sumData.push(dataRow);
     });
-    // Add vol header if any row has it
-    if(rows.some(row=>{ const v=row.vol||{}; return v.Vd&&v.etavol; })){
-      sumData[5].push('Mass flow vol. [g/s]','Δṁ [%]');
-    }
+
     const wsSummary=XLSX.utils.aoa_to_sheet(sumData);
-    wsSummary['!cols']=[{wch:4},{wch:20},{wch:18},{wch:12},{wch:12},{wch:12},{wch:12},{wch:18},{wch:12},{wch:10}];
-    wsSummary['!merges']=[
-      {s:{r:0,c:0},e:{r:0,c:9}},{s:{r:1,c:0},e:{r:1,c:9}},{s:{r:2,c:0},e:{r:2,c:9}},
+
+    // Column widths
+    wsSummary['!cols']=[
+      {wch:4},{wch:18},{wch:10},        // IDENTIFICATION
+      {wch:16},{wch:14},{wch:11},{wch:10},{wch:10},{wch:10},{wch:12},{wch:13}, // TEST SETUP
+      {wch:16},{wch:10},{wch:10},{wch:11},{wch:11},  // STANDARD
+      {wch:12},{wch:11},{wch:11},{wch:10},{wch:14},  // RESULT
+      {wch:14},{wch:10},                // vol (if any)
     ];
+
+    // Merged cells — title rows + group header row
+    const totalCols=colHdr.length-1;
+    const merges=[
+      {s:{r:0,c:0},e:{r:0,c:totalCols}},
+      {s:{r:1,c:0},e:{r:1,c:totalCols}},
+      {s:{r:2,c:0},e:{r:2,c:totalCols}},
+    ];
+    // Group header merges (row index 4)
+    let col=0;
+    groups.forEach(([lbl,cnt])=>{
+      if(cnt>1) merges.push({s:{r:4,c:col},e:{r:4,c:col+cnt-1}});
+      col+=cnt;
+    });
+    wsSummary['!merges']=merges;
+
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
 
     // ════════════════════════════════════════════════════════
