@@ -2553,12 +2553,12 @@ function exportToExcel(){
     // Group definitions — [label, colCount]
     const groups=[
       ['IDENTIFICATION',         3],   // #, Compressor, Calo
-      ['TEST SETUP',             7],   // Order, Remark, Voltage, Freq, Cooling, RPM set, RPM meas, Capacitor
+      ['TEST SETUP',             8],   // Order, Remark, Voltage, Freq, Cooling, RPM set, RPM meas, Capacitor
       ['STANDARD',               5],   // Standard, Te ref, Tc ref, Tsuc ref, Tliq ref
-      ['RESULT',                 hasVol?5:3],  // Refrigerant, Qo, COP, P1, ṁ cal [+ ṁ vol, Δṁ]
+      ['RESULT',                 hasVol?7:5],  // Refrigerant, Qo, COP, P1, ṁ cal [+ ṁ vol, Δṁ]
     ];
     // Adjust last group
-    if(hasVol) groups[3][1]=5; else groups[3][1]=4;
+    if(hasVol) groups[3][1]=7; else groups[3][1]=5;
 
     // Build group header row (row index 5, 0-based = row 6)
     const groupHdrRow=[];
