@@ -327,6 +327,12 @@ body{font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1e2433;backgroun
 /* Volumetric result card */
 .mrow-ri.vol{border-color:#c4b5fd;background:#f5f3ff}
 .mrow-ri.vol .mrow-ri-val{color:#6d28d9}
+/* Reference conditions bar */
+.mrow-ref-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:7px 12px;background:#0d1f3c;border-radius:8px 8px 0 0;margin-top:10px;margin-bottom:0}
+.mrow-setup-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:7px 12px;background:#122a52;border-radius:0 0 8px 8px;margin-bottom:6px;border-top:1px solid rgba(255,255,255,.06)}
+.mrow-ref-title{font-size:8.5px;font-weight:700;color:rgba(147,197,253,.7);text-transform:uppercase;letter-spacing:1px;flex-basis:100%;margin-bottom:2px}
+.mrow-ref-item{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:3px 8px;font-size:10.5px;font-weight:700;color:#e2e8f0}
+.mrow-ref-lbl{font-size:8px;font-weight:700;color:rgba(147,197,253,.7);text-transform:uppercase;margin-right:2px}
 .sv-tag{font-size:10.5px;background:#fff;border:1px solid #fde68a;border-radius:5px;padding:3px 8px;color:#78350f;font-weight:600}
 .sv-tag span{font-size:8.5px;color:#b45309;font-weight:700;text-transform:uppercase;margin-right:3px}
 /* Measured values strip — teal */
@@ -1900,7 +1906,34 @@ function buildRowHTML(row,num){
       mdotVol = (rpm/60) * (vd/1e6) * (eta/100) * r.rho_m; // kg/s
     }
 
-    resultHtml='<div class="mrow-result">'
+    // Reference conditions for this standard
+    const pStd = row.stdKey==='custom'
+      ? (row.custom||{Te:-35,Tc:40,Tsuc:20,Tliq:40})
+      : (STANDARDS[row.stdKey]||{Te:0,Tc:0,Tsuc:0,Tliq:0});
+
+    const refBar = '<div class="mrow-ref-bar">'
+      +'<span class="mrow-ref-title">Reference conditions — '+stdLabel+'</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Te</span>'+(pStd.Te>=0?'+':'')+pStd.Te+'°C</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Tc</span>'+(pStd.Tc>=0?'+':'')+pStd.Tc+'°C</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Tsuc</span>'+(pStd.Tsuc>=0?'+':'')+pStd.Tsuc+'°C</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Tliq</span>'+(pStd.Tliq>=0?'+':'')+pStd.Tliq+'°C</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Ref.</span>'+d.refrigerant+'</span>'
+      +'</div>'
+      +'<div class="mrow-setup-bar">'
+      +'<span class="mrow-ref-title">Test setup</span>'
+      +(d.calo?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Calo</span>'+d.calo+'</span>':'')
+      +(d.order?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Order</span>'+d.order+'</span>':'')
+      +(d.remark?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Remark</span>'+d.remark+'</span>':'')
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Voltage</span>'+d.voltage+' V</span>'
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Frequency</span>'+d.freq+' Hz</span>'
+      +(d.cooling?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Cooling</span>'+d.cooling+'</span>':'')
+      +'<span class="mrow-ref-item"><span class="mrow-ref-lbl">RPM set</span>'+d.rpm+'</span>'
+      +(d.rpm_meas?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">RPM meas</span>'+d.rpm_meas.toFixed(0)+'</span>':'')
+      +(d.capacitor?'<span class="mrow-ref-item"><span class="mrow-ref-lbl">Capacitor</span>'+d.capacitor+' µF</span>':'')
+      +'</div>';
+
+    resultHtml=refBar
+      +'<div class="mrow-result">'
       +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">Cooling Qo</div><div class="mrow-ri-val">'+r.Qo.toFixed(3)+'</div><div class="mrow-ri-u">W</div></div>'
       +'<div class="mrow-ri hl"><div class="mrow-ri-lbl">COP</div><div class="mrow-ri-val">'+r.COP.toFixed(3)+'</div><div class="mrow-ri-u">W/W</div></div>'
       +'<div class="mrow-ri"><div class="mrow-ri-lbl">Power P1</div><div class="mrow-ri-val">'+d.P1.toFixed(2)+'</div><div class="mrow-ri-u">W</div></div>'
@@ -1911,7 +1944,7 @@ function buildRowHTML(row,num){
         : '')
       +'</div>'
       +'<div style="margin-top:6px;font-size:9.5px;color:#9aa3b8;text-align:center">'
-      +d.refrigerant+' | Qo='+d.Qvessel.toFixed(2)+'×'+r.CF_rho.toFixed(5)+'×'+r.CF_dh.toFixed(5)
+      +'Qo='+d.Qvessel.toFixed(2)+'×'+r.CF_rho.toFixed(5)+'×'+r.CF_dh.toFixed(5)
       +(mdotVol!==null?' | ṁ<sub>vol</sub>: Vd='+vd+' cm³ η='+eta+'% RPM='+Math.round(rpm):'')
       +' <span style="margin-left:8px;cursor:pointer;color:#7dd3fc;text-decoration:underline" onclick="showDebugForRow('+row.id+')">debug →</span>'
       +'</div>';
